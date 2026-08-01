@@ -96,35 +96,91 @@
       <section id="stream-processing" class="submodule" style="--card-accent:#0f9b8e">
         <h2><span class="icon">&#9889;</span> Stream Processing</h2>
         <p class="tech">Real-time — Bytewax / Quix Streams</p>
-        <ul class="feature-list">
-          <li><a href="transformation-processing/event-deduplication.html">Event Deduplication</a></li>
-          <li><a href="transformation-processing/sessionization.html">Sessionization</a></li>
-          <li><a href="transformation-processing/identity-resolution.html">Identity Resolution (Stitching)</a></li>
-          <li><a href="transformation-processing/data-quality-checks.html">Data Quality Checks</a></li>
-          <li><a href="transformation-processing/real-time-enrichment.html">Real-time Enrichment</a></li>
-          <li><a href="transformation-processing/derived-event-generation.html">Derived Event Generation</a></li>
-        </ul>
+        <div class="feature-grid">
+          <a class="feature-card" href="transformation-processing/event-deduplication.html">
+            <div class="feature-icon">&#129529;</div>
+            <h4 class="feature-card-title">Event Deduplication</h4>
+            <p>Removes duplicates so one action is never counted twice.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/sessionization.html">
+            <div class="feature-icon">&#128337;</div>
+            <h4 class="feature-card-title">Sessionization</h4>
+            <p>Groups raw events into the logical sessions analytics runs on.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/identity-resolution.html">
+            <div class="feature-icon">&#129516;</div>
+            <h4 class="feature-card-title">Identity Resolution (Stitching)</h4>
+            <p>Links events across devices back to the same real customer.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/data-quality-checks.html">
+            <div class="feature-icon">&#128269;</div>
+            <h4 class="feature-card-title">Data Quality Checks</h4>
+            <p>Continuous checks that catch regressions before they reach a dashboard.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/real-time-enrichment.html">
+            <div class="feature-icon">&#10024;</div>
+            <h4 class="feature-card-title">Real-time Enrichment</h4>
+            <p>Adds computed, business-meaningful context to events as they stream.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/derived-event-generation.html">
+            <div class="feature-icon">&#129504;</div>
+            <h4 class="feature-card-title">Derived Event Generation</h4>
+            <p>Synthesizes higher-level events like cart_abandoned from raw patterns.</p>
+          </a>
+        </div>
       </section>
 
       <section id="batch-processing" class="submodule" style="--card-accent:#0f9b8e">
         <h2><span class="icon">&#128203;</span> Batch Processing</h2>
-        <p class="tech">Near-Real-time — Spark / Python Jobs</p>
-        <ul class="feature-list">
-          <li><a href="transformation-processing/rollups-aggregations.html">Rollups &amp; Aggregations</a></li>
-          <li><a href="transformation-processing/data-modeling.html">Data Modeling</a></li>
-          <li><a href="transformation-processing/backfills.html">Backfills</a></li>
-          <li><a href="transformation-processing/ml-feature-prep.html">Machine Learning Feature Prep</a></li>
-        </ul>
+        <p class="tech">dbt Core — SQL &amp; Python Models</p>
+        <div class="feature-grid">
+          <a class="feature-card" href="transformation-processing/rollups-aggregations.html">
+            <div class="feature-icon">&#10133;</div>
+            <h4 class="feature-card-title">Rollups &amp; Aggregations</h4>
+            <p>Pre-computed summaries that make dashboards fast at any scale.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/data-modeling.html">
+            <div class="feature-icon">&#129521;</div>
+            <h4 class="feature-card-title">Data Modeling</h4>
+            <p>Transforms raw events into the dimensional models the business thinks in.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/backfills.html">
+            <div class="feature-icon">&#9194;</div>
+            <h4 class="feature-card-title">Backfills</h4>
+            <p>Reprocesses history when a source, bug fix, or rule changes.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/ml-feature-prep.html">
+            <div class="feature-icon">&#129504;</div>
+            <h4 class="feature-card-title">Machine Learning Feature Prep</h4>
+            <p>Builds the feature tables ML models train and score against.</p>
+          </a>
+        </div>
       </section>
 
       <section id="event-schema-registry" class="submodule" style="--card-accent:#0f9b8e">
         <h2><span class="icon">&#128220;</span> Event Schema &amp; Registry</h2>
-        <ul class="feature-list">
-          <li><a href="transformation-processing/schema-management.html">Schema Management</a></li>
-          <li><a href="transformation-processing/versioning.html">Versioning</a></li>
-          <li><a href="transformation-processing/compatibility.html">Compatibility</a></li>
-          <li><a href="transformation-processing/governance-rules.html">Governance Rules</a></li>
-        </ul>
+        <div class="feature-grid">
+          <a class="feature-card" href="transformation-processing/schema-management.html">
+            <div class="feature-icon">&#128203;</div>
+            <h4 class="feature-card-title">Schema Management</h4>
+            <p>The authoritative definition of every event type's shape.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/versioning.html">
+            <div class="feature-icon">&#128290;</div>
+            <h4 class="feature-card-title">Versioning</h4>
+            <p>Lets a schema evolve without breaking existing consumers.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/compatibility.html">
+            <div class="feature-icon">&#128260;</div>
+            <h4 class="feature-card-title">Compatibility</h4>
+            <p>Automated checks that a schema change won't silently break anything.</p>
+          </a>
+          <a class="feature-card" href="transformation-processing/governance-rules.html">
+            <div class="feature-icon">&#9878;&#65039;</div>
+            <h4 class="feature-card-title">Governance Rules</h4>
+            <p>Policy layer governing naming, PII tags, and ownership.</p>
+          </a>
+        </div>
       </section>
 
       <div class="example-box">
