@@ -271,6 +271,25 @@ nav.main-nav {
   margin: 0;
 }
 
+/* ---------- Intro story ---------- */
+
+.intro-story {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--brand);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin: 24px 0 8px;
+  box-shadow: var(--shadow);
+}
+.intro-story p {
+  margin: 0 0 14px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+}
+.intro-story p:last-child { margin-bottom: 0; }
+
 /* ---------- Badge strip ---------- */
 
 .badge-strip {

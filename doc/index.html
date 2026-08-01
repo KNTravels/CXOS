@@ -81,6 +81,12 @@
     <p class="lead">Unified. Real-time. AI-Native. Built for the Future. This reference walks through the six-stage architecture that takes an event from a customer touchpoint all the way to real-time activation.</p>
   </section>
 
+  <div class="intro-story">
+    <p>Every enterprise today runs on a patchwork of systems — a website, a mobile app, a CRM, a support desk, a call center, a dozen SaaS tools — each holding a different sliver of the same customer relationship. Marketing sees one version of the customer, support sees another, and no one sees the whole picture in time to act on it.</p>
+    <p>CXOS exists to close that gap: a single, real-time operating system that collects every interaction once, resolves it to one unified profile, and makes it usable everywhere it needs to show up — a personalized email, a support agent's screen, a machine learning model — without a dozen teams maintaining a dozen disconnected pipelines.</p>
+    <p>This site is both the architecture reference and the build plan for the engineering teams implementing it. Each of the six stages below is worked through as a concrete, implementable design: real .NET Core microservices on Azure, a shared NuGet-based ingestion contract every integration speaks, an open Iceberg lakehouse queryable by any engine, and dbt-modeled, AI-ready data underneath it all. Four of the six stages are fully specified today, down to sample payloads and enterprise walkthroughs; Intelligence &amp; Services and Destinations &amp; Activation are next. Treat this as a living technical handbook — the plan is to keep it exactly as detailed as the code it's meant to guide.</p>
+  </div>
+
   <div class="badge-strip">
     <div class="badge"><span class="icon">&#128451;</span><div><div class="title">One Data Foundation</div><div class="desc">Collect once, use everywhere</div></div></div>
     <div class="badge"><span class="icon">&#9889;</span><div><div class="title">Real-time by Design</div><div class="desc">Stream, process, act instantly</div></div></div>
@@ -167,7 +173,7 @@
     <div class="section-head">
       <div>
         <h2>End-to-End Flow (Example)</h2>
-        <p>How a single product-view event travels through this reference implementation's stack — Angular, .NET Core, and PostgreSQL.</p>
+        <p>How a single product-view event travels through this reference implementation's stack — Angular, .NET Core microservices on Azure, and PostgreSQL.</p>
       </div>
     </div>
     <div class="flow-strip">
@@ -176,6 +182,8 @@
       <span class="flow-step">&#127777;&#65039; Angular App &mdash; Product Viewed</span>
       <span class="flow-arrow">&rarr;</span>
       <span class="flow-step">&#128268; .NET Core API &mdash; Ingestion</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">&#128246; Azure Event Hubs</span>
       <span class="flow-arrow">&rarr;</span>
       <span class="flow-step">&#9881;&#65039; .NET Core Worker &mdash; Stream Processing</span>
       <span class="flow-arrow">&rarr;</span>
@@ -189,14 +197,38 @@
     </div>
     <div class="tag-row">
       <span class="tag">Angular (SPA)</span>
-      <span class="tag">.NET Core Web API</span>
+      <span class="tag">.NET Core Web API (Docker on AKS)</span>
       <span class="tag">.NET Core Worker Service (IHostedService)</span>
+      <span class="tag">Azure API Management</span>
+      <span class="tag">Azure Event Hubs</span>
+      <span class="tag">Azure Service Bus</span>
+      <span class="tag">Azure Key Vault</span>
+      <span class="tag">Application Insights</span>
       <span class="tag">Entity Framework Core</span>
       <span class="tag">PostgreSQL</span>
+      <span class="tag">Cxos.Ingestion.Client (NuGet)</span>
     </div>
     <div class="example-box">
       <div class="label">Reference Implementation</div>
-      <p>A customer views a product on the Angular storefront. Angular POSTs a <code>ProductViewed</code> event to a .NET Core Web API ingestion endpoint. A .NET Core worker service (<code>IHostedService</code>) reads the event off a queue, deduplicates and enriches it, and persists it to PostgreSQL as the system of record. A .NET Core analytics API queries PostgreSQL (materialized views / window functions) to compute a propensity score, and the resulting insight triggers a .NET Core notification service that sends a personalized activation email.</p>
+      <p>A customer views a product on the Angular storefront. Angular POSTs a <code>ProductViewed</code> event, via the shared <code>Cxos.Ingestion.Client</code> contract, to a .NET Core Web API ingestion endpoint — packaged as a Docker container on AKS, fronted by Azure API Management. The API publishes the event onto Azure Event Hubs; a .NET Core worker service (<code>IHostedService</code>) consumes it, deduplicates and enriches it, and persists it to PostgreSQL as the system of record. A .NET Core analytics API queries PostgreSQL (materialized views / window functions) to compute a propensity score, and the resulting insight triggers a .NET Core activation service — via Azure Service Bus — that sends a personalized email. Application Insights carries one distributed-tracing correlation ID through every hop, so if any step fails, the exception shows up already linked to the exact request that caused it.</p>
+    </div>
+    <div class="handbook-block">
+      <h3>Also Used Across the Platform</h3>
+      <div class="tag-row">
+        <span class="tag">dbt (data build tool)</span>
+        <span class="tag">Snowflake</span>
+        <span class="tag">Azure Data Lake Storage Gen2</span>
+        <span class="tag">Azure Blob Storage</span>
+        <span class="tag">Azure Purview</span>
+        <span class="tag">Azure Cache for Redis</span>
+        <span class="tag">Azure IoT Hub</span>
+        <span class="tag">Azure Functions</span>
+        <span class="tag">Azure OpenAI Service</span>
+        <span class="tag">Azure Machine Learning</span>
+        <span class="tag">Azure AD (Entra ID) + Azure AD B2C</span>
+        <span class="tag">ADFS</span>
+        <span class="tag">Azure Monitor</span>
+      </div>
     </div>
   </section>
 
