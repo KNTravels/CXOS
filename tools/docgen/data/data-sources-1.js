@@ -47,6 +47,7 @@ module.exports = [
           'Ingestion API — ASP.NET Core microservice, packaged as a Docker container, running on AKS',
           'Azure Event Hubs — Kafka-compatible ingestion backbone',
           'Azure AD B2C — end-user authentication / consent context',
+          'Application Insights — end-to-end request tracing from the SDK through every downstream microservice',
         ],
         nfr: [
           'Scale: AKS autoscaling + Event Hubs throughput units absorb flash-sale traffic spikes without event loss',

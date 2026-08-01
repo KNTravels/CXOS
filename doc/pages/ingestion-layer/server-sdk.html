@@ -149,6 +149,7 @@ await _cxosClient.TrackAsync(new CxosEvent
       <li>Cxos.Ingestion.Client NuGet package (native .NET binding)</li>
       <li>Generated Node.js / Python / Java clients from the shared OpenAPI contract</li>
       <li>Azure API Management — server-to-server auth via API key or Azure AD managed identity</li>
+      <li>Application Insights — the SDK propagates the caller's trace context automatically, so a server-emitted event is traceable end-to-end alongside client-emitted ones</li>
       <li>Used directly by every other connector/gateway described elsewhere in this handbook (IoT, Kiosk, batch connectors)</li>
     </ul>
   </section>
