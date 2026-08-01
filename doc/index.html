@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CXOS Reference Documentation — Overview</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="pages/data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="pages/data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="pages/data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="pages/data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="pages/ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="pages/ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="pages/ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="pages/ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="pages/ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="pages/ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="pages/transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="pages/transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="pages/transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="pages/transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="pages/unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="pages/unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="pages/unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="pages/unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="pages/intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="pages/intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="pages/intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="pages/intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="pages/intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="pages/destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="pages/destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="pages/destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="pages/destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="pages/destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <p class="hero-eyebrow">Application Design &amp; Tech Stack</p>
+    <h1>CXOS — Customer Experience Operating System</h1>
+    <p class="lead">Unified. Real-time. AI-Native. Built for the Future. This reference walks through the six-stage architecture that takes an event from a customer touchpoint all the way to real-time activation.</p>
+  </section>
+
+  <div class="badge-strip">
+    <div class="badge"><span class="icon">&#128451;</span><div><div class="title">One Data Foundation</div><div class="desc">Collect once, use everywhere</div></div></div>
+    <div class="badge"><span class="icon">&#9889;</span><div><div class="title">Real-time by Design</div><div class="desc">Stream, process, act instantly</div></div></div>
+    <div class="badge"><span class="icon">&#128279;</span><div><div class="title">Open &amp; Composable</div><div class="desc">APIs, SDKs, Connectors</div></div></div>
+    <div class="badge"><span class="icon">&#129504;</span><div><div class="title">AI-Native</div><div class="desc">Intelligence across the stack</div></div></div>
+    <div class="badge"><span class="icon">&#128737;</span><div><div class="title">Privacy &amp; Trust</div><div class="desc">Governance, consent, control</div></div></div>
+    <div class="badge"><span class="icon">&#127760;</span><div><div class="title">Built for Scale</div><div class="desc">Multi-tenant. Multi-cloud.</div></div></div>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Architecture at a Glance</h2>
+        <p>Full end-to-end diagram — click to zoom.</p>
+      </div>
+    </div>
+    <div class="diagram-frame">
+      <img src="img/cxos-architecture.jpeg" alt="CXOS architecture diagram: Data Sources, Ingestion Layer, Transformation & Processing, Unified Data Foundation, Intelligence & Services, Destinations & Activation">
+    </div>
+    <p class="diagram-caption">Source diagram: doc/img/cxos-architecture.jpeg</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>The Six Modules</h2>
+        <p>Each stage below drills down into its own reference page with submodules and a real-world example.</p>
+      </div>
+    </div>
+    <div class="module-grid">
+
+      <a class="module-card" style="--card-accent:#6a4fc2" href="pages/data-sources.html">
+        <div class="step">STAGE 1</div>
+        <h3>Data Sources</h3>
+        <p>Every customer touchpoint, business system, and file feed that produces raw events.</p>
+        <div class="tags"><span>Touchpoints</span><span>Business Systems</span><span>Files &amp; APIs</span></div>
+        <div class="go">Explore Data Sources &rarr;</div>
+      </a>
+
+      <a class="module-card" style="--card-accent:#2b7fd6" href="pages/ingestion-layer.html">
+        <div class="step">STAGE 2</div>
+        <h3>Ingestion Layer</h3>
+        <p>SDKs, edge network, and connectors that collect, validate, and route events in real time.</p>
+        <div class="tags"><span>SDKs</span><span>Edge</span><span>Connectors</span></div>
+        <div class="go">Explore Ingestion Layer &rarr;</div>
+      </a>
+
+      <a class="module-card" style="--card-accent:#0f9b8e" href="pages/transformation-processing.html">
+        <div class="step">STAGE 3</div>
+        <h3>Transformation &amp; Processing</h3>
+        <p>Stream and batch processing that dedupes, stitches identity, and models data for use.</p>
+        <div class="tags"><span>Stream</span><span>Batch</span><span>Schema Registry</span></div>
+        <div class="go">Explore Transformation &amp; Processing &rarr;</div>
+      </a>
+
+      <a class="module-card" style="--card-accent:#2e9e5b" href="pages/unified-data-foundation.html">
+        <div class="step">STAGE 4</div>
+        <h3>Unified Data Foundation</h3>
+        <p>The CXOS Data Lakehouse — one copy of data, open formats, full governance.</p>
+        <div class="tags"><span>Lakehouse</span><span>Metadata</span><span>Governance</span></div>
+        <div class="go">Explore Unified Data Foundation &rarr;</div>
+      </a>
+
+      <a class="module-card" style="--card-accent:#d9822b" href="pages/intelligence-services.html">
+        <div class="step">STAGE 5</div>
+        <h3>Intelligence &amp; Services</h3>
+        <p>Identity, query, AI, and operational services layered on top of the foundation.</p>
+        <div class="tags"><span>Identity</span><span>Query Engine</span><span>AI &amp; Insights</span></div>
+        <div class="go">Explore Intelligence &amp; Services &rarr;</div>
+      </a>
+
+      <a class="module-card" style="--card-accent:#c23b6d" href="pages/destinations-activation.html">
+        <div class="step">STAGE 6</div>
+        <h3>Destinations &amp; Activation</h3>
+        <p>Real-time and batch delivery to the platforms where customer experience happens.</p>
+        <div class="tags"><span>Real-time</span><span>Exports</span><span>Reverse ETL</span></div>
+        <div class="go">Explore Destinations &amp; Activation &rarr;</div>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>End-to-End Flow (Example)</h2>
+        <p>How a single product-view event travels through the system.</p>
+      </div>
+    </div>
+    <div class="flow-strip">
+      <span class="flow-step">&#128100; User</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">&#128421; Product Viewed</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">&#9729; Edge</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">&#9889; Stream Processing</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">&#128451; Data Lakehouse</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">&#128202; Analytics Engine</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">&#128161; Insight</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">&#128228; Activation</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Cross-Cutting Foundation</h2>
+        <p>Capabilities that run underneath every module above.</p>
+      </div>
+    </div>
+    <div class="foundation-grid">
+      <div class="foundation-item"><div class="icon">&#128200;</div><h4>Observability</h4><p>Logs, Metrics, Traces</p></div>
+      <div class="foundation-item"><div class="icon">&#128272;</div><h4>Security</h4><p>IAM, Secrets, Threat Detection</p></div>
+      <div class="foundation-item"><div class="icon">&#128736;</div><h4>Developer Platform</h4><p>APIs, SDKs, Docs, Sandboxes</p></div>
+      <div class="foundation-item"><div class="icon">&#127961;</div><h4>Multi-Tenancy</h4><p>Isolation, Quotas, Limits</p></div>
+      <div class="foundation-item"><div class="icon">&#9881;</div><h4>Administration</h4><p>Users, Roles, Audit, Settings</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Key Design Principles</h2>
+      </div>
+    </div>
+    <ul class="principles-list">
+      <li>Collect once, use everywhere</li>
+      <li>Real-time by default</li>
+      <li>Metadata drives everything</li>
+      <li>Open, extensible, and future-proof</li>
+      <li>Privacy, security, and governance baked-in</li>
+      <li>Built for scale and performance</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Legend</h2>
+      </div>
+    </div>
+    <ul class="legend-list">
+      <li><span class="legend-line"></span> Data Flow (Real-time)</li>
+      <li><span class="legend-line dashed"></span> Data Flow (Batch / Near Real-time)</li>
+      <li><span class="legend-line dotted"></span> Control / Metadata Flow</li>
+    </ul>
+  </section>
+
+</main>
+
+<div class="lightbox"><img src="" alt="Architecture diagram enlarged"></div>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

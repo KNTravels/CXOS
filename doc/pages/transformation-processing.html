@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformation &amp; Processing — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb"><a href="../index.html">Overview</a><span class="sep">/</span><span class="current">Transformation &amp; Processing</span></div>
+
+  <div class="module-page">
+    <aside class="side-nav">
+      <div class="label">On this page</div>
+      <ul>
+        <li><a href="#stream-processing">Stream Processing</a></li>
+        <li><a href="#batch-processing">Batch Processing</a></li>
+        <li><a href="#event-schema-registry">Event Schema &amp; Registry</a></li>
+      </ul>
+    </aside>
+
+    <div>
+      <div class="module-intro" style="--card-accent:#0f9b8e">
+        <div class="step">Stage 3 of 6</div>
+        <h1>Transformation &amp; Processing</h1>
+        <p>Raw events are deduplicated, stitched to an identity, sessionized, and modeled — in real time for immediate use, and in batch for deeper aggregation.</p>
+      </div>
+
+      <section id="stream-processing" class="submodule" style="--card-accent:#0f9b8e">
+        <h2><span class="icon">&#9889;</span> Stream Processing</h2>
+        <p class="tech">Real-time — Bytewax / Quix Streams</p>
+        <ul class="feature-list">
+          <li>Event Deduplication</li>
+          <li>Sessionization</li>
+          <li>Identity Resolution (Stitching)</li>
+          <li>Data Quality Checks</li>
+          <li>Real-time Enrichment</li>
+          <li>Derived Event Generation</li>
+        </ul>
+      </section>
+
+      <section id="batch-processing" class="submodule" style="--card-accent:#0f9b8e">
+        <h2><span class="icon">&#128203;</span> Batch Processing</h2>
+        <p class="tech">Near-Real-time — Spark / Python Jobs</p>
+        <ul class="feature-list">
+          <li>Rollups &amp; Aggregations</li>
+          <li>Data Modeling</li>
+          <li>Backfills</li>
+          <li>Machine Learning Feature Prep</li>
+        </ul>
+      </section>
+
+      <section id="event-schema-registry" class="submodule" style="--card-accent:#0f9b8e">
+        <h2><span class="icon">&#128220;</span> Event Schema &amp; Registry</h2>
+        <ul class="feature-list">
+          <li>Schema Management</li>
+          <li>Versioning</li>
+          <li>Compatibility</li>
+          <li>Governance Rules</li>
+        </ul>
+      </section>
+
+      <div class="example-box">
+        <div class="label">Real World Example</div>
+        <p>Events are deduplicated, stitched to a single customer profile, sessions are built, and purchase events update lifetime value in real-time. Nightly jobs aggregate data for faster analytics.</p>
+      </div>
+
+      <div class="module-pager">
+        <a class="prev" href="ingestion-layer.html"><div class="dir">&larr; Previous</div><div class="name">Ingestion Layer</div></a>
+        <a class="next" href="unified-data-foundation.html"><div class="dir">Next stage &rarr;</div><div class="name">Unified Data Foundation</div></a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

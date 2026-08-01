@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destinations &amp; Activation — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb"><a href="../index.html">Overview</a><span class="sep">/</span><span class="current">Destinations &amp; Activation</span></div>
+
+  <div class="module-page">
+    <aside class="side-nav">
+      <div class="label">On this page</div>
+      <ul>
+        <li><a href="#real-time-activation">Real-time Activation</a></li>
+        <li><a href="#batch-file-exports">Batch / File Exports</a></li>
+        <li><a href="#apis-webhooks">APIs &amp; Webhooks</a></li>
+        <li><a href="#reverse-etl-cdp-sync">Reverse ETL / CDP Sync</a></li>
+      </ul>
+    </aside>
+
+    <div>
+      <div class="module-intro" style="--card-accent:#c23b6d">
+        <div class="step">Stage 6 of 6</div>
+        <h1>Destinations &amp; Activation</h1>
+        <p>Where insight becomes action — pushing audiences, personalization, and data out to the platforms and systems where customer experience actually happens.</p>
+      </div>
+
+      <section id="real-time-activation" class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#9889;</span> Real-time Activation</h2>
+        <ul class="feature-list">
+          <li>Email Platforms (SendGrid)</li>
+          <li>SMS / Push (Twilio, FCM)</li>
+          <li>Ad Platforms (Google, Meta)</li>
+          <li>Web / App Personalization</li>
+          <li>On-site Messages</li>
+        </ul>
+      </section>
+
+      <section id="batch-file-exports" class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#128190;</span> Batch / File Exports</h2>
+        <ul class="feature-list">
+          <li>S3 / GCS / Azure Blob</li>
+          <li>SFTP / FTPS</li>
+          <li>Snowflake / BigQuery</li>
+          <li>Databricks / Redshift</li>
+        </ul>
+      </section>
+
+      <section id="apis-webhooks" class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#128279;</span> APIs &amp; Webhooks</h2>
+        <ul class="feature-list">
+          <li>Journeys &amp; Automation</li>
+          <li>External Applications</li>
+          <li>Custom Integrations</li>
+        </ul>
+      </section>
+
+      <section id="reverse-etl-cdp-sync" class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#128260;</span> Reverse ETL / CDP Sync</h2>
+        <ul class="feature-list">
+          <li>CRM (Salesforce)</li>
+          <li>Support (Zendesk)</li>
+          <li>Marketing (HubSpot)</li>
+        </ul>
+      </section>
+
+      <div class="example-box">
+        <div class="label">Real World Example</div>
+        <p>A high-intent user is added to a remarketing audience in Meta Ads, receives a personalized email, and sees an on-site offer the next time they visit.</p>
+      </div>
+
+      <div class="module-pager">
+        <a class="prev" href="intelligence-services.html"><div class="dir">&larr; Previous</div><div class="name">Intelligence &amp; Services</div></a>
+        <a class="next" href="../index.html"><div class="dir">Back to &rarr;</div><div class="name">Overview</div></a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
