@@ -257,9 +257,9 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
         hldCaption: 'Rollups turn billions of raw events into dashboard-ready summaries.',
         hld: [
           { label: 'Data Source', name: 'Data Lakehouse (curated zone)', detail: 'Read source' },
-          { label: 'Ingestion', name: 'Azure Functions Timer', detail: 'Scheduled batch trigger' },
-          { label: 'Processing', name: 'Rollups &amp; Aggregations', detail: '.NET Core Batch Worker — scheduled aggregation jobs', origin: true },
-          { label: 'Foundation', name: 'Data Lakehouse (analytics-marts zone)', detail: 'Write destination' },
+          { label: 'Ingestion', name: 'dbt Core', detail: 'SQL-based transformation framework' },
+          { label: 'Processing', name: 'Rollups &amp; Aggregations', detail: 'dbt incremental models, orchestrated by a Dockerized .NET Core scheduler', origin: true },
+          { label: 'Foundation', name: 'Data Lakehouse (analytics-marts zone)', detail: 'Or Snowflake, via dbt\'s adapter' },
           { label: 'Intelligence', name: 'Query &amp; Analytics Engine', detail: 'Primary consumer of rollup tables' },
           { label: 'Activation', name: 'Executive &amp; Team Dashboards', detail: 'Fast, affordable reporting' },
         ],
@@ -268,30 +268,34 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           "Standardizes how metrics like 'daily active users' are defined and computed, so different teams don't get different numbers for the same metric",
           'Owned by Data Engineering / Analytics Engineering',
         ],
-        technical: 'Scheduled .NET Core batch jobs (Azure Functions Timer trigger, or longer-running jobs on Azure Container Apps Jobs) read from the curated zone of the Data Lakehouse and write pre-aggregated tables (daily/weekly rollups by dimension) back into the analytics-marts zone. Jobs use windowed, idempotent writes (safe to rerun for a given date) so a failed run can simply be retried without double-counting.',
+        technical: 'Rollups are defined as dbt models (SQL, materialized as incremental Iceberg tables) rather than hand-rolled batch jobs. A thin .NET Core scheduler, packaged as a Docker container on Azure Container Apps Jobs, triggers <code>dbt run --select tag:rollups</code> on a schedule; dbt\'s incremental materialization processes only the current day/week partition, and <code>dbt test</code> runs automatically afterward (row-count and not-null checks) so a broken aggregation never silently reaches the marts zone. Teams standardized on a cloud warehouse can point the same dbt project at Snowflake via its adapter instead of the lakehouse, without rewriting the SQL.',
         chipsLabel: 'Example Rollups', chips: ['Daily active users', 'Revenue by category', 'Cohort retention', 'Channel-level funnel conversion'],
-        artifactTitle: 'Rollup Table Row',
-        artifactCode: `{
-  "date": "2026-08-01",
-  "dimension": "product_category",
-  "value": "audio",
-  "metric": "revenue",
-  "amount": 482910,
-  "currency": "INR"
-}`,
+        artifactTitle: 'dbt Model — Rollup',
+        artifactCode: `-- models/marts/revenue_by_category_daily.sql
+{{ config(materialized='incremental', unique_key=['event_date','category']) }}
+
+select
+  event_date,
+  product_category as category,
+  sum(amount) as revenue
+from {{ ref('stg_order_events') }}
+{% if is_incremental() %}
+where event_date >= (select max(event_date) from {{ this }})
+{% endif %}
+group by 1, 2`,
         integration: [
-          'Azure Functions Timer trigger / Azure Container Apps Jobs — scheduled batch execution',
-          'Data Lakehouse curated zone — read source',
-          'Data Lakehouse analytics-marts zone — write destination',
+          'dbt Core — SQL-based transformation and testing framework, version-controlled alongside application code',
+          'Dockerized .NET Core scheduler (Azure Container Apps Jobs) — triggers <code>dbt run</code> / <code>dbt test</code> on a schedule',
+          "Data Lakehouse analytics-marts zone, or Snowflake via dbt's adapter — write destination",
           'Query &amp; Analytics Engine — the primary consumer of rollup tables for dashboards',
         ],
         nfr: [
-          'Scale: jobs process a bounded daily/weekly partition rather than the full historical table, keeping runtime predictable as data grows',
+          "Scale: dbt's incremental materialization processes only the current day/week partition rather than the full historical table, keeping runtime predictable as data grows",
           'Latency: rollups are typically available a few hours after the day/week closes — not real-time by design',
           'Reliability: idempotent, date-partitioned writes make reruns and backfills safe',
           "Security/Privacy: rollups aggregate away individual-level PII by construction — inherently more privacy-safe than raw event access",
         ],
-        example: 'The weekly executive dashboard reads from a pre-computed revenue-by-category rollup instead of scanning a billion-row raw event table on every page load — the difference between a sub-second dashboard and a report that times out.',
+        example: 'The weekly executive dashboard reads from a pre-computed revenue-by-category dbt model instead of scanning a billion-row raw event table on every page load. When a currency-conversion bug briefly corrupts the aggregation, a <code>dbt test</code> assertion (revenue must be non-negative) fails the run automatically — preventing the bad numbers from ever reaching the dashboard.',
       },
       {
         slug: 'data-modeling', name: 'Data Modeling',
@@ -299,9 +303,9 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
         hldCaption: 'Data Modeling bridges raw events and business-friendly entities.',
         hld: [
           { label: 'Data Source', name: 'Data Lakehouse (curated zone)', detail: 'Source event data' },
-          { label: 'Ingestion', name: 'Azure Data Factory', detail: 'Batch orchestration' },
-          { label: 'Processing', name: 'Data Modeling', detail: '.NET Core Batch Worker — dimensional model builds', origin: true },
-          { label: 'Foundation', name: 'Data Lakehouse (analytics-marts zone)', detail: 'Fact/dimension tables' },
+          { label: 'Ingestion', name: 'dbt Core', detail: 'Staging &rarr; intermediate &rarr; marts model layers' },
+          { label: 'Processing', name: 'Data Modeling', detail: 'dbt models, version-controlled and code-reviewed', origin: true },
+          { label: 'Foundation', name: 'Data Lakehouse (analytics-marts zone)', detail: 'Or Snowflake, via dbt\'s adapter' },
           { label: 'Intelligence', name: "Semantic Layer", detail: "Maps business terms onto these models" },
           { label: 'Activation', name: 'BI Tools &amp; Business Users', detail: 'Think in customers, orders, products' },
         ],
@@ -310,30 +314,31 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           'Establishes a single, governed definition of core business entities instead of every analyst building their own',
           'Owned by Analytics Engineering, in partnership with each business domain',
         ],
-        technical: 'Batch modeling jobs (.NET Core, orchestrated via Azure Data Factory or Azure Functions) build dimensional tables (fact/dimension model) from the curated event zone — a customer dimension, an order fact table, a product dimension — following a schema defined and reviewed like any other API contract. These tables are what the Query &amp; Analytics Engine\'s semantic layer maps business-friendly metric names onto.',
+        technical: 'Dimensional models are dbt models following the staging &rarr; intermediate &rarr; marts layering convention: staging models do light cleanup 1:1 with a source table, intermediate models join and reshape, and marts models are the final fact/dimension tables the Query &amp; Analytics Engine\'s semantic layer maps business-friendly names onto. dbt\'s <code>ref()</code> and <code>source()</code> functions build the model dependency graph automatically — this graph is what the Metadata Layer\'s Lineage capability surfaces, so lineage is a byproduct of writing the models correctly, not separate documentation work. Models materialize as Iceberg tables in the lakehouse by default, or in Snowflake for teams standardized on that warehouse, via dbt\'s adapter.',
         chipsLabel: 'Model Types', chips: ['Fact tables (orders, sessions)', 'Dimension tables (customer, product)', 'Slowly changing dimensions (SCD Type 2)'],
-        artifactTitle: 'Dimension Table Row',
-        artifactCode: `{
-  "customer_key": "cust_004821",
-  "tier": "gold",
-  "signup_date": "2024-03-12",
-  "valid_from": "2026-06-01",
-  "valid_to": null,
-  "is_current": true
-}`,
+        artifactTitle: 'dbt Model — Dimension',
+        artifactCode: `-- models/marts/dim_customer.sql
+{{ config(materialized='table') }}
+
+select
+  customer_key,
+  tier,
+  signup_date,
+  current_timestamp() as valid_from
+from {{ ref('stg_customer_profile') }}`,
         integration: [
-          'Azure Data Factory / Azure Functions — batch orchestration',
-          'Data Lakehouse curated zone — source data',
-          'Data Lakehouse analytics-marts zone — modeled fact/dimension tables',
-          "Query & Analytics Engine's semantic layer — maps business terms onto these models",
+          'dbt Core — staging/intermediate/marts model layers, version-controlled alongside application code',
+          "dbt docs — auto-generates the dependency graph that feeds the Metadata Layer's Lineage",
+          "Data Lakehouse analytics-marts zone, or Snowflake via dbt's adapter — model materialization target",
+          "Query & Analytics Engine's semantic layer — maps business terms onto marts models",
         ],
         nfr: [
-          'Scale: incremental modeling (processing only changed records) keeps build times manageable as history grows',
+          'Scale: dbt chooses incremental or full-refresh materialization per model based on data volume and change rate, keeping build times manageable as history grows',
           "Latency: models typically refresh on an hourly-to-daily cadence, matching the rollups' cadence",
-          'Reliability: schema changes to a model go through the same review process as an API contract change, since BI tools depend on stability',
+          'Reliability: model changes go through the same pull-request review as an API contract change, since BI tools depend on stability',
           'Security/Privacy: PII fields in dimension tables are classified and access-controlled the same as any other sensitive data in the lakehouse',
         ],
-        example: "When Finance asks 'what was gold-tier customer revenue last quarter', the answer comes from a join between the customer dimension and order fact tables that Analytics Engineering already built and validated — not a bespoke, unreviewed query against raw events.",
+        example: "When Finance asks 'what was gold-tier customer revenue last quarter', the answer comes from a join between the dim_customer and fct_orders dbt models — reviewed via pull request like any other code change — not a bespoke, unreviewed query against raw events.",
       },
       {
         slug: 'backfills', name: 'Backfills',
@@ -341,8 +346,8 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
         hldCaption: 'Backfills bring history in line with the current logic, safely.',
         hld: [
           { label: 'Data Source', name: 'Data Lakehouse (raw zone)', detail: 'Source of truth for reprocessing' },
-          { label: 'Ingestion', name: 'Azure Container Apps Jobs', detail: 'Long-running backfill execution' },
-          { label: 'Processing', name: 'Backfills', detail: '.NET Core Batch Worker — historical reprocessing jobs', origin: true },
+          { label: 'Ingestion', name: 'dbt Core', detail: 'Same model SQL used for backfill and production runs' },
+          { label: 'Processing', name: 'Backfills', detail: 'dbt run with a historical date-range variable', origin: true },
           { label: 'Foundation', name: 'Iceberg Time Travel / Versioning', detail: 'Enables safe, validated cutover' },
           { label: 'Intelligence', name: 'Same Transformation Logic', detail: 'Reused, not reimplemented, for consistency' },
           { label: 'Activation', name: 'Corrected Historical Reporting', detail: 'Brings history in line with current logic' },
@@ -352,29 +357,25 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           'Lets a bug fix or business-logic change apply retroactively, keeping historical reporting consistent with current definitions',
           'Owned by Data Engineering, requested by whichever team needs the correction or onboarding',
         ],
-        technical: "A backfill job re-runs the Transformation &amp; Processing logic (stream or batch) against a historical date range read from the Data Lakehouse's raw zone, writing corrected output to the curated/marts zones. Because the lakehouse's Iceberg tables support time travel and versioning, backfills can write to a new table version and be validated before the 'current' pointer is switched over — avoiding a window where in-flight readers see partially backfilled data.",
+        technical: 'Backfills use dbt\'s variable-driven date-range pattern: <code>dbt run --select model_name --vars \'{"start_date": ..., "end_date": ...}\'</code> reprocesses a historical window using the exact same model SQL as production — there\'s no separate backfill codebase that can drift out of sync with the real pipeline. The job runs as a Docker container on Azure Container Apps Jobs, writing to a new Iceberg snapshot; because the lakehouse\'s Iceberg tables support time travel, the previous snapshot remains queryable and the \'current\' pointer only switches over once <code>dbt test</code> confirms the backfilled output against a validation target.',
         chipsLabel: 'Common Triggers', chips: ['New source onboarding', 'Bug fix in derivation logic', 'Business rule change', 'Schema evolution'],
-        artifactTitle: 'Backfill Job Definition',
-        artifactCode: `{
-  "backfill_id": "bf_20260801_identity_fix",
-  "date_range": ["2026-01-01", "2026-07-31"],
-  "target_table": "curated.identity_stitched_events",
-  "reason": "corrected probabilistic match threshold",
-  "validation_required": true
-}`,
+        artifactTitle: 'dbt Backfill Command',
+        artifactCode: `dbt run --select identity_stitched_events \\
+  --vars '{"start_date": "2026-01-01", "end_date": "2026-07-31"}' \\
+  --target validation`,
         integration: [
-          'Data Lakehouse raw zone — source of truth for reprocessing',
-          'Iceberg time travel / versioning — enables safe, validated cutover',
-          'Azure Container Apps Jobs — long-running backfill execution',
-          'Same Transformation &amp; Processing logic used in real-time — reused, not reimplemented, for consistency',
+          'dbt Core — the same model SQL used for backfill and production runs, parameterized by date range',
+          'Iceberg time travel / versioning — enables safe, validated cutover before the new snapshot becomes current',
+          'Docker container on Azure Container Apps Jobs — long-running backfill execution',
+          'dbt test — runs against the validation target before the backfilled data is promoted',
         ],
         nfr: [
-          'Scale: large backfills (months to years of history) are chunked by date range and parallelized across workers',
+          'Scale: large backfills (months to years of history) are chunked by date range and run as parallel dbt invocations',
           'Latency: backfills are explicitly not real-time — they\'re scheduled, monitored, long-running jobs',
           'Reliability: table versioning allows validation before cutover and instant rollback if a backfill produces unexpected results',
           'Security/Privacy: backfills follow the same access-control and audit-logging requirements as any other write to the lakehouse',
         ],
-        example: 'A fix to the identity-stitching confidence threshold is deployed. Rather than accepting seven months of under-stitched historical profiles, a backfill reprocesses that window using the corrected logic, validates the output against a sample, and cuts over — bringing historical data in line with the corrected logic without a multi-month wait.',
+        example: 'A fix to the identity-stitching confidence threshold is deployed. Rather than accepting seven months of under-stitched historical profiles, <code>dbt run</code> reprocesses that window with the corrected model against a validation target, <code>dbt test</code> confirms the output, and the snapshot is promoted — bringing historical data in line with the corrected logic without a multi-month wait or a second codebase to maintain.',
       },
       {
         slug: 'ml-feature-prep', name: 'Machine Learning Feature Prep',
@@ -382,8 +383,8 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
         hldCaption: 'Feature Prep is where most of the real work behind "AI-powered" personalization happens.',
         hld: [
           { label: 'Data Source', name: 'Data Lakehouse (curated zone)', detail: 'Source event data' },
-          { label: 'Ingestion', name: 'Scheduled Batch Job', detail: 'Azure Container Apps Jobs' },
-          { label: 'Processing', name: 'ML Feature Prep', detail: '.NET Core Batch Worker — feature engineering pipeline', origin: true },
+          { label: 'Ingestion', name: 'dbt Python Models', detail: 'pandas/scikit-learn feature transforms' },
+          { label: 'Processing', name: 'ML Feature Prep', detail: 'dbt models (SQL + Python) — feature engineering', origin: true },
           { label: 'Foundation', name: 'Feature Store Table', detail: 'Data Lakehouse — computed features' },
           { label: 'Intelligence', name: 'AI &amp; Insights API', detail: 'Reads features at inference time' },
           { label: 'Activation', name: 'Azure Machine Learning', detail: 'Training jobs read point-in-time snapshots' },
@@ -393,29 +394,29 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           "Reusable feature tables mean a new model doesn't start from raw events every time — it builds on a shared, governed feature set",
           'Owned by Data Science / ML Engineering, using Data Engineering\'s batch infrastructure',
         ],
-        technical: 'Feature prep jobs compute per-customer feature vectors (recency/frequency/monetary metrics, category affinities, engagement scores) from the curated event zone on a scheduled cadence, writing to a dedicated feature store table in the Data Lakehouse. The AI &amp; Insights API reads the latest feature vector at inference time rather than recomputing it live, keeping model-serving latency low; training jobs read historical feature snapshots for point-in-time-correct training data.',
+        technical: 'Most feature tables are ordinary SQL dbt models (recency/frequency/monetary aggregates); features that need array or ML-library logic (e.g., a category-affinity vector) use dbt\'s Python model support, running pandas/scikit-learn inside the same orchestrated pipeline instead of a separate bespoke feature-pipeline codebase. Every feature model gets the same version control, <code>dbt test</code> data-quality checks, and automatic lineage as any other transformation. The .NET Core scheduler, packaged as a Docker container on Azure Container Apps Jobs, triggers the feature-tagged model selection on a schedule; the AI &amp; Insights API reads the latest feature vector at inference time, and Azure Machine Learning training jobs read historical feature snapshots for point-in-time-correct training data.',
         chipsLabel: 'Example Features', chips: ['recency_days', 'purchase_frequency_90d', 'category_affinity_vector', 'engagement_score'],
-        artifactTitle: 'Feature Vector Row',
-        artifactCode: `{
-  "customer_key": "cust_004821",
-  "as_of_date": "2026-08-01",
-  "recency_days": 3,
-  "purchase_frequency_90d": 4,
-  "engagement_score": 0.82
-}`,
+        artifactTitle: 'dbt Python Model — Feature',
+        artifactCode: `# models/features/customer_engagement_score.py
+def model(dbt, session):
+    df = dbt.ref("stg_customer_events").to_pandas()
+    df["engagement_score"] = (
+        df["session_count_30d"] * 0.4 + df["purchase_count_30d"] * 0.6
+    )
+    return df[["customer_key", "engagement_score"]]`,
         integration: [
-          'Data Lakehouse curated zone — source event data',
+          'dbt Core (SQL models) + dbt Python models — feature engineering, version-controlled and tested',
           'Feature store table (Data Lakehouse) — where computed features are written',
           'AI &amp; Insights API — reads features at inference time',
           'Azure Machine Learning — training jobs read point-in-time feature snapshots',
         ],
         nfr: [
-          'Scale: feature computation is incremental where possible (updating only changed customers) rather than a full recompute each run',
+          "Scale: dbt's incremental materialization updates only changed customers' feature rows rather than a full recompute each run",
           'Latency: features typically refresh daily; models needing fresher signals combine batch features with the real-time enrichment layer',
           "Reliability: point-in-time correctness is enforced so training data never leaks future information into a feature computed 'as of' an earlier date",
           'Security/Privacy: feature tables are subject to the same governance classification as the raw data they are derived from',
         ],
-        example: "The propensity-to-convert model used by AI & Insights trains on a point-in-time-correct feature snapshot rather than today's live data, avoiding the common mistake of a model that performs well in testing but poorly in production because it was accidentally trained on 'future' information.",
+        example: "The propensity-to-convert model used by AI & Insights trains on a point-in-time-correct dbt feature snapshot rather than today's live data — the same <code>dbt test</code> suite that validates the feature model in production also catches a future-leaking join before it ever reaches a training run.",
       },
     ],
   },

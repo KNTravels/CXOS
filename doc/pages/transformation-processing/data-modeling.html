@@ -92,11 +92,11 @@
     <div class="hld-diagram">
       <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Lakehouse (curated zone)</div><div class="stage-detail">Source event data</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure Data Factory</div><div class="stage-detail">Batch orchestration</div></div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">dbt Core</div><div class="stage-detail">Staging &rarr; intermediate &rarr; marts model layers</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node origin" style="--card-accent:#0f9b8e"><div class="stage-label">Processing</div><div class="stage-name">Data Modeling</div><div class="stage-detail">.NET Core Batch Worker — dimensional model builds</div></div>
+      <div class="hld-node origin" style="--card-accent:#0f9b8e"><div class="stage-label">Processing</div><div class="stage-name">Data Modeling</div><div class="stage-detail">dbt models, version-controlled and code-reviewed</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse (analytics-marts zone)</div><div class="stage-detail">Fact/dimension tables</div></div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse (analytics-marts zone)</div><div class="stage-detail">Or Snowflake, via dbt's adapter</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Semantic Layer</div><div class="stage-detail">Maps business terms onto these models</div></div>
       <div class="hld-arrow">&rarr;</div>
@@ -115,7 +115,7 @@
 
   <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>Batch modeling jobs (.NET Core, orchestrated via Azure Data Factory or Azure Functions) build dimensional tables (fact/dimension model) from the curated event zone — a customer dimension, an order fact table, a product dimension — following a schema defined and reviewed like any other API contract. These tables are what the Query &amp; Analytics Engine's semantic layer maps business-friendly metric names onto.</p>
+    <p>Dimensional models are dbt models following the staging &rarr; intermediate &rarr; marts layering convention: staging models do light cleanup 1:1 with a source table, intermediate models join and reshape, and marts models are the final fact/dimension tables the Query &amp; Analytics Engine's semantic layer maps business-friendly names onto. dbt's <code>ref()</code> and <code>source()</code> functions build the model dependency graph automatically — this graph is what the Metadata Layer's Lineage capability surfaces, so lineage is a byproduct of writing the models correctly, not separate documentation work. Models materialize as Iceberg tables in the lakehouse by default, or in Snowflake for teams standardized on that warehouse, via dbt's adapter.</p>
     <div class="handbook-block">
       <h3>Model Types</h3>
       <div class="tag-row">
@@ -127,40 +127,41 @@
   </section>
 
   <section class="submodule" style="--card-accent:#0f9b8e">
-    <h2><span class="icon">&#128190;</span> Dimension Table Row</h2>
-    <pre class="code-block">{
-  "customer_key": "cust_004821",
-  "tier": "gold",
-  "signup_date": "2024-03-12",
-  "valid_from": "2026-06-01",
-  "valid_to": null,
-  "is_current": true
-}</pre>
+    <h2><span class="icon">&#128190;</span> dbt Model — Dimension</h2>
+    <pre class="code-block">-- models/marts/dim_customer.sql
+{{ config(materialized='table') }}
+
+select
+  customer_key,
+  tier,
+  signup_date,
+  current_timestamp() as valid_from
+from {{ ref('stg_customer_profile') }}</pre>
   </section>
 
   <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128279;</span> Integration Points</h2>
     <ul class="feature-list">
-      <li>Azure Data Factory / Azure Functions — batch orchestration</li>
-      <li>Data Lakehouse curated zone — source data</li>
-      <li>Data Lakehouse analytics-marts zone — modeled fact/dimension tables</li>
-      <li>Query & Analytics Engine's semantic layer — maps business terms onto these models</li>
+      <li>dbt Core — staging/intermediate/marts model layers, version-controlled alongside application code</li>
+      <li>dbt docs — auto-generates the dependency graph that feeds the Metadata Layer's Lineage</li>
+      <li>Data Lakehouse analytics-marts zone, or Snowflake via dbt's adapter — model materialization target</li>
+      <li>Query & Analytics Engine's semantic layer — maps business terms onto marts models</li>
     </ul>
   </section>
 
   <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
-      <li>Scale: incremental modeling (processing only changed records) keeps build times manageable as history grows</li>
+      <li>Scale: dbt chooses incremental or full-refresh materialization per model based on data volume and change rate, keeping build times manageable as history grows</li>
       <li>Latency: models typically refresh on an hourly-to-daily cadence, matching the rollups' cadence</li>
-      <li>Reliability: schema changes to a model go through the same review process as an API contract change, since BI tools depend on stability</li>
+      <li>Reliability: model changes go through the same pull-request review as an API contract change, since BI tools depend on stability</li>
       <li>Security/Privacy: PII fields in dimension tables are classified and access-controlled the same as any other sensitive data in the lakehouse</li>
     </ul>
   </section>
 
   <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>When Finance asks 'what was gold-tier customer revenue last quarter', the answer comes from a join between the customer dimension and order fact tables that Analytics Engineering already built and validated — not a bespoke, unreviewed query against raw events.</p>
+    <p>When Finance asks 'what was gold-tier customer revenue last quarter', the answer comes from a join between the dim_customer and fct_orders dbt models — reviewed via pull request like any other code change — not a bespoke, unreviewed query against raw events.</p>
   </section>
 
   <p style="margin-top:28px;"><a href="../transformation-processing.html#batch-processing">&larr; Back to Batch Processing</a></p>

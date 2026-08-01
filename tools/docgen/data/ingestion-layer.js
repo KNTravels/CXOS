@@ -161,7 +161,7 @@ await _cxosClient.TrackAsync(new CxosEvent
           'The single place where "did we receive this event at all" can be answered, which matters for data-completeness audits',
           'Owned by Platform Engineering; treated as a tier-1 production service',
         ],
-        technical: 'Event Collection is the ASP.NET Core Web API endpoint fronted by Azure API Management. It accepts events over HTTPS (SDKs), gRPC (high-throughput server callers), and via the webhook receivers described elsewhere. Every request is authenticated, given a receipt timestamp and a server-assigned <code>event_id</code> if the caller didn\'t supply one, and acknowledged with a 202 Accepted before any validation or enrichment happens — collection is deliberately decoupled from processing so a downstream slowdown never blocks intake.',
+        technical: 'Event Collection is the ASP.NET Core Web API endpoint fronted by Azure API Management, built and shipped as a Docker image so every environment (local dev, staging, production AKS nodes) runs the identical container. It accepts events over HTTPS (SDKs), gRPC (high-throughput server callers), and via the webhook receivers described elsewhere. Every request is authenticated, given a receipt timestamp and a server-assigned <code>event_id</code> if the caller didn\'t supply one, and acknowledged with a 202 Accepted before any validation or enrichment happens — collection is deliberately decoupled from processing so a downstream slowdown never blocks intake.',
         chipsLabel: 'Supported Transports', chips: ['HTTPS (SDKs)', 'gRPC (server callers)', 'Webhooks', 'Batch upload'],
         artifactTitle: 'Collection Acknowledgment',
         artifactCode: `HTTP/1.1 202 Accepted
@@ -172,7 +172,7 @@ await _cxosClient.TrackAsync(new CxosEvent
 }`,
         integration: [
           'Azure API Management — ingress, auth, throttling for all transports',
-          'NET Core Ingestion API on AKS — the collection endpoint itself',
+          '.NET Core Ingestion API — Docker container on AKS, the collection endpoint itself',
           'Azure Event Hubs — immediate hand-off after acknowledgment',
           'Azure Monitor — collection-tier health and throughput dashboards',
         ],
@@ -252,7 +252,7 @@ await _cxosClient.TrackAsync(new CxosEvent
 }`,
         integration: [
           'Azure Cache for Redis — cached IP-to-geo lookup table for low-latency enrichment',
-          'NET Core Ingestion API middleware — enrichment runs inline before publishing to Event Hubs',
+          '.NET Core Ingestion API middleware — enrichment runs inline before publishing to Event Hubs',
           'User-Agent parsing library — device/browser classification',
           "Identity & Profile Service — enriched geo/device fields feed the unified profile's device graph",
         ],
@@ -294,7 +294,7 @@ await _cxosClient.TrackAsync(new CxosEvent
         integration: [
           'Consent Management Platform (client-side) — supplies real-time consent state to the SDKs',
           'Governance & Security policy table — the source of truth for purpose-vs-consent rules',
-          'NET Core Ingestion API — enforcement point, before Event Hubs publish',
+          '.NET Core Ingestion API — enforcement point, before Event Hubs publish',
           'Audit Logs (Governance & Security) — every consent decision is logged for compliance review',
         ],
         nfr: [
@@ -512,7 +512,7 @@ Content-Type: application/json
 { "event": "product_viewed", "user_id": "cust_004821" }`,
         integration: [
           'Azure API Management — TLS termination, auth, rate limiting',
-          'NET Core Ingestion API (ASP.NET Core Web API) — the REST endpoint itself',
+          '.NET Core Ingestion API (ASP.NET Core Web API, Docker container) — the REST endpoint itself',
           'Used by every SDK and most connectors as the default transport',
           'Azure Front Door — global entry point and DDoS protection ahead of API Management',
         ],

@@ -92,11 +92,11 @@
     <div class="hld-diagram">
       <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Lakehouse (curated zone)</div><div class="stage-detail">Read source</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure Functions Timer</div><div class="stage-detail">Scheduled batch trigger</div></div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">dbt Core</div><div class="stage-detail">SQL-based transformation framework</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node origin" style="--card-accent:#0f9b8e"><div class="stage-label">Processing</div><div class="stage-name">Rollups &amp; Aggregations</div><div class="stage-detail">.NET Core Batch Worker — scheduled aggregation jobs</div></div>
+      <div class="hld-node origin" style="--card-accent:#0f9b8e"><div class="stage-label">Processing</div><div class="stage-name">Rollups &amp; Aggregations</div><div class="stage-detail">dbt incremental models, orchestrated by a Dockerized .NET Core scheduler</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse (analytics-marts zone)</div><div class="stage-detail">Write destination</div></div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse (analytics-marts zone)</div><div class="stage-detail">Or Snowflake, via dbt's adapter</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Query &amp; Analytics Engine</div><div class="stage-detail">Primary consumer of rollup tables</div></div>
       <div class="hld-arrow">&rarr;</div>
@@ -115,7 +115,7 @@
 
   <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>Scheduled .NET Core batch jobs (Azure Functions Timer trigger, or longer-running jobs on Azure Container Apps Jobs) read from the curated zone of the Data Lakehouse and write pre-aggregated tables (daily/weekly rollups by dimension) back into the analytics-marts zone. Jobs use windowed, idempotent writes (safe to rerun for a given date) so a failed run can simply be retried without double-counting.</p>
+    <p>Rollups are defined as dbt models (SQL, materialized as incremental Iceberg tables) rather than hand-rolled batch jobs. A thin .NET Core scheduler, packaged as a Docker container on Azure Container Apps Jobs, triggers <code>dbt run --select tag:rollups</code> on a schedule; dbt's incremental materialization processes only the current day/week partition, and <code>dbt test</code> runs automatically afterward (row-count and not-null checks) so a broken aggregation never silently reaches the marts zone. Teams standardized on a cloud warehouse can point the same dbt project at Snowflake via its adapter instead of the lakehouse, without rewriting the SQL.</p>
     <div class="handbook-block">
       <h3>Example Rollups</h3>
       <div class="tag-row">
@@ -128,23 +128,27 @@
   </section>
 
   <section class="submodule" style="--card-accent:#0f9b8e">
-    <h2><span class="icon">&#128190;</span> Rollup Table Row</h2>
-    <pre class="code-block">{
-  "date": "2026-08-01",
-  "dimension": "product_category",
-  "value": "audio",
-  "metric": "revenue",
-  "amount": 482910,
-  "currency": "INR"
-}</pre>
+    <h2><span class="icon">&#128190;</span> dbt Model — Rollup</h2>
+    <pre class="code-block">-- models/marts/revenue_by_category_daily.sql
+{{ config(materialized='incremental', unique_key=['event_date','category']) }}
+
+select
+  event_date,
+  product_category as category,
+  sum(amount) as revenue
+from {{ ref('stg_order_events') }}
+{% if is_incremental() %}
+where event_date >= (select max(event_date) from {{ this }})
+{% endif %}
+group by 1, 2</pre>
   </section>
 
   <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128279;</span> Integration Points</h2>
     <ul class="feature-list">
-      <li>Azure Functions Timer trigger / Azure Container Apps Jobs — scheduled batch execution</li>
-      <li>Data Lakehouse curated zone — read source</li>
-      <li>Data Lakehouse analytics-marts zone — write destination</li>
+      <li>dbt Core — SQL-based transformation and testing framework, version-controlled alongside application code</li>
+      <li>Dockerized .NET Core scheduler (Azure Container Apps Jobs) — triggers <code>dbt run</code> / <code>dbt test</code> on a schedule</li>
+      <li>Data Lakehouse analytics-marts zone, or Snowflake via dbt's adapter — write destination</li>
       <li>Query &amp; Analytics Engine — the primary consumer of rollup tables for dashboards</li>
     </ul>
   </section>
@@ -152,7 +156,7 @@
   <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
-      <li>Scale: jobs process a bounded daily/weekly partition rather than the full historical table, keeping runtime predictable as data grows</li>
+      <li>Scale: dbt's incremental materialization processes only the current day/week partition rather than the full historical table, keeping runtime predictable as data grows</li>
       <li>Latency: rollups are typically available a few hours after the day/week closes — not real-time by design</li>
       <li>Reliability: idempotent, date-partitioned writes make reruns and backfills safe</li>
       <li>Security/Privacy: rollups aggregate away individual-level PII by construction — inherently more privacy-safe than raw event access</li>
@@ -161,7 +165,7 @@
 
   <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>The weekly executive dashboard reads from a pre-computed revenue-by-category rollup instead of scanning a billion-row raw event table on every page load — the difference between a sub-second dashboard and a report that times out.</p>
+    <p>The weekly executive dashboard reads from a pre-computed revenue-by-category dbt model instead of scanning a billion-row raw event table on every page load. When a currency-conversion bug briefly corrupts the aggregation, a <code>dbt test</code> assertion (revenue must be non-negative) fails the run automatically — preventing the bad numbers from ever reaching the dashboard.</p>
   </section>
 
   <p style="margin-top:28px;"><a href="../transformation-processing.html#batch-processing">&larr; Back to Batch Processing</a></p>

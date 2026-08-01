@@ -115,7 +115,7 @@
 
   <section class="submodule" style="--card-accent:#2b7fd6">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>Event Collection is the ASP.NET Core Web API endpoint fronted by Azure API Management. It accepts events over HTTPS (SDKs), gRPC (high-throughput server callers), and via the webhook receivers described elsewhere. Every request is authenticated, given a receipt timestamp and a server-assigned <code>event_id</code> if the caller didn't supply one, and acknowledged with a 202 Accepted before any validation or enrichment happens — collection is deliberately decoupled from processing so a downstream slowdown never blocks intake.</p>
+    <p>Event Collection is the ASP.NET Core Web API endpoint fronted by Azure API Management, built and shipped as a Docker image so every environment (local dev, staging, production AKS nodes) runs the identical container. It accepts events over HTTPS (SDKs), gRPC (high-throughput server callers), and via the webhook receivers described elsewhere. Every request is authenticated, given a receipt timestamp and a server-assigned <code>event_id</code> if the caller didn't supply one, and acknowledged with a 202 Accepted before any validation or enrichment happens — collection is deliberately decoupled from processing so a downstream slowdown never blocks intake.</p>
     <div class="handbook-block">
       <h3>Supported Transports</h3>
       <div class="tag-row">
@@ -141,7 +141,7 @@
     <h2><span class="icon">&#128279;</span> Integration Points</h2>
     <ul class="feature-list">
       <li>Azure API Management — ingress, auth, throttling for all transports</li>
-      <li>NET Core Ingestion API on AKS — the collection endpoint itself</li>
+      <li>.NET Core Ingestion API — Docker container on AKS, the collection endpoint itself</li>
       <li>Azure Event Hubs — immediate hand-off after acknowledgment</li>
       <li>Azure Monitor — collection-tier health and throughput dashboards</li>
     </ul>
