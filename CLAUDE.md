@@ -1,0 +1,159 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this is
+
+`doc/` is a static, offline-first reference-documentation website for **CXOS (Customer Experience Operating System)** — a six-stage architecture (Data Sources → Ingestion Layer → Transformation & Processing → Unified Data Foundation → Intelligence & Services → Destinations & Activation) sourced from `doc/Application dessign and teck stack.jpeg`. Vanilla HTML/CSS/JS, no build step, no framework, no package.json.
+
+`code/` is currently empty — reserved for a future application implementation. It has no relationship to `doc/` today.
+
+## Collaboration note
+
+This is a real multi-contributor GitHub repo (`KNTravels/CXOS`), not a solo/local project —
+people work on feature branches (e.g. `naman-0802`, `jayant-0802`) merged via PRs into `main`.
+**Always run `git status` and `git branch` before starting work**, and re-run
+`tools/docgen/check-links.js` after pulling someone else's changes, since another contributor
+may have added or reorganized detail pages you don't have generator data for locally. A
+`deploy-pages`-style GitHub Actions workflow already publishes `doc/` — don't assume this is a
+throwaway/local-only site.
+
+## Site structure
+
+```
+doc/
+├── index.html                 Overview: hero, architecture diagram, 6 module cards,
+│                               end-to-end flow, cross-cutting foundation, principles
+├── css/style.css               Shared styles (light/dark aware)
+├── js/main.js                  Nav dropdowns/mobile menu, active-link highlighting, lightbox
+├── img/cxos-architecture.jpeg  The source diagram (do not delete — index.html embeds it)
+└── pages/
+    ├── data-sources.html                  \_
+    ├── ingestion-layer.html                |  6 hand-written module pages.
+    ├── transformation-processing.html      |  Each has a sticky side-nav, a module-intro
+    ├── unified-data-foundation.html        |  block, and one <section id="submodule-anchor">
+    ├── intelligence-services.html          |  per submodule with a <ul class="feature-list">
+    ├── destinations-activation.html       _/   of bullets.
+    │
+    ├── data-sources/*.html                 Generated detail pages, one per bullet
+    ├── ingestion-layer/*.html              under each module's submodules. Each bullet
+    ├── transformation-processing/*.html    on the parent module page links to one of
+    └── unified-data-foundation/*.html      these via <a href="data-sources/slug.html">.
+```
+
+Header nav = the 6 modules; each has a dropdown of its submodule anchors. Module pages are
+3 clicks from home; detail pages are 4 (module → submodule anchor → detail page).
+
+## The generator (`tools/docgen/`)
+
+Every file under `pages/<module>/*.html` (the "detail pages") is **generated**, not
+hand-written — do not hand-edit them directly; edit the corresponding data file and regenerate.
+
+```
+tools/docgen/
+├── genlib.js    Page template + nav template + the 6-stage HLD pipeline renderer
+├── run.js       CLI: node run.js <module-file-slug> <path-to-data.js> [docRoot]
+├── check-links.js   Validates every internal href/src across all pages (no server needed)
+└── data/
+    ├── data-sources-1.js            Customer Touchpoints (7 items)
+    ├── data-sources-2.js            Business Systems + Files & Integrations (8 items)
+    ├── ingestion-layer.js           All 5 submodules (15 items)
+    ├── transformation-processing.js All 3 submodules (14 items)
+    └── unified-data-foundation.js   All 3 submodules (16 items)
+```
+
+To regenerate a module after editing its data file:
+
+```bash
+cd tools/docgen
+node run.js <module-file-slug> ./data/<file>.js
+node check-links.js ../../doc      # always re-validate after
+```
+
+`docRoot` defaults to `../../doc` relative to `genlib.js`, so it works regardless of checkout
+path — no need to pass it unless writing somewhere else.
+
+### Data file schema (one entry per detail page)
+
+Each module's data file exports an array of `{ anchor, name, items: [...] }` submodule groups
+(`anchor`/`name` must match the `id`/heading on the parent module page's `<section>`). Each
+item:
+
+| Field | Purpose |
+|---|---|
+| `slug` | Output filename (`slug.html`) |
+| `name` | Page `<h1>` and nav-list text |
+| `tagline` | One-sentence description under the h1 |
+| `hldCaption` | One-line summary above the HLD diagram |
+| `hld` | **Full 6-node array** — see "HLD diagrams" below. **Do not use the old `hldSelf` shortcut** (removed from practice — see Lessons Learned) |
+| `business` | 3 bullets: Business Context |
+| `technical` | One paragraph: Technical Overview (HTML string, `<code>` tags OK) |
+| `chipsLabel`, `chips` | Small pill list under Technical Overview (event names / entities / capabilities) |
+| `artifactTitle`, `artifactCode` | A code block (JSON payload / config / snippet) — title varies per item type |
+| `integration` | 3-5 bullets: Integration Points |
+| `nfr` | 4 bullets: Non-Functional Considerations (always cover Scale/Latency/Reliability/Security) |
+| `example` | One paragraph: Enterprise Example, with a concrete business outcome/number |
+
+### HLD diagrams — always write full 6 nodes, never the generic-pipeline shortcut
+
+**Lesson learned (do not repeat):** `genlib.js` has a `buildHld()` fallback that auto-fills 5
+of 6 nodes with generic pipeline text (`.NET Core Ingestion API`, `Data Lakehouse`, etc.) when
+an item only specifies `hldSelf` for its own stage. This was used for a batch of pages once and
+the user flagged it as visibly broken — a real HLD should show the *actual* specific flow for
+that item, not a templated filler. **Every item's `hld` field must be a fully-specified array of
+6 `{ label, name, detail }` objects**, exactly one with `origin: true` (the node highlighted with
+a colored border — usually, but not always, index 0). Derive all 6 nodes from what the item's
+own Technical Overview/Integration Points actually say, referencing the *adjacent* real
+components (what hands data to this item, what this item hands off to), not placeholder text.
+`buildHld`/`hldSelf` remain in `genlib.js` for backward compatibility only — do not use them for
+new content.
+
+### Accent colors (must match across module page, detail pages, and index.html card)
+
+| Module | Hex |
+|---|---|
+| Data Sources | `#6a4fc2` |
+| Ingestion Layer | `#2b7fd6` |
+| Transformation & Processing | `#0f9b8e` |
+| Unified Data Foundation | `#2e9e5b` |
+| Intelligence & Services | `#d9822b` |
+| Destinations & Activation | `#c23b6d` |
+
+## Reference tech stack used throughout the content
+
+All "Technical Overview" / "Integration Points" content is written against one consistent,
+concrete implementation choice (not the generic Bytewax/Redpanda/DataFusion language from the
+original architecture diagram, which was superseded per user direction mid-project):
+
+- **.NET Core microservices** per stage (Ingestion API, Stream/Batch Workers, Analytics/AI API, Activation API), hosted on **AKS** / **Azure Container Apps**.
+- **NuGet-package-driven SDK sharing**: every touchpoint/connector/service calls the same shared `Cxos.Ingestion.Client` NuGet package (published to an internal Azure Artifacts feed) — this is the running thread that ties every page's Integration Points together. Don't invent a different shared-SDK story per page.
+- **Azure services** mapped per stage: Azure API Management (gateway) · Azure Event Hubs (Kafka-compatible backbone; Redpanda pages describe it as an alternative/compatible broker) · Azure IoT Hub (device ingress) · Azure Functions (webhook receivers, batch/timer jobs) · Azure Blob Storage (batch/file landing) · Azure Data Lake Storage Gen2 (lakehouse storage) · Azure Purview (catalog/lineage/dictionary/policy) · Azure Database for PostgreSQL (operational/analytics stores) · Azure OpenAI Service / Azure Machine Learning (AI & Insights) · Azure Key Vault (secrets) · Azure Cache for Redis (hot-path caching) · Azure AD / Entra ID (auth, managed identities) · Azure Monitor (observability).
+
+Every new detail page should reuse these same names/services rather than introducing new ones,
+so cross-links between pages (e.g., "→ see Ingestion Layer's Queue & Retry") stay coherent.
+
+## Status (update this section as work continues)
+
+**Done** (60 generated detail pages + 6 module pages + `index.html` = 67 pages total, all link-validated):
+- Data Sources — all 3 submodules (15 items)
+- Ingestion Layer — all 5 submodules (15 items)
+- Transformation & Processing — all 3 submodules (14 items)
+- Unified Data Foundation — all 3 submodules (16 items)
+
+**Not started** (explicitly paused by user on 2026-08-02 pending review of the above):
+- Intelligence & Services — 4 submodules (Identity & Profile Service, Query & Analytics Engine,
+  AI & Insights, Operational Services), ~17 items
+- Destinations & Activation — 4 submodules (Real-time Activation, Batch/File Exports, APIs &
+  Webhooks, Reverse ETL/CDP Sync), ~15 items
+
+When resuming: write a new `tools/docgen/data/<module-file-slug>.js` following the schema
+above (use an existing data file as the template), run it through `run.js`, add `<a>` links to
+the corresponding bullets on the parent module page (`pages/<module-file-slug>.html`), then run
+`check-links.js` before considering the module done.
+
+## Verifying changes
+
+There's no dev server needed — open any `.html` file directly (`file://`) in a browser. After
+any edit that touches links, anchors, or `<img>`/`<script>` paths, run
+`node tools/docgen/check-links.js doc` — it resolves every relative `href`/`src` on disk and
+flags anything broken, without needing a running server.
