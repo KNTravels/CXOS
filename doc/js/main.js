@@ -37,7 +37,22 @@ document.addEventListener("DOMContentLoaded", function () {
     return document.querySelector(a.getAttribute("href"));
   }).filter(Boolean);
 
+  // Clicking a side-nav link highlights it immediately, rather than waiting
+  // for the post-scroll position math to agree (which can land on the wrong
+  // section boundary on long pages with many short sections, e.g. the BRD).
+  var suppressScrollHighlight = false;
+  sideLinks.forEach(function (a) {
+    a.addEventListener("click", function () {
+      sideLinks.forEach(function (l) { l.classList.remove("active"); });
+      a.classList.add("active");
+      suppressScrollHighlight = true;
+      window.clearTimeout(a._suppressTimer);
+      a._suppressTimer = window.setTimeout(function () { suppressScrollHighlight = false; }, 700);
+    });
+  });
+
   function updateActiveSideLink() {
+    if (suppressScrollHighlight) return;
     var scrollPos = window.scrollY + 120;
     var current = sections[0];
     sections.forEach(function (sec) {

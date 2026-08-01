@@ -20,6 +20,12 @@
   --shadow: 0 1px 2px rgba(20, 24, 40, 0.06), 0 4px 16px rgba(20, 24, 40, 0.06);
   --shadow-hover: 0 4px 10px rgba(20, 24, 40, 0.08), 0 10px 28px rgba(20, 24, 40, 0.10);
   --header-h: 60px;
+  --danger-bg: #fde2e2;
+  --danger-text: #b3261e;
+  --warning-bg: #fdecc8;
+  --warning-text: #93590a;
+  --info-bg: #dbeafe;
+  --info-text: #1e4e8c;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,6 +41,12 @@
     --brand-light: #232a4d;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
     --shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.35), 0 10px 28px rgba(0, 0, 0, 0.3);
+    --danger-bg: #4a1f1f;
+    --danger-text: #ff8a8a;
+    --warning-bg: #4a3a1a;
+    --warning-text: #ffcf7a;
+    --info-bg: #1a2f4a;
+    --info-text: #8ab4ff;
   }
 }
 
@@ -940,6 +952,73 @@ code {
 .legend-line { width: 28px; height: 0; border-top: 2px solid var(--text-muted); display: inline-block; }
 .legend-line.dashed { border-top-style: dashed; }
 .legend-line.dotted { border-top-style: dotted; }
+
+/* ---------- Document tables (BRD requirement tables) ---------- */
+
+.doc-table-wrap {
+  overflow-x: auto;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.doc-table th,
+.doc-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.doc-table tr:last-child td { border-bottom: none; }
+.doc-table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-weight: 700;
+  background: var(--surface-alt);
+}
+.doc-table td.reqid {
+  font-weight: 700;
+  color: var(--card-accent, var(--brand));
+  white-space: nowrap;
+}
+.priority {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.priority.must { background: var(--danger-bg); color: var(--danger-text); }
+.priority.should { background: var(--warning-bg); color: var(--warning-text); }
+.priority.could { background: var(--info-bg); color: var(--info-text); }
+
+.doc-meta-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.doc-meta-table th,
+.doc-meta-table td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.doc-meta-table th {
+  width: 140px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 12.5px;
+}
 
 /* ---------- Footer ---------- */
 

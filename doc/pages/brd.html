@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Requirements Document — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../index.html">Overview</a></li>
+      <li data-page="brd.html" class="active"><a href="brd.html">BRD</a></li>
+      <li data-page="data-sources.html">
+        <a href="data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb"><a href="../index.html">Overview</a><span class="sep">/</span><span class="current">Business Requirements Document</span></div>
+
+  <div class="module-page">
+    <aside class="side-nav">
+      <div class="label">On this page</div>
+      <ul>
+        <li><a href="#purpose">Purpose &amp; Business Context</a></li>
+        <li><a href="#objectives">Business Objectives</a></li>
+        <li><a href="#scope">Scope</a></li>
+        <li><a href="#stakeholders">Stakeholders</a></li>
+        <li><a href="#br-data-sources">BR-1 &middot; Data Sources</a></li>
+        <li><a href="#br-ingestion-layer">BR-2 &middot; Ingestion Layer</a></li>
+        <li><a href="#br-transformation-processing">BR-3 &middot; Transformation &amp; Processing</a></li>
+        <li><a href="#br-unified-data-foundation">BR-4 &middot; Unified Data Foundation</a></li>
+        <li><a href="#br-intelligence-services">BR-5 &middot; Intelligence &amp; Services</a></li>
+        <li><a href="#br-destinations-activation">BR-6 &middot; Destinations &amp; Activation</a></li>
+        <li><a href="#nfr">Non-Functional Requirements</a></li>
+        <li><a href="#assumptions">Assumptions &amp; Constraints</a></li>
+        <li><a href="#success-metrics">Success Metrics</a></li>
+      </ul>
+    </aside>
+
+    <div>
+      <div class="module-intro" style="--card-accent:#3454d1">
+        <div class="step">Business Requirements Document</div>
+        <h1>CXOS — Business Requirements Document</h1>
+        <p>The business case and requirements driving the six-stage CXOS architecture — what the business needs each stage to deliver, who it serves, and how success is measured. Companion document to the technical reference; read alongside the six module pages for the "why" behind each "how".</p>
+      </div>
+
+      <section class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128196;</span> Document Control</h2>
+        <table class="doc-meta-table">
+          <tr><th>Document</th><td>CXOS Business Requirements Document (BRD)</td></tr>
+          <tr><th>Version</th><td>1.0</td></tr>
+          <tr><th>Status</th><td>Approved for Stages 1&ndash;4 (Data Sources, Ingestion Layer, Transformation &amp; Processing, Unified Data Foundation); Draft for Stages 5&ndash;6 (Intelligence &amp; Services, Destinations &amp; Activation)</td></tr>
+          <tr><th>Owner</th><td>Platform &amp; Product Team</td></tr>
+          <tr><th>Last Updated</th><td>2026-08-02</td></tr>
+        </table>
+      </section>
+
+      <section id="purpose" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128218;</span> Purpose &amp; Business Context</h2>
+        <p>Customer interactions are currently spread across a website, a mobile app, a CRM, a support desk, a call center, and a dozen other SaaS tools — each holding a different sliver of the same customer relationship. Marketing sees one version of the customer, support sees another, and no team has a complete, real-time picture in time to act on it. This fragmentation shows up as duplicated outreach, inconsistent personalization, slow compliance response, and engineering time spent building one-off integrations between systems that already exist.</p>
+        <p>This document defines the business requirements for CXOS (Customer Experience Operating System) — a single platform that collects every customer interaction once, resolves it to one unified profile, and makes that profile usable everywhere it needs to show up, from a personalized email to a support agent's screen to a machine learning model. It is the business counterpart to the technical architecture documented across the six module pages on this site.</p>
+      </section>
+
+      <section id="objectives" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#127919;</span> Business Objectives</h2>
+        <ul class="feature-list">
+          <li>Unify customer data from every channel and business system into one real-time, governed profile</li>
+          <li>Reduce the time it takes to onboard a new data source or activation destination from a multi-week engineering project to a configuration change</li>
+          <li>Enable real-time personalization and activation without each team building its own pipeline</li>
+          <li>Make compliance (GDPR, CCPA, DPDP) a built-in property of the platform, not a bolt-on process</li>
+          <li>Give business users self-service access to unified customer data without an engineering ticket</li>
+          <li>Provide a single, auditable source of truth that Finance, Legal, and Compliance can all rely on</li>
+        </ul>
+      </section>
+
+      <section id="scope" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128204;</span> Scope</h2>
+        <div class="handbook-block">
+          <h3>In Scope</h3>
+          <ul class="feature-list">
+            <li>Ingestion from all customer touchpoints, core business systems, and file/API-based sources (Stage 1)</li>
+            <li>A shared, versioned ingestion contract and edge processing for every integration (Stage 2)</li>
+            <li>Real-time and batch transformation, identity resolution, and schema governance (Stage 3)</li>
+            <li>A governed, open-format data lakehouse with full lineage, classification, and access control (Stage 4)</li>
+            <li>Self-service analytics, AI-driven insight, and operational monitoring (Stage 5 — planned)</li>
+            <li>Real-time and batch activation to marketing, ad, and CRM/support platforms (Stage 6 — planned)</li>
+          </ul>
+        </div>
+        <div class="handbook-block">
+          <h3>Out of Scope</h3>
+          <ul class="feature-list">
+            <li>Replacing existing systems of record (Salesforce, Shopify, Zendesk, HubSpot) — CXOS unifies their data, it does not replace them</li>
+            <li>Building new customer-facing applications (the Angular storefront, mobile apps) — CXOS instruments existing applications, it does not build them</li>
+            <li>Multi-cloud support — Azure is the approved cloud provider for this program</li>
+            <li>Data science model development beyond the reference AI &amp; Insights capabilities — CXOS provides the platform, not the model roadmap</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="stakeholders" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#129309;</span> Stakeholders</h2>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Stakeholder</th><th>Interest</th></tr>
+            <tr><td>Marketing &amp; Lifecycle Teams</td><td>Unified profile for personalization, campaign targeting, and consent-safe activation</td></tr>
+            <tr><td>Customer Support &amp; Success</td><td>Full customer context (orders, tickets, usage) at the point of an interaction</td></tr>
+            <tr><td>Sales &amp; RevOps</td><td>Accurate account/opportunity data blended with product-usage signals</td></tr>
+            <tr><td>Finance &amp; Billing</td><td>Reliable revenue and subscription data tied to the customer record</td></tr>
+            <tr><td>Legal &amp; Compliance</td><td>Provable consent enforcement, data classification, and audit trails</td></tr>
+            <tr><td>Data Engineering &amp; Platform Engineering</td><td>A maintainable, governed platform instead of N bespoke pipelines</td></tr>
+            <tr><td>Data Science / ML Engineering</td><td>Trustworthy, point-in-time-correct data for model training and inference</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="br-data-sources" class="submodule" style="--card-accent:#6a4fc2">
+        <h2><span class="icon">&#128100;</span> BR-1 &middot; Data Sources</h2>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>ID</th><th>Requirement</th><th>Priority</th><th>Acceptance Criteria</th></tr>
+            <tr>
+              <td class="reqid">BR-1.1</td>
+              <td>Capture customer interactions across every touchpoint (web, mobile, IoT, kiosk, chat/voice/bots, email/SMS, call center, social) without measurable gaps.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>&ge;99.5% of instrumented touchpoint events are captured and visible in the unified profile within the defined SLA.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-1.2</td>
+              <td>Ingest core business-system data (CRM, Commerce, Support, Marketing, ERP/Billing) to enrich the unified customer record.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>All five business systems are connected and reconciled against source-system record counts within 0.1% variance.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-1.3</td>
+              <td>Support onboarding a new file- or API-based data source without a bespoke engineering project for common integration patterns.</td>
+              <td><span class="priority should">Should</span></td>
+              <td>A new pre-built-connector-eligible source can be enabled via configuration in under 1 business day.</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="br-ingestion-layer" class="submodule" style="--card-accent:#2b7fd6">
+        <h2><span class="icon">&#128268;</span> BR-2 &middot; Ingestion Layer</h2>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>ID</th><th>Requirement</th><th>Priority</th><th>Acceptance Criteria</th></tr>
+            <tr>
+              <td class="reqid">BR-2.1</td>
+              <td>Every client and server integration must speak one versioned event contract so downstream teams never encounter conflicting schemas for the same event type.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>100% of production event types are registered in the Event Schema &amp; Registry with an owning team.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-2.2</td>
+              <td>No event may be lost due to a downstream outage or traffic spike.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>Zero data-loss incidents attributable to ingestion capacity over a 12-month rolling window.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-2.3</td>
+              <td>Consent must be evaluated and enforced before any event is used for a regulated purpose (marketing, personalization).</td>
+              <td><span class="priority must">Must</span></td>
+              <td>100% of consent-gated events carry a valid consent basis; verified in a quarterly audit.</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="br-transformation-processing" class="submodule" style="--card-accent:#0f9b8e">
+        <h2><span class="icon">&#9889;</span> BR-3 &middot; Transformation &amp; Processing</h2>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>ID</th><th>Requirement</th><th>Priority</th><th>Acceptance Criteria</th></tr>
+            <tr>
+              <td class="reqid">BR-3.1</td>
+              <td>Duplicate or out-of-order events must not distort business-critical metrics (revenue, active users, conversion).</td>
+              <td><span class="priority must">Must</span></td>
+              <td>Reconciliation against source-system totals shows &lt;0.1% variance attributable to dedup/ordering defects.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-3.2</td>
+              <td>A customer's activity across every device, session, and channel must resolve to one identity.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>&ge;95% of logged-in-session events are correctly stitched to the known customer profile.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-3.3</td>
+              <td>Business-facing metric and schema definitions must be reviewed, versioned, and change-controlled like source code.</td>
+              <td><span class="priority should">Should</span></td>
+              <td>100% of schema/metric changes have an associated pull request and reviewer sign-off.</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="br-unified-data-foundation" class="submodule" style="--card-accent:#2e9e5b">
+        <h2><span class="icon">&#128451;</span> BR-4 &middot; Unified Data Foundation</h2>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>ID</th><th>Requirement</th><th>Priority</th><th>Acceptance Criteria</th></tr>
+            <tr>
+              <td class="reqid">BR-4.1</td>
+              <td>Customer and business data must be stored once, in an open format, accessible to any approved analytics engine without duplication.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>No team maintains an unsanctioned "shadow copy" of customer data outside the lakehouse.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-4.2</td>
+              <td>Every field must be classified and access-controlled sufficiently to pass a compliance audit (GDPR, CCPA, DPDP, SOC 2).</td>
+              <td><span class="priority must">Must</span></td>
+              <td>Zero critical findings in the annual data-governance audit.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-4.3</td>
+              <td>The organization must be able to reconstruct the state of any customer record as of a past date, for dispute resolution and regulatory response.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>A historical "as of" query returns an auditable answer within 1 business day of a request.</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="br-intelligence-services" class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#129504;</span> BR-5 &middot; Intelligence &amp; Services <span class="priority should" style="margin-left:10px;">Planned</span></h2>
+        <p class="tech">Requirements below are drafted for scoping; not yet built — see the site status for the current build plan.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>ID</th><th>Requirement</th><th>Priority</th><th>Acceptance Criteria</th></tr>
+            <tr>
+              <td class="reqid">BR-5.1</td>
+              <td>Business users (analysts, marketers) must be able to query unified customer data without submitting an engineering ticket.</td>
+              <td><span class="priority should">Should</span></td>
+              <td>&ge;80% of ad hoc data requests are self-served within 2 quarters of general availability.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-5.2</td>
+              <td>The platform must support predictive use cases — churn risk, propensity to convert, anomaly detection — using the unified profile.</td>
+              <td><span class="priority should">Should</span></td>
+              <td>At least 2 predictive models are in production use by business teams within the first year.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-5.3</td>
+              <td>Operational issues (data quality, pipeline failures, billing/usage anomalies) must be visible to the owning team without manual log inspection.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>Mean time to detect a data-quality regression is under 30 minutes.</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="br-destinations-activation" class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#128228;</span> BR-6 &middot; Destinations &amp; Activation <span class="priority should" style="margin-left:10px;">Planned</span></h2>
+        <p class="tech">Requirements below are drafted for scoping; not yet built — see the site status for the current build plan.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>ID</th><th>Requirement</th><th>Priority</th><th>Acceptance Criteria</th></tr>
+            <tr>
+              <td class="reqid">BR-6.1</td>
+              <td>Insights and audiences must reach marketing, ad, and CRM platforms without a manual export/import step.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>100% of supported destinations sync via an automated connector, not a manual file handoff.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-6.2</td>
+              <td>Activation must occur within a business-relevant window: real-time for in-session personalization, near-real-time/batch for campaign-style activation.</td>
+              <td><span class="priority must">Must</span></td>
+              <td>Real-time activation triggers fire within 5 minutes of the qualifying event; batch syncs complete within their scheduled window.</td>
+            </tr>
+            <tr>
+              <td class="reqid">BR-6.3</td>
+              <td>Downstream systems (CRM, Support, Marketing) must receive CXOS-computed insight (propensity, LTV) back into their native workflow via Reverse ETL.</td>
+              <td><span class="priority should">Should</span></td>
+              <td>Reverse ETL sync to at least 3 named destination systems is live within the first year.</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="nfr" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Requirements</h2>
+        <ul class="feature-list">
+          <li>Availability: 99.9% platform availability for real-time ingestion and activation paths, measured monthly</li>
+          <li>Compliance: GDPR, CCPA, and India's DPDP Act compliance from day one; SOC 2 Type II readiness within 18 months</li>
+          <li>Data Residency: support region-specific data residency requirements (EU, India) as new markets are onboarded</li>
+          <li>Scalability: support multi-tenant, multi-brand usage without cross-tenant data leakage</li>
+          <li>Cost Governance: storage and compute cost per unified customer profile tracked and reported to Finance quarterly</li>
+          <li>Support Model: Platform Engineering provides tier-1/2 support with a documented runbook for every production incident class</li>
+        </ul>
+      </section>
+
+      <section id="assumptions" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128203;</span> Assumptions &amp; Constraints</h2>
+        <ul class="feature-list">
+          <li>Azure is the approved cloud provider for this program; there is no multi-cloud requirement in this phase</li>
+          <li>Existing business systems (Salesforce, Shopify, Zendesk, HubSpot) remain systems of record for their domain — CXOS unifies their data, it does not replace them</li>
+          <li>Delivery is phased: Data Sources, Ingestion Layer, Transformation &amp; Processing, and Unified Data Foundation are approved and in build; Intelligence &amp; Services and Destinations &amp; Activation are planned for the next phase</li>
+          <li>Budget and timeline for the next phase are subject to this phase's success criteria being met</li>
+        </ul>
+      </section>
+
+      <section id="success-metrics" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128200;</span> Success Metrics</h2>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Metric</th><th>Target</th></tr>
+            <tr><td>Customer touchpoints unified into a single profile</td><td>100% of in-scope touchpoints within 12 months</td></tr>
+            <tr><td>Time to onboard a new data source</td><td>&lt;5 business days for a pre-built connector</td></tr>
+            <tr><td>Reduction in duplicate/conflicting customer records</td><td>&gt;90% reduction vs. pre-CXOS baseline</td></tr>
+            <tr><td>Real-time activation latency</td><td>&lt;5 minutes, event to activation</td></tr>
+            <tr><td>Compliance audit pass rate</td><td>Zero critical findings</td></tr>
+            <tr><td>Self-service analytics adoption</td><td>80% of ad hoc requests self-served</td></tr>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

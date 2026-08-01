@@ -172,11 +172,20 @@ so cross-links between pages (e.g., "→ see Ingestion Layer's Queue & Retry") s
 
 ## Status (update this section as work continues)
 
-**Done** (60 generated detail pages + 6 module pages + `index.html` = 67 pages total, all link-validated):
+**Done** (60 generated detail pages + 6 module pages + `index.html` + `pages/brd.html` = 68 pages total, all link-validated):
 - Data Sources — all 3 submodules (15 items)
 - Ingestion Layer — all 5 submodules (15 items)
 - Transformation & Processing — all 3 submodules (14 items)
 - Unified Data Foundation — all 3 submodules (16 items)
+- `pages/brd.html` — Business Requirements Document: purpose, objectives, scope, stakeholders,
+  BR-1 through BR-6 (one requirements table per module, each colored with that module's own
+  accent), NFRs, assumptions, success metrics. BR-5/BR-6 are marked "Planned" since Intelligence
+  & Services / Destinations & Activation aren't built yet — update those tables' content (not
+  just their "Planned" badge) once those modules ship. Uses new `.doc-table` / `.doc-meta-table`
+  / `.priority` (must/should/could) CSS components. **BRD is a top-level nav item** (added in
+  `genlib.js`'s `navHtml()`, so it's already on all 60 generated pages — if you ever hand-edit a
+  module page's header nav, remember to add the `<li data-page="brd.html">` entry there too, or
+  it'll silently drop off just that page.
 
 **Not started** (explicitly paused by user on 2026-08-02 pending review of the above):
 - Intelligence & Services — 4 submodules (Identity & Profile Service, Query & Analytics Engine,
