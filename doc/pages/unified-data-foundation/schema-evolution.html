@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Email / SMS — Customer Touchpoints — CXOS Reference Documentation</title>
+<title>Schema Evolution — CXOS Data Lakehouse — CXOS Reference Documentation</title>
 <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
   <nav class="main-nav">
     <ul class="nav-list">
       <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="data-sources.html" class="active">
+      <li data-page="data-sources.html">
         <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
@@ -43,7 +43,7 @@
           <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
         </div>
       </li>
-      <li data-page="unified-data-foundation.html">
+      <li data-page="unified-data-foundation.html" class="active">
         <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
@@ -76,103 +76,90 @@
 <main class="page">
   <div class="breadcrumb">
     <a href="../../index.html">Overview</a><span class="sep">/</span>
-    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
-    <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a><span class="sep">/</span>
-    <span class="current">Email / SMS</span>
+    <a href="../unified-data-foundation.html">Unified Data Foundation</a><span class="sep">/</span>
+    <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse</a><span class="sep">/</span>
+    <span class="current">Schema Evolution</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:#6a4fc2">
-    <div class="step">Data Sources &rarr; Customer Touchpoints</div>
-    <h1>Email / SMS</h1>
-    <p>Outbound and inbound engagement on email and SMS channels — opens, clicks, replies, and opt-outs — usually reported back by the sending platform.</p>
+  <div class="module-intro" style="--card-accent:#2e9e5b">
+    <div class="step">Unified Data Foundation &rarr; CXOS Data Lakehouse</div>
+    <h1>Schema Evolution</h1>
+    <p>The ability to add, rename, or reorder columns in a lakehouse table without rewriting existing data or breaking existing queries.</p>
   </div>
 
   <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>ESP webhook &rarr; .NET Core microservices on Azure.</p></div></div>
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Schema Evolution lets tables change shape as the business does.</p></div></div>
     <div class="hld-diagram">
-      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">Email / SMS</div><div class="stage-detail">Outbound campaigns, inbound replies</div></div>
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure Function (Webhook Receiver)</div><div class="stage-detail">SendGrid/Twilio webhook &rarr; Cxos.Ingestion.Client</div></div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Priority path for opt-outs via Azure Event Hubs</div></div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Event Schema &amp; Registry</div><div class="stage-detail">Governs what changes are allowed</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Engagement history per profile</div></div>
+      <div class="hld-node origin" style="--card-accent:#2e9e5b"><div class="stage-label">Foundation</div><div class="stage-name">Schema Evolution</div><div class="stage-detail">Iceberg's in-place schema change support</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Azure DB for PostgreSQL — campaign performance</div></div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Query &amp; Analytics Engine</div><div class="stage-detail">Old and new queries both keep working</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Next-best-channel, suppression sync (Reverse ETL)</div></div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Uninterrupted Downstream Consumers</div><div class="stage-detail">No forced migration window</div></div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#128188;</span> Business Context</h2>
     <ul class="feature-list">
-      <li>Email/SMS engagement is a leading indicator of campaign ROI and channel fatigue</li>
-      <li>Opt-out/consent events here are legally load-bearing — mishandling them creates compliance risk</li>
-      <li>Owned by Lifecycle/CRM Marketing; consent state is shared with Legal/Compliance</li>
+      <li>The business changes constantly, and the lakehouse's table structure has to change with it without a disruptive migration</li>
+      <li>Removes a major source of "can we add this field" friction between business teams and data engineering</li>
+      <li>Owned by Data Engineering</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>SendGrid and Twilio call a .NET Core Azure Function webhook endpoint for every engagement event (send, open, click, bounce, opt-out); the function validates the provider signature and forwards the event through <code>Cxos.Ingestion.Client</code> into the Ingestion API. The Stream Worker routes two priority tiers onto separate Azure Event Hubs consumer groups: standard engagement (opens/clicks) and compliance-critical (unsubscribes/bounces), so opt-outs are never queued behind bulk analytics traffic. The Analytics API (ASP.NET Core + Dapper) reads rollups from Azure Database for PostgreSQL Flexible Server for campaign dashboards.</p>
+    <p>Iceberg tracks column changes (add, drop, rename, reorder, widen type) as metadata operations rather than rewriting existing Parquet files. Old files remain readable under the new schema (missing new columns read as null), and this capability is what the Event Schema &amp; Registry's compatibility rules are built to safely take advantage of at the lakehouse layer, not just the event-contract layer.</p>
     <div class="handbook-block">
-      <h3>Typical Events</h3>
+      <h3>Supported Changes</h3>
       <div class="tag-row">
-        <span class="tag">email_sent</span>
-        <span class="tag">email_opened</span>
-        <span class="tag">email_clicked</span>
-        <span class="tag">sms_delivered</span>
-        <span class="tag">unsubscribed</span>
+        <span class="tag">Add column</span>
+        <span class="tag">Rename column</span>
+        <span class="tag">Reorder columns</span>
+        <span class="tag">Widen type (int &rarr; long)</span>
       </div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
-    <h2><span class="icon">&#128190;</span> Sample Event Payload</h2>
-    <pre class="code-block">{
-  "event": "email_clicked",
-  "event_id": "1e438f2b-3a9c-4c2d-8b1a-6f2e0d4a7c93",
-  "timestamp": "2026-08-01T08:15:47Z",
-  "user_id": "cust_004821",
-  "context": {
-    "channel": "email",
-    "campaign_id": "camp_2291",
-    "provider": "sendgrid"
-  },
-  "properties": {
-    "link_url": "/summer-sale",
-    "message_id": "msg_774f"
-  }
-}</pre>
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128190;</span> Schema Evolution Operation</h2>
+    <pre class="code-block">ALTER TABLE curated.orders
+ADD COLUMN tax_amount DECIMAL(10,2);
+-- Existing files remain valid; new column reads as NULL for old rows</pre>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#128279;</span> Integration Points</h2>
     <ul class="feature-list">
-      <li>Azure Function webhook receivers for SendGrid / Twilio / Braze</li>
-      <li><code>Cxos.Ingestion.Client</code> NuGet package — shared contract for the outbound call into the Ingestion API</li>
-      <li>Azure Event Hubs — dual consumer groups (standard vs. compliance-priority)</li>
-      <li>Reverse ETL (.NET Core Activation API + Azure Functions) — suppression list sync back to the ESP</li>
+      <li>Apache Iceberg — provides the underlying schema evolution mechanism</li>
+      <li>Event Schema &amp; Registry — governs which changes are safe to propagate into the lakehouse</li>
+      <li>Data Modeling — dimensional tables evolve using this capability as business entities change</li>
+      <li>Query &amp; Analytics Engine — must handle nulls gracefully for newly added columns on historical rows</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
-      <li>Scale: campaign sends can generate millions of webhook callbacks in a short burst — Azure Functions consumption plan scales out automatically</li>
-      <li>Latency: opt-out events are applied within minutes via the compliance-priority Event Hubs consumer group</li>
-      <li>Reliability: webhook handling is idempotent (event_id dedup) since providers frequently retry deliveries</li>
-      <li>Security/Privacy: consent state is written to an auditable table in Azure Database for PostgreSQL, not just a marketing flag</li>
+      <li>Scale: schema changes are metadata-only operations, independent of table size — no multi-hour rewrite of historical data</li>
+      <li>Latency: a schema change takes effect immediately for new writes; historical data is reinterpreted, not rewritten</li>
+      <li>Reliability: schema evolution is additive-safe by design — existing queries don't break when a column is added</li>
+      <li>Security/Privacy: newly added columns must still go through the same PII classification process as any new field</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>A retail brand's promotional SMS blast generates an unsubscribe spike within 5 minutes. Because the Azure Function webhook receiver routes opt-out events onto the compliance-priority Event Hubs consumer group, every affected contact is suppressed from the next wave of the same campaign before it sends — avoiding a compliance incident and an estimated $40K in regulatory exposure.</p>
+    <p>The Commerce team needs to add tax_amount to the orders table. Schema evolution lets this happen instantly without rewriting years of historical order data or breaking any dashboard currently querying the table.</p>
   </section>
 
-  <p style="margin-top:28px;"><a href="../data-sources.html#customer-touchpoints">&larr; Back to Customer Touchpoints</a></p>
+  <p style="margin-top:28px;"><a href="../unified-data-foundation.html#data-lakehouse">&larr; Back to CXOS Data Lakehouse</a></p>
 </main>
 
 <footer class="site-footer">

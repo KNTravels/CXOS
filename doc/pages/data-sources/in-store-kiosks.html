@@ -88,7 +88,7 @@
   </div>
 
   <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>Kiosk client &rarr; offline queue &rarr; .NET Core microservices on Azure &rarr; downstream activation.</p></div></div>
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Kiosk client &rarr; offline queue &rarr; .NET Core microservices on Azure.</p></div></div>
     <div class="hld-diagram">
       <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">In-Store Kiosk</div><div class="stage-detail">Self-checkout, loyalty lookup, product lookup</div></div>
       <div class="hld-arrow">&rarr;</div>
@@ -119,8 +119,11 @@
     <div class="handbook-block">
       <h3>Typical Events</h3>
       <div class="tag-row">
-        <span class="tag">kiosk_session_started</span><span class="tag">loyalty_scanned</span><span class="tag">product_lookup</span>
-        <span class="tag">self_checkout_completed</span><span class="tag">payment_processed</span>
+        <span class="tag">kiosk_session_started</span>
+        <span class="tag">loyalty_scanned</span>
+        <span class="tag">product_lookup</span>
+        <span class="tag">self_checkout_completed</span>
+        <span class="tag">payment_processed</span>
       </div>
     </div>
   </section>

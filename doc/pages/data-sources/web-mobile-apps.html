@@ -115,12 +115,16 @@
 
   <section class="submodule" style="--card-accent:#6a4fc2">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>The Web SDK (TypeScript) and Mobile SDK (Swift / Kotlin) are thin wrappers around the same contract published in the <code>Cxos.Ingestion.Client</code> NuGet package, so the browser, the mobile app, and the .NET Core Ingestion API all agree on one event schema. Client apps call Azure API Management, which authenticates the request (Azure AD B2C for end-user tokens), applies rate limiting, and routes to the Ingestion API — an ASP.NET Core Web API running on AKS. The API validates the payload and publishes it onto Azure Event Hubs for downstream processing.</p>
+    <p>The Web SDK (TypeScript) and Mobile SDK (Swift / Kotlin) are thin wrappers around the same contract published in the <code>Cxos.Ingestion.Client</code> NuGet package, so the browser, the mobile app, and the .NET Core Ingestion API all agree on one event schema. Client apps call Azure API Management, which authenticates the request (Azure AD B2C for end-user tokens), applies rate limiting, and routes to the Ingestion API — an ASP.NET Core Web API packaged as a Docker container and running on AKS. The API validates the payload and publishes it onto Azure Event Hubs for downstream processing.</p>
     <div class="handbook-block">
       <h3>Typical Events</h3>
       <div class="tag-row">
-        <span class="tag">page_view</span><span class="tag">product_viewed</span><span class="tag">add_to_cart</span>
-        <span class="tag">search_performed</span><span class="tag">app_opened</span><span class="tag">checkout_started</span>
+        <span class="tag">page_view</span>
+        <span class="tag">product_viewed</span>
+        <span class="tag">add_to_cart</span>
+        <span class="tag">search_performed</span>
+        <span class="tag">app_opened</span>
+        <span class="tag">checkout_started</span>
       </div>
     </div>
   </section>
@@ -153,7 +157,7 @@
     <ul class="feature-list">
       <li><code>Cxos.Ingestion.Client</code> NuGet package (Azure Artifacts feed) — typed contracts + Polly retry policy</li>
       <li>Azure API Management — gateway, auth, throttling</li>
-      <li>Ingestion API — ASP.NET Core microservice on AKS</li>
+      <li>Ingestion API — ASP.NET Core microservice, packaged as a Docker container, running on AKS</li>
       <li>Azure Event Hubs — Kafka-compatible ingestion backbone</li>
       <li>Azure AD B2C — end-user authentication / consent context</li>
     </ul>

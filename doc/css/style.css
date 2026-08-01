@@ -115,6 +115,7 @@ nav.main-nav {
   padding: 0;
   height: var(--header-h);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 .nav-list::-webkit-scrollbar { display: none; }
@@ -183,12 +184,14 @@ nav.main-nav {
 
 .nav-toggle {
   display: none;
+  margin-left: auto;
   border: none;
   background: none;
-  font-size: 20px;
+  font-size: 22px;
+  line-height: 1;
   color: var(--text);
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 10px 8px;
 }
 
 @media (max-width: 860px) {
@@ -217,6 +220,13 @@ nav.main-nav {
     background: var(--surface-alt);
   }
   .nav-list > li.open .dropdown { display: block; }
+}
+
+@media (max-width: 860px) {
+  .side-nav {
+    position: static;
+    margin-bottom: 20px;
+  }
 }
 
 /* ---------- Layout ---------- */
@@ -579,28 +589,37 @@ nav.main-nav {
 }
 .submodule h2 {
   margin: 0 0 4px;
-  font-size: 19px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
 }
 .submodule h2 .icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
   background: var(--card-accent, var(--brand));
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 21px;
   flex-shrink: 0;
+  box-shadow: var(--shadow);
 }
 .submodule .tech {
   font-size: 12.5px;
   color: var(--text-muted);
-  margin-bottom: 12px;
+  margin: 0 0 12px 60px;
   font-style: italic;
+}
+.submodule .feature-grid,
+.submodule .feature-list {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
 }
 .feature-list {
   list-style: none;
@@ -625,6 +644,56 @@ nav.main-nav {
   height: 6px;
   border-radius: 50%;
   background: var(--card-accent, var(--brand));
+}
+
+/* ---------- Feature grid (submodule item cards) ---------- */
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 26px 20px;
+  margin-top: 4px;
+}
+.feature-card {
+  display: block;
+  color: inherit;
+}
+.feature-card:hover { text-decoration: none; }
+.feature-card:hover .feature-card-title { color: var(--card-accent, var(--brand)); }
+.feature-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--brand-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  margin-bottom: 14px;
+}
+.feature-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text);
+  transition: color 0.15s ease;
+}
+.feature-card-title::before {
+  content: "";
+  width: 3px;
+  height: 16px;
+  background: var(--card-accent, var(--brand));
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.feature-card p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
 .example-box {
@@ -734,6 +803,106 @@ nav.main-nav {
   border: 1px solid var(--border);
   padding: 4px 10px;
   border-radius: 999px;
+}
+
+code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.9em;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* ---------- High-Level Design (HLD) diagram ---------- */
+
+.hld-diagram {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 14px;
+}
+.hld-node {
+  flex: 1 0 150px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: var(--surface-alt);
+  margin: 0 4px;
+}
+.hld-node.origin {
+  border-color: var(--card-accent, var(--brand));
+  border-width: 2px;
+  background: var(--brand-light);
+}
+.hld-node .stage-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.hld-node .stage-name {
+  font-weight: 700;
+  font-size: 13.5px;
+  margin-top: 3px;
+  color: var(--text);
+}
+.hld-node .stage-detail {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.hld-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 22px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+.hld-caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* ---------- Code block ---------- */
+
+.code-block {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  white-space: pre;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ---------- Handbook section variants ---------- */
+
+.handbook-block {
+  margin-top: 14px;
+}
+.handbook-block h3 {
+  font-size: 12.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin: 0 0 8px;
 }
 
 /* ---------- Legend ---------- */

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Email / SMS — Customer Touchpoints — CXOS Reference Documentation</title>
+<title>Access Control (RBAC/ABAC) — Governance &amp; Security — CXOS Reference Documentation</title>
 <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
   <nav class="main-nav">
     <ul class="nav-list">
       <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="data-sources.html" class="active">
+      <li data-page="data-sources.html">
         <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
@@ -43,7 +43,7 @@
           <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
         </div>
       </li>
-      <li data-page="unified-data-foundation.html">
+      <li data-page="unified-data-foundation.html" class="active">
         <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
@@ -76,103 +76,95 @@
 <main class="page">
   <div class="breadcrumb">
     <a href="../../index.html">Overview</a><span class="sep">/</span>
-    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
-    <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a><span class="sep">/</span>
-    <span class="current">Email / SMS</span>
+    <a href="../unified-data-foundation.html">Unified Data Foundation</a><span class="sep">/</span>
+    <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security</a><span class="sep">/</span>
+    <span class="current">Access Control (RBAC/ABAC)</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:#6a4fc2">
-    <div class="step">Data Sources &rarr; Customer Touchpoints</div>
-    <h1>Email / SMS</h1>
-    <p>Outbound and inbound engagement on email and SMS channels — opens, clicks, replies, and opt-outs — usually reported back by the sending platform.</p>
+  <div class="module-intro" style="--card-accent:#2e9e5b">
+    <div class="step">Unified Data Foundation &rarr; Governance &amp; Security</div>
+    <h1>Access Control (RBAC/ABAC)</h1>
+    <p>Enforces who can read, write, or modify lakehouse data based on role and attribute — the runtime enforcement of the Policies &amp; Entitlements metadata.</p>
   </div>
 
   <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>ESP webhook &rarr; .NET Core microservices on Azure.</p></div></div>
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Access Control is checked before any data is returned, on every query.</p></div></div>
     <div class="hld-diagram">
-      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">Email / SMS</div><div class="stage-detail">Outbound campaigns, inbound replies</div></div>
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure Function (Webhook Receiver)</div><div class="stage-detail">SendGrid/Twilio webhook &rarr; Cxos.Ingestion.Client</div></div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Priority path for opt-outs via Azure Event Hubs</div></div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Policies &amp; Entitlements</div><div class="stage-detail">Metadata Layer's rules enforced here</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Engagement history per profile</div></div>
+      <div class="hld-node origin" style="--card-accent:#2e9e5b"><div class="stage-label">Foundation</div><div class="stage-name">Access Control (RBAC/ABAC)</div><div class="stage-detail">Azure AD roles (ADFS-federated for internal staff) + ABAC</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Azure DB for PostgreSQL — campaign performance</div></div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Every Query</div><div class="stage-detail">Checked before any data is returned</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Next-best-channel, suppression sync (Reverse ETL)</div></div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Compliant Data Access</div><div class="stage-detail">The outcome this control guarantees</div></div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#128188;</span> Business Context</h2>
     <ul class="feature-list">
-      <li>Email/SMS engagement is a leading indicator of campaign ROI and channel fatigue</li>
-      <li>Opt-out/consent events here are legally load-bearing — mishandling them creates compliance risk</li>
-      <li>Owned by Lifecycle/CRM Marketing; consent state is shared with Legal/Compliance</li>
+      <li>The direct control that prevents unauthorized access to customer data — a compliance and trust requirement, not optional</li>
+      <li>Role-based access lets the platform scale to many teams without a manually managed permission list per table</li>
+      <li>Owned by Security / Data Governance</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>SendGrid and Twilio call a .NET Core Azure Function webhook endpoint for every engagement event (send, open, click, bounce, opt-out); the function validates the provider signature and forwards the event through <code>Cxos.Ingestion.Client</code> into the Ingestion API. The Stream Worker routes two priority tiers onto separate Azure Event Hubs consumer groups: standard engagement (opens/clicks) and compliance-critical (unsubscribes/bounces), so opt-outs are never queued behind bulk analytics traffic. The Analytics API (ASP.NET Core + Dapper) reads rollups from Azure Database for PostgreSQL Flexible Server for campaign dashboards.</p>
+    <p>RBAC assigns broad table-level permissions via Azure AD (Entra ID) group membership (e.g., 'data-engineering' can read raw and curated zones). Internal/employee identities — support agents, analysts, engineers — authenticate through the enterprise's existing on-prem Active Directory, federated into Azure AD via ADFS (SAML/WS-Federation), so staff use their corporate SSO credentials rather than a separate Azure-only account; customer-facing identities remain on Azure AD B2C, kept entirely separate. ABAC layers finer-grained, attribute-based rules on top of either identity source — e.g., 'customer-support agents can read profile data only for customers in their assigned region.' Both are evaluated by the same shared policy library described under Policies &amp; Entitlements, checked on every query before data is returned.</p>
     <div class="handbook-block">
-      <h3>Typical Events</h3>
+      <h3>Model</h3>
       <div class="tag-row">
-        <span class="tag">email_sent</span>
-        <span class="tag">email_opened</span>
-        <span class="tag">email_clicked</span>
-        <span class="tag">sms_delivered</span>
-        <span class="tag">unsubscribed</span>
+        <span class="tag">RBAC — role-based (Azure AD groups)</span>
+        <span class="tag">ABAC — attribute-based (finer-grained rules)</span>
+        <span class="tag">ADFS — federated internal/employee SSO</span>
       </div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
-    <h2><span class="icon">&#128190;</span> Sample Event Payload</h2>
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128190;</span> Access Decision</h2>
     <pre class="code-block">{
-  "event": "email_clicked",
-  "event_id": "1e438f2b-3a9c-4c2d-8b1a-6f2e0d4a7c93",
-  "timestamp": "2026-08-01T08:15:47Z",
-  "user_id": "cust_004821",
-  "context": {
-    "channel": "email",
-    "campaign_id": "camp_2291",
-    "provider": "sendgrid"
-  },
-  "properties": {
-    "link_url": "/summer-sale",
-    "message_id": "msg_774f"
-  }
+  "principal": "agt_302",
+  "identity_source": "adfs-federated",
+  "role": "customer-support-tier1",
+  "resource": "curated.customer_profile",
+  "decision": "allow",
+  "constraints": { "column_mask": ["email", "phone"] }
 }</pre>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#128279;</span> Integration Points</h2>
     <ul class="feature-list">
-      <li>Azure Function webhook receivers for SendGrid / Twilio / Braze</li>
-      <li><code>Cxos.Ingestion.Client</code> NuGet package — shared contract for the outbound call into the Ingestion API</li>
-      <li>Azure Event Hubs — dual consumer groups (standard vs. compliance-priority)</li>
-      <li>Reverse ETL (.NET Core Activation API + Azure Functions) — suppression list sync back to the ESP</li>
+      <li>Azure AD (Entra ID) — role and group source of truth</li>
+      <li>ADFS — federates on-prem enterprise Active Directory into Azure AD for internal/employee SSO</li>
+      <li>Policies &amp; Entitlements metadata — defines the rules RBAC/ABAC evaluates</li>
+      <li>Shared policy-evaluation library — enforced consistently across every lakehouse-reading service</li>
+      <li>Audit Logs — every access decision is logged</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
-      <li>Scale: campaign sends can generate millions of webhook callbacks in a short burst — Azure Functions consumption plan scales out automatically</li>
-      <li>Latency: opt-out events are applied within minutes via the compliance-priority Event Hubs consumer group</li>
-      <li>Reliability: webhook handling is idempotent (event_id dedup) since providers frequently retry deliveries</li>
-      <li>Security/Privacy: consent state is written to an auditable table in Azure Database for PostgreSQL, not just a marketing flag</li>
+      <li>Scale: policy evaluation adds negligible overhead per query regardless of lakehouse size</li>
+      <li>Latency: sub-millisecond policy checks via cached role/attribute lookups</li>
+      <li>Reliability: fail-closed by design — an evaluation error denies access rather than defaulting to allow</li>
+      <li>Security/Privacy: a foundational security control; access decisions are themselves logged for audit, and ADFS federation means no separate password store exists for internal accounts to compromise</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>A retail brand's promotional SMS blast generates an unsubscribe spike within 5 minutes. Because the Azure Function webhook receiver routes opt-out events onto the compliance-priority Event Hubs consumer group, every affected contact is suppressed from the next wave of the same campaign before it sends — avoiding a compliance incident and an estimated $40K in regulatory exposure.</p>
+    <p>A support agent signs in via ADFS-federated SSO using their existing corporate AD credentials, based in the EU, and tries to query a US customer's profile. ABAC's region-attribute rule denies the request even though their RBAC role would otherwise permit customer-profile access — a more precise control than role alone could provide.</p>
   </section>
 
-  <p style="margin-top:28px;"><a href="../data-sources.html#customer-touchpoints">&larr; Back to Customer Touchpoints</a></p>
+  <p style="margin-top:28px;"><a href="../unified-data-foundation.html#governance-security">&larr; Back to Governance &amp; Security</a></p>
 </main>
 
 <footer class="site-footer">

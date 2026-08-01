@@ -97,46 +97,108 @@
 
       <section id="client-sdks" class="submodule" style="--card-accent:#2b7fd6">
         <h2><span class="icon">&#128187;</span> Client SDKs</h2>
-        <ul class="feature-list">
-          <li>Web SDK</li>
-          <li>Mobile SDK</li>
-          <li>Server SDK</li>
-        </ul>
+        <div class="feature-grid">
+          <a class="feature-card" href="ingestion-layer/web-sdk.html">
+            <div class="feature-icon">&#127760;</div>
+            <h4 class="feature-card-title">Web SDK</h4>
+            <p>TypeScript client library instrumenting web storefronts and apps.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/mobile-sdk.html">
+            <div class="feature-icon">&#128241;</div>
+            <h4 class="feature-card-title">Mobile SDK</h4>
+            <p>Native iOS/Android libraries sharing the same event contract.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/server-sdk.html">
+            <div class="feature-icon">&#128421;&#65039;</div>
+            <h4 class="feature-card-title">Server SDK</h4>
+            <p>Backend library for IoT gateways, kiosks, and internal services.</p>
+          </a>
+        </div>
       </section>
 
       <section id="edge-network" class="submodule" style="--card-accent:#2b7fd6">
         <h2><span class="icon">&#127760;</span> Edge Network</h2>
         <p class="tech">Global Points of Presence</p>
-        <ul class="feature-list">
-          <li>Event Collection</li>
-          <li>Validation</li>
-          <li>Enrichment (Geo, Device, IP)</li>
-          <li>Consent Enforcement</li>
-          <li>Queue &amp; Retry</li>
-        </ul>
+        <div class="feature-grid">
+          <a class="feature-card" href="ingestion-layer/event-collection.html">
+            <div class="feature-icon">&#128229;</div>
+            <h4 class="feature-card-title">Event Collection</h4>
+            <p>The front door — receives every event before anything else happens.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/validation.html">
+            <div class="feature-icon">&#9989;</div>
+            <h4 class="feature-card-title">Validation</h4>
+            <p>Schema and contract checks immediately after collection.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/enrichment.html">
+            <div class="feature-icon">&#10024;</div>
+            <h4 class="feature-card-title">Enrichment (Geo, Device, IP)</h4>
+            <p>Adds location and device context before storage.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/consent-enforcement.html">
+            <div class="feature-icon">&#128737;&#65039;</div>
+            <h4 class="feature-card-title">Consent Enforcement</h4>
+            <p>Checks consent state before an event is allowed to proceed.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/queue-retry.html">
+            <div class="feature-icon">&#128260;</div>
+            <h4 class="feature-card-title">Queue &amp; Retry</h4>
+            <p>Absorbs bursts and outages between the edge and processing.</p>
+          </a>
+        </div>
       </section>
 
       <section id="streaming-ingestion" class="submodule" style="--card-accent:#2b7fd6">
         <h2><span class="icon">&#128266;</span> Streaming Ingestion</h2>
-        <p class="tech">Redpanda (Kafka Compatible)</p>
+        <div class="feature-grid">
+          <a class="feature-card" href="ingestion-layer/redpanda.html">
+            <div class="feature-icon">&#128246;</div>
+            <h4 class="feature-card-title">Redpanda (Kafka Compatible)</h4>
+            <p>Kafka-API-compatible streaming backbone with lower operational overhead.</p>
+          </a>
+        </div>
       </section>
 
       <section id="connectors" class="submodule" style="--card-accent:#2b7fd6">
         <h2><span class="icon">&#128268;</span> Connectors</h2>
-        <ul class="feature-list">
-          <li>Pre-built Connectors</li>
-          <li>Custom Connectors</li>
-        </ul>
+        <div class="feature-grid">
+          <a class="feature-card" href="ingestion-layer/pre-built-connectors.html">
+            <div class="feature-icon">&#129513;</div>
+            <h4 class="feature-card-title">Pre-built Connectors</h4>
+            <p>Ready-to-configure integrations for common SaaS platforms.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/custom-connectors.html">
+            <div class="feature-icon">&#128295;</div>
+            <h4 class="feature-card-title">Custom Connectors</h4>
+            <p>Framework for building a new integration when none exists yet.</p>
+          </a>
+        </div>
       </section>
 
       <section id="protocols-supported" class="submodule" style="--card-accent:#2b7fd6">
         <h2><span class="icon">&#128225;</span> Protocols Supported</h2>
-        <ul class="feature-list">
-          <li>HTTP / HTTPS</li>
-          <li>gRPC</li>
-          <li>Webhooks</li>
-          <li>Batch Upload (S3, SFTP, API)</li>
-        </ul>
+        <div class="feature-grid">
+          <a class="feature-card" href="ingestion-layer/http-https.html">
+            <div class="feature-icon">&#128279;</div>
+            <h4 class="feature-card-title">HTTP / HTTPS</h4>
+            <p>The default, universal protocol for SDK and connector traffic.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/grpc.html">
+            <div class="feature-icon">&#9889;</div>
+            <h4 class="feature-card-title">gRPC</h4>
+            <p>High-throughput binary protocol for the highest-volume server callers.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/webhooks.html">
+            <div class="feature-icon">&#127991;&#65039;</div>
+            <h4 class="feature-card-title">Webhooks</h4>
+            <p>Inbound pattern for platforms that push events to CXOS.</p>
+          </a>
+          <a class="feature-card" href="ingestion-layer/batch-upload.html">
+            <div class="feature-icon">&#128230;</div>
+            <h4 class="feature-card-title">Batch Upload (S3, SFTP, API)</h4>
+            <p>Path for large, scheduled data drops and historical exports.</p>
+          </a>
+        </div>
       </section>
 
       <div class="example-box">

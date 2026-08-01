@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Email / SMS — Customer Touchpoints — CXOS Reference Documentation</title>
+<title>Compatibility — Event Schema &amp; Registry — CXOS Reference Documentation</title>
 <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
   <nav class="main-nav">
     <ul class="nav-list">
       <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="data-sources.html" class="active">
+      <li data-page="data-sources.html">
         <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
@@ -35,7 +35,7 @@
           <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
         </div>
       </li>
-      <li data-page="transformation-processing.html">
+      <li data-page="transformation-processing.html" class="active">
         <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
@@ -76,103 +76,93 @@
 <main class="page">
   <div class="breadcrumb">
     <a href="../../index.html">Overview</a><span class="sep">/</span>
-    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
-    <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a><span class="sep">/</span>
-    <span class="current">Email / SMS</span>
+    <a href="../transformation-processing.html">Transformation &amp; Processing</a><span class="sep">/</span>
+    <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry</a><span class="sep">/</span>
+    <span class="current">Compatibility</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:#6a4fc2">
-    <div class="step">Data Sources &rarr; Customer Touchpoints</div>
-    <h1>Email / SMS</h1>
-    <p>Outbound and inbound engagement on email and SMS channels — opens, clicks, replies, and opt-outs — usually reported back by the sending platform.</p>
+  <div class="module-intro" style="--card-accent:#0f9b8e">
+    <div class="step">Transformation &amp; Processing &rarr; Event Schema &amp; Registry</div>
+    <h1>Compatibility</h1>
+    <p>Automated checks that a proposed schema change won't silently break an existing consumer before it's ever allowed to ship.</p>
   </div>
 
   <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>ESP webhook &rarr; .NET Core microservices on Azure.</p></div></div>
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Compatibility checking turns schema risk into an automated CI gate.</p></div></div>
     <div class="hld-diagram">
-      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">Email / SMS</div><div class="stage-detail">Outbound campaigns, inbound replies</div></div>
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Versioning</div><div class="stage-detail">New version proposal to check</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure Function (Webhook Receiver)</div><div class="stage-detail">SendGrid/Twilio webhook &rarr; Cxos.Ingestion.Client</div></div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Schema Diff Engine</div><div class="stage-detail">Compares proposed vs. current schema</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Priority path for opt-outs via Azure Event Hubs</div></div>
+      <div class="hld-node origin" style="--card-accent:#0f9b8e"><div class="stage-label">Processing</div><div class="stage-name">Compatibility Checking</div><div class="stage-detail">Automated schema diff validation</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Engagement history per profile</div></div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">CI/CD Pipeline</div><div class="stage-detail">Runs as a merge gate</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Azure DB for PostgreSQL — campaign performance</div></div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Governance Rules</div><div class="stage-detail">Runs alongside this check</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Next-best-channel, suppression sync (Reverse ETL)</div></div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Prevented Breaking Changes</div><div class="stage-detail">The outcome this control delivers</div></div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128188;</span> Business Context</h2>
     <ul class="feature-list">
-      <li>Email/SMS engagement is a leading indicator of campaign ROI and channel fatigue</li>
-      <li>Opt-out/consent events here are legally load-bearing — mishandling them creates compliance risk</li>
-      <li>Owned by Lifecycle/CRM Marketing; consent state is shared with Legal/Compliance</li>
+      <li>Turns "did this schema change break anything" from a question discovered in production into one answered automatically before merge</li>
+      <li>Gives teams confidence to evolve their event schemas without fear of an invisible downstream breakage</li>
+      <li>Owned by Platform Engineering</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>SendGrid and Twilio call a .NET Core Azure Function webhook endpoint for every engagement event (send, open, click, bounce, opt-out); the function validates the provider signature and forwards the event through <code>Cxos.Ingestion.Client</code> into the Ingestion API. The Stream Worker routes two priority tiers onto separate Azure Event Hubs consumer groups: standard engagement (opens/clicks) and compliance-critical (unsubscribes/bounces), so opt-outs are never queued behind bulk analytics traffic. The Analytics API (ASP.NET Core + Dapper) reads rollups from Azure Database for PostgreSQL Flexible Server for campaign dashboards.</p>
+    <p>When a schema change is submitted to the Registry, an automated compatibility checker diffs the proposed schema against the current version using standard rules (removing a required field, narrowing a type, or removing an enum value are breaking; adding an optional field is not) and against the Registry's knowledge of active consumers where declared. Breaking changes are rejected unless explicitly submitted as a new major version with a documented migration path.</p>
     <div class="handbook-block">
-      <h3>Typical Events</h3>
+      <h3>Breaking Change Examples</h3>
       <div class="tag-row">
-        <span class="tag">email_sent</span>
-        <span class="tag">email_opened</span>
-        <span class="tag">email_clicked</span>
-        <span class="tag">sms_delivered</span>
-        <span class="tag">unsubscribed</span>
+        <span class="tag">Removing a required field</span>
+        <span class="tag">Narrowing a field type</span>
+        <span class="tag">Removing an enum value</span>
+        <span class="tag">Renaming a field</span>
       </div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
-    <h2><span class="icon">&#128190;</span> Sample Event Payload</h2>
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128190;</span> Compatibility Check Result</h2>
     <pre class="code-block">{
-  "event": "email_clicked",
-  "event_id": "1e438f2b-3a9c-4c2d-8b1a-6f2e0d4a7c93",
-  "timestamp": "2026-08-01T08:15:47Z",
-  "user_id": "cust_004821",
-  "context": {
-    "channel": "email",
-    "campaign_id": "camp_2291",
-    "provider": "sendgrid"
-  },
-  "properties": {
-    "link_url": "/summer-sale",
-    "message_id": "msg_774f"
-  }
+  "proposed_version": "4",
+  "compatible_with": "3",
+  "result": "breaking",
+  "reason": "field 'currency' changed from optional to required"
 }</pre>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128279;</span> Integration Points</h2>
     <ul class="feature-list">
-      <li>Azure Function webhook receivers for SendGrid / Twilio / Braze</li>
-      <li><code>Cxos.Ingestion.Client</code> NuGet package — shared contract for the outbound call into the Ingestion API</li>
-      <li>Azure Event Hubs — dual consumer groups (standard vs. compliance-priority)</li>
-      <li>Reverse ETL (.NET Core Activation API + Azure Functions) — suppression list sync back to the ESP</li>
+      <li>Schema Registry API — hosts the compatibility checker</li>
+      <li>CI/CD pipeline — schema changes run through this check before deployment, same as a code review gate</li>
+      <li>Versioning system — breaking changes are automatically routed to major-version handling</li>
+      <li>Developer portal — surfaces check results to the engineer proposing the change</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
-      <li>Scale: campaign sends can generate millions of webhook callbacks in a short burst — Azure Functions consumption plan scales out automatically</li>
-      <li>Latency: opt-out events are applied within minutes via the compliance-priority Event Hubs consumer group</li>
-      <li>Reliability: webhook handling is idempotent (event_id dedup) since providers frequently retry deliveries</li>
-      <li>Security/Privacy: consent state is written to an auditable table in Azure Database for PostgreSQL, not just a marketing flag</li>
+      <li>Scale: compatibility checks are fast, schema-diff operations — no meaningful performance concern</li>
+      <li>Latency: runs synchronously in CI, adding seconds to a schema-change pull request, not minutes</li>
+      <li>Reliability: the checker itself is tested against a suite of known-breaking and known-safe change patterns</li>
+      <li>Security/Privacy: no data-privacy implications — this is a structural, not content, check</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>A retail brand's promotional SMS blast generates an unsubscribe spike within 5 minutes. Because the Azure Function webhook receiver routes opt-out events onto the compliance-priority Event Hubs consumer group, every affected contact is suppressed from the next wave of the same campaign before it sends — avoiding a compliance incident and an estimated $40K in regulatory exposure.</p>
+    <p>An engineer accidentally proposes narrowing the discount_percent field from a float to an integer. The compatibility checker flags this as breaking during the pull request, before it ever reaches production and silently truncates every discount value downstream.</p>
   </section>
 
-  <p style="margin-top:28px;"><a href="../data-sources.html#customer-touchpoints">&larr; Back to Customer Touchpoints</a></p>
+  <p style="margin-top:28px;"><a href="../transformation-processing.html#event-schema-registry">&larr; Back to Event Schema &amp; Registry</a></p>
 </main>
 
 <footer class="site-footer">

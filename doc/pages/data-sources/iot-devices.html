@@ -88,7 +88,7 @@
   </div>
 
   <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>Device telemetry &rarr; Azure IoT Hub &rarr; .NET Core microservices on Azure &rarr; downstream activation.</p></div></div>
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Device telemetry &rarr; Azure IoT Hub &rarr; .NET Core microservices on Azure.</p></div></div>
     <div class="hld-diagram">
       <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">IoT Device</div><div class="stage-detail">Smart appliance, wearable, in-vehicle unit</div></div>
       <div class="hld-arrow">&rarr;</div>
@@ -119,8 +119,11 @@
     <div class="handbook-block">
       <h3>Typical Events</h3>
       <div class="tag-row">
-        <span class="tag">device_status</span><span class="tag">sensor_reading</span><span class="tag">firmware_updated</span>
-        <span class="tag">device_paired</span><span class="tag">battery_low</span>
+        <span class="tag">device_status</span>
+        <span class="tag">sensor_reading</span>
+        <span class="tag">firmware_updated</span>
+        <span class="tag">device_paired</span>
+        <span class="tag">battery_low</span>
       </div>
     </div>
   </section>

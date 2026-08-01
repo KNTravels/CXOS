@@ -88,7 +88,7 @@
   </div>
 
   <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>Conversation platform webhook &rarr; .NET Core microservices on Azure &rarr; downstream activation.</p></div></div>
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Conversation platform webhook &rarr; .NET Core microservices on Azure.</p></div></div>
     <div class="hld-diagram">
       <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">Chat / Voice / Bot</div><div class="stage-detail">Live chat, chatbot, voice assistant</div></div>
       <div class="hld-arrow">&rarr;</div>
@@ -119,8 +119,11 @@
     <div class="handbook-block">
       <h3>Typical Events</h3>
       <div class="tag-row">
-        <span class="tag">chat_started</span><span class="tag">message_sent</span><span class="tag">intent_detected</span>
-        <span class="tag">bot_handoff_to_human</span><span class="tag">call_transcribed</span>
+        <span class="tag">chat_started</span>
+        <span class="tag">message_sent</span>
+        <span class="tag">intent_detected</span>
+        <span class="tag">bot_handoff_to_human</span>
+        <span class="tag">call_transcribed</span>
       </div>
     </div>
   </section>
