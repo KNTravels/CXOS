@@ -279,7 +279,6 @@ nav.main-nav {
 .hero p.lead {
   font-size: 16px;
   color: var(--text-muted);
-  max-width: 720px;
   margin: 0;
 }
 
