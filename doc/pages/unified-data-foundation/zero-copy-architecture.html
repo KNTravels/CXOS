@@ -115,7 +115,7 @@
 
   <section class="submodule" style="--card-accent:#2e9e5b">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>Because every zone is stored as Iceberg tables on Azure Data Lake Storage Gen2, any engine that speaks the Iceberg format reads the same physical Parquet files directly — there's no ETL step that copies data into a separate proprietary warehouse format. The Query &amp; Analytics Engine, ad hoc Spark jobs, and Azure Machine Learning training pipelines all read from the same underlying storage, differing only in compute engine, not data location.</p>
+    <p>Because every zone is stored as Iceberg tables on Azure Data Lake Storage Gen2, any engine that speaks the Iceberg format reads the same physical Parquet files directly — there's no ETL step that copies data into a separate proprietary warehouse format. The Query &amp; Analytics Engine, ad hoc Spark jobs, Snowflake (via Iceberg external tables), and Azure Machine Learning training pipelines all read from the same underlying storage, differing only in compute engine, not data location.</p>
     <div class="handbook-block">
       <h3>Benefits</h3>
       <div class="tag-row">

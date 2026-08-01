@@ -19,7 +19,7 @@ module.exports = [
           'Directly drives conversion-rate optimization, personalization, and cart-abandonment recovery',
           'Owned by Digital / Product / Growth; often the P&amp;L justification for the platform investment',
         ],
-        technical: 'The Web SDK (TypeScript) and Mobile SDK (Swift / Kotlin) are thin wrappers around the same contract published in the <code>Cxos.Ingestion.Client</code> NuGet package, so the browser, the mobile app, and the .NET Core Ingestion API all agree on one event schema. Client apps call Azure API Management, which authenticates the request (Azure AD B2C for end-user tokens), applies rate limiting, and routes to the Ingestion API — an ASP.NET Core Web API running on AKS. The API validates the payload and publishes it onto Azure Event Hubs for downstream processing.',
+        technical: 'The Web SDK (TypeScript) and Mobile SDK (Swift / Kotlin) are thin wrappers around the same contract published in the <code>Cxos.Ingestion.Client</code> NuGet package, so the browser, the mobile app, and the .NET Core Ingestion API all agree on one event schema. Client apps call Azure API Management, which authenticates the request (Azure AD B2C for end-user tokens), applies rate limiting, and routes to the Ingestion API — an ASP.NET Core Web API packaged as a Docker container and running on AKS. The API validates the payload and publishes it onto Azure Event Hubs for downstream processing.',
         chipsLabel: 'Typical Events', chips: ['page_view', 'product_viewed', 'add_to_cart', 'search_performed', 'app_opened', 'checkout_started'],
         artifactTitle: 'Sample Event Payload',
         artifactCode: `{
@@ -44,7 +44,7 @@ module.exports = [
         integration: [
           '<code>Cxos.Ingestion.Client</code> NuGet package (Azure Artifacts feed) — typed contracts + Polly retry policy',
           'Azure API Management — gateway, auth, throttling',
-          'Ingestion API — ASP.NET Core microservice on AKS',
+          'Ingestion API — ASP.NET Core microservice, packaged as a Docker container, running on AKS',
           'Azure Event Hubs — Kafka-compatible ingestion backbone',
           'Azure AD B2C — end-user authentication / consent context',
         ],
