@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Email / SMS — Customer Touchpoints — CXOS Reference Documentation</title>
+<title>Rollups &amp; Aggregations — Batch Processing — CXOS Reference Documentation</title>
 <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
   <nav class="main-nav">
     <ul class="nav-list">
       <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="data-sources.html" class="active">
+      <li data-page="data-sources.html">
         <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
@@ -35,7 +35,7 @@
           <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
         </div>
       </li>
-      <li data-page="transformation-processing.html">
+      <li data-page="transformation-processing.html" class="active">
         <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
@@ -76,103 +76,95 @@
 <main class="page">
   <div class="breadcrumb">
     <a href="../../index.html">Overview</a><span class="sep">/</span>
-    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
-    <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a><span class="sep">/</span>
-    <span class="current">Email / SMS</span>
+    <a href="../transformation-processing.html">Transformation &amp; Processing</a><span class="sep">/</span>
+    <a href="../transformation-processing.html#batch-processing">Batch Processing</a><span class="sep">/</span>
+    <span class="current">Rollups &amp; Aggregations</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:#6a4fc2">
-    <div class="step">Data Sources &rarr; Customer Touchpoints</div>
-    <h1>Email / SMS</h1>
-    <p>Outbound and inbound engagement on email and SMS channels — opens, clicks, replies, and opt-outs — usually reported back by the sending platform.</p>
+  <div class="module-intro" style="--card-accent:#0f9b8e">
+    <div class="step">Transformation &amp; Processing &rarr; Batch Processing</div>
+    <h1>Rollups &amp; Aggregations</h1>
+    <p>Pre-computed summaries (daily active users, revenue by category, cohort retention) that make dashboards and reports fast without scanning raw events every time.</p>
   </div>
 
   <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>ESP webhook &rarr; .NET Core microservices on Azure.</p></div></div>
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Rollups turn billions of raw events into dashboard-ready summaries.</p></div></div>
     <div class="hld-diagram">
-      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">Email / SMS</div><div class="stage-detail">Outbound campaigns, inbound replies</div></div>
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Lakehouse (curated zone)</div><div class="stage-detail">Read source</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure Function (Webhook Receiver)</div><div class="stage-detail">SendGrid/Twilio webhook &rarr; Cxos.Ingestion.Client</div></div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure Functions Timer</div><div class="stage-detail">Scheduled batch trigger</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Priority path for opt-outs via Azure Event Hubs</div></div>
+      <div class="hld-node origin" style="--card-accent:#0f9b8e"><div class="stage-label">Processing</div><div class="stage-name">Rollups &amp; Aggregations</div><div class="stage-detail">.NET Core Batch Worker — scheduled aggregation jobs</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Engagement history per profile</div></div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse (analytics-marts zone)</div><div class="stage-detail">Write destination</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Azure DB for PostgreSQL — campaign performance</div></div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Query &amp; Analytics Engine</div><div class="stage-detail">Primary consumer of rollup tables</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Next-best-channel, suppression sync (Reverse ETL)</div></div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Executive &amp; Team Dashboards</div><div class="stage-detail">Fast, affordable reporting</div></div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128188;</span> Business Context</h2>
     <ul class="feature-list">
-      <li>Email/SMS engagement is a leading indicator of campaign ROI and channel fatigue</li>
-      <li>Opt-out/consent events here are legally load-bearing — mishandling them creates compliance risk</li>
-      <li>Owned by Lifecycle/CRM Marketing; consent state is shared with Legal/Compliance</li>
+      <li>Raw event-level queries don't scale to interactive dashboards at billions of rows — rollups are what makes reporting fast and affordable</li>
+      <li>Standardizes how metrics like 'daily active users' are defined and computed, so different teams don't get different numbers for the same metric</li>
+      <li>Owned by Data Engineering / Analytics Engineering</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>SendGrid and Twilio call a .NET Core Azure Function webhook endpoint for every engagement event (send, open, click, bounce, opt-out); the function validates the provider signature and forwards the event through <code>Cxos.Ingestion.Client</code> into the Ingestion API. The Stream Worker routes two priority tiers onto separate Azure Event Hubs consumer groups: standard engagement (opens/clicks) and compliance-critical (unsubscribes/bounces), so opt-outs are never queued behind bulk analytics traffic. The Analytics API (ASP.NET Core + Dapper) reads rollups from Azure Database for PostgreSQL Flexible Server for campaign dashboards.</p>
+    <p>Scheduled .NET Core batch jobs (Azure Functions Timer trigger, or longer-running jobs on Azure Container Apps Jobs) read from the curated zone of the Data Lakehouse and write pre-aggregated tables (daily/weekly rollups by dimension) back into the analytics-marts zone. Jobs use windowed, idempotent writes (safe to rerun for a given date) so a failed run can simply be retried without double-counting.</p>
     <div class="handbook-block">
-      <h3>Typical Events</h3>
+      <h3>Example Rollups</h3>
       <div class="tag-row">
-        <span class="tag">email_sent</span>
-        <span class="tag">email_opened</span>
-        <span class="tag">email_clicked</span>
-        <span class="tag">sms_delivered</span>
-        <span class="tag">unsubscribed</span>
+        <span class="tag">Daily active users</span>
+        <span class="tag">Revenue by category</span>
+        <span class="tag">Cohort retention</span>
+        <span class="tag">Channel-level funnel conversion</span>
       </div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
-    <h2><span class="icon">&#128190;</span> Sample Event Payload</h2>
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128190;</span> Rollup Table Row</h2>
     <pre class="code-block">{
-  "event": "email_clicked",
-  "event_id": "1e438f2b-3a9c-4c2d-8b1a-6f2e0d4a7c93",
-  "timestamp": "2026-08-01T08:15:47Z",
-  "user_id": "cust_004821",
-  "context": {
-    "channel": "email",
-    "campaign_id": "camp_2291",
-    "provider": "sendgrid"
-  },
-  "properties": {
-    "link_url": "/summer-sale",
-    "message_id": "msg_774f"
-  }
+  "date": "2026-08-01",
+  "dimension": "product_category",
+  "value": "audio",
+  "metric": "revenue",
+  "amount": 482910,
+  "currency": "INR"
 }</pre>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#128279;</span> Integration Points</h2>
     <ul class="feature-list">
-      <li>Azure Function webhook receivers for SendGrid / Twilio / Braze</li>
-      <li><code>Cxos.Ingestion.Client</code> NuGet package — shared contract for the outbound call into the Ingestion API</li>
-      <li>Azure Event Hubs — dual consumer groups (standard vs. compliance-priority)</li>
-      <li>Reverse ETL (.NET Core Activation API + Azure Functions) — suppression list sync back to the ESP</li>
+      <li>Azure Functions Timer trigger / Azure Container Apps Jobs — scheduled batch execution</li>
+      <li>Data Lakehouse curated zone — read source</li>
+      <li>Data Lakehouse analytics-marts zone — write destination</li>
+      <li>Query &amp; Analytics Engine — the primary consumer of rollup tables for dashboards</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
-      <li>Scale: campaign sends can generate millions of webhook callbacks in a short burst — Azure Functions consumption plan scales out automatically</li>
-      <li>Latency: opt-out events are applied within minutes via the compliance-priority Event Hubs consumer group</li>
-      <li>Reliability: webhook handling is idempotent (event_id dedup) since providers frequently retry deliveries</li>
-      <li>Security/Privacy: consent state is written to an auditable table in Azure Database for PostgreSQL, not just a marketing flag</li>
+      <li>Scale: jobs process a bounded daily/weekly partition rather than the full historical table, keeping runtime predictable as data grows</li>
+      <li>Latency: rollups are typically available a few hours after the day/week closes — not real-time by design</li>
+      <li>Reliability: idempotent, date-partitioned writes make reruns and backfills safe</li>
+      <li>Security/Privacy: rollups aggregate away individual-level PII by construction — inherently more privacy-safe than raw event access</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>A retail brand's promotional SMS blast generates an unsubscribe spike within 5 minutes. Because the Azure Function webhook receiver routes opt-out events onto the compliance-priority Event Hubs consumer group, every affected contact is suppressed from the next wave of the same campaign before it sends — avoiding a compliance incident and an estimated $40K in regulatory exposure.</p>
+    <p>The weekly executive dashboard reads from a pre-computed revenue-by-category rollup instead of scanning a billion-row raw event table on every page load — the difference between a sub-second dashboard and a report that times out.</p>
   </section>
 
-  <p style="margin-top:28px;"><a href="../data-sources.html#customer-touchpoints">&larr; Back to Customer Touchpoints</a></p>
+  <p style="margin-top:28px;"><a href="../transformation-processing.html#batch-processing">&larr; Back to Batch Processing</a></p>
 </main>
 
 <footer class="site-footer">

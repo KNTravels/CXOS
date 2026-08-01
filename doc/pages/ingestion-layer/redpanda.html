@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Email / SMS — Customer Touchpoints — CXOS Reference Documentation</title>
+<title>Redpanda (Kafka Compatible) — Streaming Ingestion — CXOS Reference Documentation</title>
 <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
   <nav class="main-nav">
     <ul class="nav-list">
       <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="data-sources.html" class="active">
+      <li data-page="data-sources.html">
         <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
@@ -25,7 +25,7 @@
           <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
         </div>
       </li>
-      <li data-page="ingestion-layer.html">
+      <li data-page="ingestion-layer.html" class="active">
         <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
         <div class="dropdown">
           <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
@@ -76,103 +76,93 @@
 <main class="page">
   <div class="breadcrumb">
     <a href="../../index.html">Overview</a><span class="sep">/</span>
-    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
-    <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a><span class="sep">/</span>
-    <span class="current">Email / SMS</span>
+    <a href="../ingestion-layer.html">Ingestion Layer</a><span class="sep">/</span>
+    <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion</a><span class="sep">/</span>
+    <span class="current">Redpanda (Kafka Compatible)</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:#6a4fc2">
-    <div class="step">Data Sources &rarr; Customer Touchpoints</div>
-    <h1>Email / SMS</h1>
-    <p>Outbound and inbound engagement on email and SMS channels — opens, clicks, replies, and opt-outs — usually reported back by the sending platform.</p>
+  <div class="module-intro" style="--card-accent:#2b7fd6">
+    <div class="step">Ingestion Layer &rarr; Streaming Ingestion</div>
+    <h1>Redpanda (Kafka Compatible)</h1>
+    <p>The Kafka-API-compatible streaming backbone CXOS uses in place of Apache Kafka itself, chosen for lower operational overhead at equivalent throughput.</p>
   </div>
 
   <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>ESP webhook &rarr; .NET Core microservices on Azure.</p></div></div>
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Redpanda is the durable log every ingested event flows through.</p></div></div>
     <div class="hld-diagram">
-      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">Email / SMS</div><div class="stage-detail">Outbound campaigns, inbound replies</div></div>
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Ingestion API</div><div class="stage-detail">Producer — publishes validated events</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure Function (Webhook Receiver)</div><div class="stage-detail">SendGrid/Twilio webhook &rarr; Cxos.Ingestion.Client</div></div>
+      <div class="hld-node origin" style="--card-accent:#2b7fd6"><div class="stage-label">Ingestion</div><div class="stage-name">Redpanda Cluster</div><div class="stage-detail">Kafka-compatible durable log</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Priority path for opt-outs via Azure Event Hubs</div></div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Consumer — Confluent.Kafka .NET client</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Engagement history per profile</div></div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Where consumed events are ultimately written</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Azure DB for PostgreSQL — campaign performance</div></div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Schema Registry</div><div class="stage-detail">Enforces the contract at the broker level</div></div>
       <div class="hld-arrow">&rarr;</div>
-      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Next-best-channel, suppression sync (Reverse ETL)</div></div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Every Real-time Consumer</div><div class="stage-detail">The backbone every real-time stage depends on</div></div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2b7fd6">
     <h2><span class="icon">&#128188;</span> Business Context</h2>
     <ul class="feature-list">
-      <li>Email/SMS engagement is a leading indicator of campaign ROI and channel fatigue</li>
-      <li>Opt-out/consent events here are legally load-bearing — mishandling them creates compliance risk</li>
-      <li>Owned by Lifecycle/CRM Marketing; consent state is shared with Legal/Compliance</li>
+      <li>The streaming backbone is invisible to business stakeholders when it works, and existential when it doesn't — it's the platform's real-time nervous system</li>
+      <li>Kafka-API compatibility means the ecosystem of Kafka connectors, client libraries, and tooling all work unmodified</li>
+      <li>Owned by Platform / Infrastructure Engineering</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2b7fd6">
     <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>SendGrid and Twilio call a .NET Core Azure Function webhook endpoint for every engagement event (send, open, click, bounce, opt-out); the function validates the provider signature and forwards the event through <code>Cxos.Ingestion.Client</code> into the Ingestion API. The Stream Worker routes two priority tiers onto separate Azure Event Hubs consumer groups: standard engagement (opens/clicks) and compliance-critical (unsubscribes/bounces), so opt-outs are never queued behind bulk analytics traffic. The Analytics API (ASP.NET Core + Dapper) reads rollups from Azure Database for PostgreSQL Flexible Server for campaign dashboards.</p>
+    <p>Where CXOS is deployed with Redpanda directly (rather than Azure Event Hubs' native Kafka-compatible endpoint), it runs as a managed cluster fronting the same producer/consumer contracts used elsewhere — the .NET Core Ingestion API and Stream Worker use the standard Confluent.Kafka .NET client against Redpanda exactly as they would against Event Hubs, so the rest of the platform's code is broker-agnostic. Topic partitioning follows the event's user_id/anonymous_id to preserve per-customer ordering.</p>
     <div class="handbook-block">
-      <h3>Typical Events</h3>
+      <h3>Compatibility</h3>
       <div class="tag-row">
-        <span class="tag">email_sent</span>
-        <span class="tag">email_opened</span>
-        <span class="tag">email_clicked</span>
-        <span class="tag">sms_delivered</span>
-        <span class="tag">unsubscribed</span>
+        <span class="tag">Kafka producer/consumer API</span>
+        <span class="tag">Schema Registry compatible</span>
+        <span class="tag">Confluent.Kafka .NET client</span>
       </div>
     </div>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
-    <h2><span class="icon">&#128190;</span> Sample Event Payload</h2>
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128190;</span> Topic Configuration</h2>
     <pre class="code-block">{
-  "event": "email_clicked",
-  "event_id": "1e438f2b-3a9c-4c2d-8b1a-6f2e0d4a7c93",
-  "timestamp": "2026-08-01T08:15:47Z",
-  "user_id": "cust_004821",
-  "context": {
-    "channel": "email",
-    "campaign_id": "camp_2291",
-    "provider": "sendgrid"
-  },
-  "properties": {
-    "link_url": "/summer-sale",
-    "message_id": "msg_774f"
-  }
+  "topic": "cxos.events.raw",
+  "partitions": 24,
+  "partition_key": "user_id | anonymous_id",
+  "retention_hours": 168,
+  "compaction": false
 }</pre>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2b7fd6">
     <h2><span class="icon">&#128279;</span> Integration Points</h2>
     <ul class="feature-list">
-      <li>Azure Function webhook receivers for SendGrid / Twilio / Braze</li>
-      <li><code>Cxos.Ingestion.Client</code> NuGet package — shared contract for the outbound call into the Ingestion API</li>
-      <li>Azure Event Hubs — dual consumer groups (standard vs. compliance-priority)</li>
-      <li>Reverse ETL (.NET Core Activation API + Azure Functions) — suppression list sync back to the ESP</li>
+      <li>Redpanda cluster (or Azure Event Hubs' Kafka-compatible endpoint, interchangeably)</li>
+      <li>Confluent.Kafka .NET client — used by the Ingestion API (producer) and Stream Worker (consumer)</li>
+      <li>Schema Registry — enforces the Cxos.Ingestion.Client contract at the broker level</li>
+      <li>Azure Monitor — broker-level throughput, consumer lag, and partition-skew dashboards</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2b7fd6">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
-      <li>Scale: campaign sends can generate millions of webhook callbacks in a short burst — Azure Functions consumption plan scales out automatically</li>
-      <li>Latency: opt-out events are applied within minutes via the compliance-priority Event Hubs consumer group</li>
-      <li>Reliability: webhook handling is idempotent (event_id dedup) since providers frequently retry deliveries</li>
-      <li>Security/Privacy: consent state is written to an auditable table in Azure Database for PostgreSQL, not just a marketing flag</li>
+      <li>Scale: partition count is sized for peak expected throughput with headroom; partitioning by customer ID keeps load reasonably balanced</li>
+      <li>Latency: sub-second producer-to-consumer latency under normal load</li>
+      <li>Reliability: replication factor 3 across availability zones; offset commits are transactional with downstream writes where exactly-once semantics matter</li>
+      <li>Security/Privacy: mTLS between all producers/consumers and the broker; topic-level ACLs restrict which services can produce or consume which event types</li>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#6a4fc2">
+  <section class="submodule" style="--card-accent:#2b7fd6">
     <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>A retail brand's promotional SMS blast generates an unsubscribe spike within 5 minutes. Because the Azure Function webhook receiver routes opt-out events onto the compliance-priority Event Hubs consumer group, every affected contact is suppressed from the next wave of the same campaign before it sends — avoiding a compliance incident and an estimated $40K in regulatory exposure.</p>
+    <p>The platform migrates its highest-volume topic from a self-managed Kafka cluster to Redpanda without changing a single line of the Stream Worker's consumer code, since both speak the same Kafka wire protocol — cutting operational overhead while preserving every existing integration.</p>
   </section>
 
-  <p style="margin-top:28px;"><a href="../data-sources.html#customer-touchpoints">&larr; Back to Customer Touchpoints</a></p>
+  <p style="margin-top:28px;"><a href="../ingestion-layer.html#streaming-ingestion">&larr; Back to Streaming Ingestion</a></p>
 </main>
 
 <footer class="site-footer">

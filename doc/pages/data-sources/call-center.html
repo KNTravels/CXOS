@@ -88,7 +88,7 @@
   </div>
 
   <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>CCaaS export &rarr; Azure Blob Storage &rarr; .NET Core microservices on Azure &rarr; downstream activation.</p></div></div>
+    <div class="section-head"><div><h2>High-Level Design</h2><p>CCaaS export &rarr; Azure Blob Storage &rarr; .NET Core microservices on Azure.</p></div></div>
     <div class="hld-diagram">
       <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">Call Center</div><div class="stage-detail">Inbound/outbound voice via CCaaS</div></div>
       <div class="hld-arrow">&rarr;</div>
@@ -119,8 +119,11 @@
     <div class="handbook-block">
       <h3>Typical Events</h3>
       <div class="tag-row">
-        <span class="tag">call_started</span><span class="tag">ivr_selection</span><span class="tag">call_transferred</span>
-        <span class="tag">call_ended</span><span class="tag">csat_recorded</span>
+        <span class="tag">call_started</span>
+        <span class="tag">ivr_selection</span>
+        <span class="tag">call_transferred</span>
+        <span class="tag">call_ended</span>
+        <span class="tag">csat_recorded</span>
       </div>
     </div>
   </section>
