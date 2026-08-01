@@ -62,6 +62,7 @@ ${dropdown}
   }).join('\n');
 
   return `      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
 ${lis}`;
 }
 
@@ -194,10 +195,6 @@ ${li(item.nfr)}
 
   <p style="margin-top:28px;"><a href="../${moduleFile}.html#${submoduleAnchor}">&larr; Back to ${submoduleName}</a></p>
 </main>
-
-<footer class="site-footer">
-  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
-</footer>
 
 <script src="../../js/main.js"></script>
 </body>
