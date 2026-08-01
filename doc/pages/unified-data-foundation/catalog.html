@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalog — Metadata Layer — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html" class="active">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../unified-data-foundation.html">Unified Data Foundation</a><span class="sep">/</span>
+    <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer</a><span class="sep">/</span>
+    <span class="current">Catalog</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#2e9e5b">
+    <div class="step">Unified Data Foundation &rarr; Metadata Layer</div>
+    <h1>Catalog</h1>
+    <p>The searchable index of every table, its location, schema, and owner across the entire lakehouse — the platform's map of itself.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>The Catalog is how anyone finds out what data already exists.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Every table is registered here automatically</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#2e9e5b"><div class="stage-label">Foundation</div><div class="stage-name">Catalog</div><div class="stage-detail">Azure Purview — searchable table/schema index</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Query &amp; Analytics Engine</div><div class="stage-detail">Resolves table locations via the catalog</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Developer Portal</div><div class="stage-detail">Self-service table discovery</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Without a catalog, "does this data already exist somewhere" becomes tribal knowledge — the catalog makes discovery self-service</li>
+      <li>Reduces duplicate data pipelines built because a team didn't know an existing table already had what they needed</li>
+      <li>Owned by Data Governance / Platform Engineering</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>The catalog is implemented on Azure Purview, which automatically scans and registers every table in the Data Lakehouse — location, schema, partition spec, and owner metadata. The Query &amp; Analytics Engine resolves logical table names to physical Iceberg table locations through the catalog rather than hardcoded paths, and the developer portal exposes catalog search so any engineer can discover existing tables before building a new pipeline.</p>
+    <div class="handbook-block">
+      <h3>Catalog Contents</h3>
+      <div class="tag-row">
+        <span class="tag">Table location & schema</span>
+        <span class="tag">Owner metadata</span>
+        <span class="tag">Partition spec</span>
+        <span class="tag">Last-updated timestamp</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128190;</span> Catalog Entry</h2>
+    <pre class="code-block">{
+  "table": "curated.identity_stitched_events",
+  "owner_team": "platform-engineering",
+  "location": "abfss://lakehouse@cxosdata.dfs.core.windows.net/curated/events",
+  "row_count_estimate": 2847193021,
+  "last_updated": "2026-08-01T09:00:00Z"
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Azure Purview — the catalog implementation</li>
+      <li>Query &amp; Analytics Engine — resolves table names via catalog lookups</li>
+      <li>Developer portal — surfaces catalog search to engineers</li>
+      <li>Data Lakehouse — every table is auto-registered on creation</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: catalog scanning runs incrementally, not a full rescan of the lakehouse on every change</li>
+      <li>Latency: catalog lookups are cached and fast; not a bottleneck for query planning</li>
+      <li>Reliability: catalog staleness is bounded by the scan schedule — typically near-real-time for new tables</li>
+      <li>Security/Privacy: catalog entries expose schema and metadata, not row-level data, so browsing the catalog is lower-risk than querying a table directly</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A new analyst wants revenue data and searches the catalog for 'revenue' instead of asking around — finding the existing marts.revenue_by_category_daily table and its owning team in seconds, avoiding a duplicate pipeline.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../unified-data-foundation.html#metadata-layer">&larr; Back to Metadata Layer</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

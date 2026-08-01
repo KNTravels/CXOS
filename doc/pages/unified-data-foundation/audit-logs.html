@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Logs — Governance &amp; Security — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html" class="active">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../unified-data-foundation.html">Unified Data Foundation</a><span class="sep">/</span>
+    <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security</a><span class="sep">/</span>
+    <span class="current">Audit Logs</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#2e9e5b">
+    <div class="step">Unified Data Foundation &rarr; Governance &amp; Security</div>
+    <h1>Audit Logs</h1>
+    <p>The immutable record of every access, change, and policy decision across the platform — what makes every other control provable, not just claimed.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Audit Logs are the evidence layer behind every governance control.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Consent Enforcement</div><div class="stage-detail">Every consent decision is logged here</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Access Control (RBAC/ABAC)</div><div class="stage-detail">Every access decision is logged here</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#2e9e5b"><div class="stage-label">Foundation</div><div class="stage-name">Audit Logs</div><div class="stage-detail">Immutable, append-only log store</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Compliance Reporting</div><div class="stage-detail">The primary consumer of audit data</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Regulatory &amp; Internal Investigations</div><div class="stage-detail">What audit logs ultimately support</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Compliance frameworks (SOC 2, GDPR, ISO 27001) require provable audit trails, not just policy documents claiming controls exist</li>
+      <li>Turns "did anyone access this customer's data inappropriately" from an unanswerable question into a queryable log</li>
+      <li>Owned by Security / Compliance</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>Every governance-relevant action — consent decisions, access-control evaluations, schema governance rejections, lifecycle deletions — writes an immutable, append-only record to a dedicated audit log store (Azure Data Lake Storage Gen2, write-once configuration, separate from operational tables). Audit records are structured and queryable, letting Compliance run investigations without needing to grep application logs.</p>
+    <div class="handbook-block">
+      <h3>Logged Events</h3>
+      <div class="tag-row">
+        <span class="tag">Consent decisions</span>
+        <span class="tag">Access-control evaluations</span>
+        <span class="tag">Schema governance rejections</span>
+        <span class="tag">Lifecycle deletions</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128190;</span> Audit Log Entry</h2>
+    <pre class="code-block">{
+  "timestamp": "2026-08-01T12:00:03Z",
+  "actor": "agt_302",
+  "action": "query",
+  "resource": "curated.customer_profile",
+  "decision": "allow",
+  "policy_ref": "abac-region-rule-4"
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Azure Data Lake Storage Gen2 (write-once configuration) — immutable audit log storage</li>
+      <li>Consent Enforcement, Access Control, Governance Rules — all write audit entries</li>
+      <li>Compliance reporting tools — query the audit log store</li>
+      <li>Azure Monitor — operational alerting on suspicious audit patterns</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: audit logging is append-only and write-optimized, sized for governance-relevant decision volume, not raw event volume</li>
+      <li>Latency: audit writes are asynchronous relative to the action they log, so they never slow down the primary operation</li>
+      <li>Reliability: write-once storage configuration prevents tampering, including by administrators</li>
+      <li>Security/Privacy: access to the audit log itself is tightly restricted — auditing the auditors is a standard security requirement</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2e9e5b">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A regulator asks for proof that a specific customer's marketing-consent withdrawal was honored. Compliance queries the audit log and produces a complete, tamper-proof record of the consent change and every subsequent access decision — turning a multi-week manual investigation into a same-day query.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../unified-data-foundation.html#governance-security">&larr; Back to Governance &amp; Security</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>
