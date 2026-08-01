@@ -96,37 +96,101 @@
       <section id="data-lakehouse" class="submodule" style="--card-accent:#2e9e5b">
         <h2><span class="icon">&#128451;</span> CXOS Data Lakehouse</h2>
         <p class="tech">Apache Iceberg + S3 Compatible Storage</p>
-        <ul class="feature-list">
-          <li><a href="unified-data-foundation/lakehouse-zones.html">Raw Events &rarr; Curated Data &rarr; Analytics Data Marts</a></li>
-          <li><a href="unified-data-foundation/open-table-format.html">Open Table Format (Iceberg)</a></li>
-          <li><a href="unified-data-foundation/zero-copy-architecture.html">Zero-Copy Architecture</a></li>
-          <li><a href="unified-data-foundation/time-travel-versioning.html">Time Travel &amp; Versioning</a></li>
-          <li><a href="unified-data-foundation/schema-evolution.html">Schema Evolution</a></li>
-          <li><a href="unified-data-foundation/partitioning-clustering.html">Partitioning &amp; Clustering</a></li>
-          <li><a href="unified-data-foundation/lifecycle-management.html">Lifecycle Management</a></li>
-        </ul>
+        <div class="feature-grid">
+          <a class="feature-card" href="unified-data-foundation/lakehouse-zones.html">
+            <div class="feature-icon">&#127964;&#65039;</div>
+            <h4 class="feature-card-title">Raw &rarr; Curated &rarr; Analytics Data Marts</h4>
+            <p>The three-tier structure every event passes through in the lakehouse.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/open-table-format.html">
+            <div class="feature-icon">&#128214;</div>
+            <h4 class="feature-card-title">Open Table Format (Iceberg)</h4>
+            <p>The open format that makes zero-copy, multi-engine access possible.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/zero-copy-architecture.html">
+            <div class="feature-icon">&#128279;</div>
+            <h4 class="feature-card-title">Zero-Copy Architecture</h4>
+            <p>One physical copy of data, queried by many engines.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/time-travel-versioning.html">
+            <div class="feature-icon">&#9203;</div>
+            <h4 class="feature-card-title">Time Travel &amp; Versioning</h4>
+            <p>Query the lakehouse as it existed at any point in the past.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/schema-evolution.html">
+            <div class="feature-icon">&#129516;</div>
+            <h4 class="feature-card-title">Schema Evolution</h4>
+            <p>Add or rename columns without rewriting existing data.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/partitioning-clustering.html">
+            <div class="feature-icon">&#128193;</div>
+            <h4 class="feature-card-title">Partitioning &amp; Clustering</h4>
+            <p>The data layout strategy that keeps billion-row queries fast.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/lifecycle-management.html">
+            <div class="feature-icon">&#9851;&#65039;</div>
+            <h4 class="feature-card-title">Lifecycle Management</h4>
+            <p>Automated policies that age and expire data over time.</p>
+          </a>
+        </div>
       </section>
 
       <section id="metadata-layer" class="submodule" style="--card-accent:#2e9e5b">
         <h2><span class="icon">&#129504;</span> Metadata Layer</h2>
         <p class="tech">Central Nervous System</p>
-        <ul class="feature-list">
-          <li><a href="unified-data-foundation/catalog.html">Catalog</a></li>
-          <li><a href="unified-data-foundation/lineage.html">Lineage</a></li>
-          <li><a href="unified-data-foundation/data-dictionary.html">Data Dictionary</a></li>
-          <li><a href="unified-data-foundation/policies-entitlements.html">Policies &amp; Entitlements</a></li>
-        </ul>
+        <div class="feature-grid">
+          <a class="feature-card" href="unified-data-foundation/catalog.html">
+            <div class="feature-icon">&#128218;</div>
+            <h4 class="feature-card-title">Catalog</h4>
+            <p>Searchable index of every table, schema, and owner.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/lineage.html">
+            <div class="feature-icon">&#129525;</div>
+            <h4 class="feature-card-title">Lineage</h4>
+            <p>Traces exactly which sources and transforms produced a table.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/data-dictionary.html">
+            <div class="feature-icon">&#128214;</div>
+            <h4 class="feature-card-title">Data Dictionary</h4>
+            <p>Human-readable definitions for every table and field.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/policies-entitlements.html">
+            <div class="feature-icon">&#128220;</div>
+            <h4 class="feature-card-title">Policies &amp; Entitlements</h4>
+            <p>Metadata-driven rules for who can access what.</p>
+          </a>
+        </div>
       </section>
 
       <section id="governance-security" class="submodule" style="--card-accent:#2e9e5b">
         <h2><span class="icon">&#128274;</span> Governance &amp; Security</h2>
-        <ul class="feature-list">
-          <li><a href="unified-data-foundation/access-control.html">Access Control (RBAC/ABAC)</a></li>
-          <li><a href="unified-data-foundation/privacy-consent.html">Privacy &amp; Consent</a></li>
-          <li><a href="unified-data-foundation/data-classification.html">Data Classification</a></li>
-          <li><a href="unified-data-foundation/audit-logs.html">Audit Logs</a></li>
-          <li><a href="unified-data-foundation/encryption.html">Encryption (At Rest &amp; In Transit)</a></li>
-        </ul>
+        <div class="feature-grid">
+          <a class="feature-card" href="unified-data-foundation/access-control.html">
+            <div class="feature-icon">&#128272;</div>
+            <h4 class="feature-card-title">Access Control (RBAC/ABAC)</h4>
+            <p>Enforces who can read or modify data by role and attribute.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/privacy-consent.html">
+            <div class="feature-icon">&#128737;&#65039;</div>
+            <h4 class="feature-card-title">Privacy &amp; Consent</h4>
+            <p>Ensures stored data is only used for consented purposes.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/data-classification.html">
+            <div class="feature-icon">&#127991;&#65039;</div>
+            <h4 class="feature-card-title">Data Classification</h4>
+            <p>Tags every field with a sensitivity level.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/audit-logs.html">
+            <div class="feature-icon">&#129534;</div>
+            <h4 class="feature-card-title">Audit Logs</h4>
+            <p>Immutable record of every access and policy decision.</p>
+          </a>
+          <a class="feature-card" href="unified-data-foundation/encryption.html">
+            <div class="feature-icon">&#128274;</div>
+            <h4 class="feature-card-title">Encryption (At Rest &amp; In Transit)</h4>
+            <p>Keeps data unreadable without proper authorization, always.</p>
+          </a>
+        </div>
       </section>
 
       <div class="example-box">

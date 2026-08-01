@@ -32,8 +32,14 @@ doc/
     ├── ingestion-layer.html                |  6 hand-written module pages.
     ├── transformation-processing.html      |  Each has a sticky side-nav, a module-intro
     ├── unified-data-foundation.html        |  block, and one <section id="submodule-anchor">
-    ├── intelligence-services.html          |  per submodule with a <ul class="feature-list">
-    ├── destinations-activation.html       _/   of bullets.
+    ├── intelligence-services.html          |  per submodule. The 4 built modules render each
+    ├── destinations-activation.html       _/   submodule's items as a `.feature-grid` of
+    │                                            `.feature-card` tiles (icon + accent bar +
+    │                                            title + one-line description, linking to the
+    │                                            detail page) — see "Submodule item cards" below.
+    │                                            The 2 paused modules still use the older plain
+    │                                            `<ul class="feature-list">` bullet links; restyle
+    │                                            them to feature-grid once their content is built.
     │
     ├── data-sources/*.html                 Generated detail pages, one per bullet
     ├── ingestion-layer/*.html              under each module's submodules. Each bullet
@@ -72,6 +78,35 @@ node check-links.js ../../doc      # always re-validate after
 
 `docRoot` defaults to `../../doc` relative to `genlib.js`, so it works regardless of checkout
 path — no need to pass it unless writing somewhere else.
+
+### Submodule item cards (`.feature-grid` / `.feature-card`)
+
+Module pages (hand-written, not generated) render each submodule's items as a card grid rather
+than a plain bullet list, modeled on a Microsoft/Azure marketing-feature-grid pattern the user
+supplied as a reference. Markup per item:
+
+```html
+<div class="feature-grid">
+  <a class="feature-card" href="data-sources/web-mobile-apps.html">
+    <div class="feature-icon">&#128187;</div>
+    <h4 class="feature-card-title">Web / Mobile Apps</h4>
+    <p>Highest-volume source of behavioral events across web and native apps.</p>
+  </a>
+  <!-- one .feature-card per item in the submodule -->
+</div>
+```
+
+- `.feature-icon` — a single emoji in a light rounded-square box (uses `var(--brand-light)`, not
+  the per-module accent, so icon tint stays consistent site-wide).
+- `.feature-card-title` — bold title with a `::before` vertical accent bar colored via the
+  section's `--card-accent`; text turns accent-colored on hover.
+- The `<p>` — a **short, punchy one-liner** (~8-14 words), not the detail page's full `tagline`.
+  Write a fresh condensed phrase per item; don't just truncate the tagline mid-sentence.
+- Submodules with only one item (e.g. Streaming Ingestion → Redpanda) still use a one-item
+  `.feature-grid` for visual consistency, not a bare link.
+- CSS lives in `doc/css/style.css` under "Feature grid (submodule item cards)". The older
+  `.feature-list` (plain bulleted `<li><a>`) CSS is kept for the 2 not-yet-restyled modules —
+  don't remove it until Intelligence & Services / Destinations & Activation are migrated too.
 
 ### Data file schema (one entry per detail page)
 
