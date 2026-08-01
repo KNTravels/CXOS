@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing (HubSpot) — Business Systems — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html" class="active">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
+    <a href="../data-sources.html#business-systems">Business Systems</a><span class="sep">/</span>
+    <span class="current">Marketing (HubSpot)</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#6a4fc2">
+    <div class="step">Data Sources &rarr; Business Systems</div>
+    <h1>Marketing (HubSpot)</h1>
+    <p>Marketing engagement and lifecycle-stage data synced from HubSpot — lead scoring and campaign history alongside behavioral events.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>HubSpot &rarr; .NET Core Connector on Azure &rarr; downstream activation.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Business System</div><div class="stage-name">Marketing (HubSpot)</div><div class="stage-detail">Lifecycle stage, lead score, campaign membership</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">.NET Core HubSpot Connector</div><div class="stage-detail">API + webhook &rarr; Cxos.Ingestion.Client</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Lifecycle-stage change normalization</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Marketing engagement history</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Unified lead score, campaign attribution</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Reverse ETL — behavioral score back to HubSpot</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>HubSpot often holds the lead-to-customer lifecycle stage that other systems don't track natively</li>
+      <li>Combining HubSpot's marketing-qualified signals with CXOS's real-time behavioral data improves lead scoring accuracy</li>
+      <li>Owned by Marketing Ops</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>The HubSpot connector uses HubSpot's Webhooks API (<code>contact.propertyChange</code>) for real-time lifecycle-stage updates and the CRM API for scheduled full syncs. Both paths pass through <code>Cxos.Ingestion.Client</code> into the Ingestion API, keeping HubSpot's contact properties in the same shared schema as every other data source.</p>
+    <div class="handbook-block">
+      <h3>Synced Events</h3>
+      <div class="tag-row">
+        <span class="tag">lifecycle_stage_changed</span>
+        <span class="tag">lead_score_updated</span>
+        <span class="tag">campaign_enrolled</span>
+        <span class="tag">form_submitted</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128190;</span> Sample Lifecycle Event</h2>
+    <pre class="code-block">{
+  "event": "lifecycle_stage_changed",
+  "event_id": "f3a8c1d0-6b9e-4c2a-8d1f-3a7c9e0b5f68",
+  "timestamp": "2026-08-01T07:30:00Z",
+  "user_id": "cust_004821",
+  "context": { "channel": "marketing", "platform": "hubspot" },
+  "properties": { "from_stage": "Lead", "to_stage": "Marketing Qualified Lead", "lead_score": 78 }
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>HubSpot Webhooks API — real-time property-change events</li>
+      <li>HubSpot CRM API — scheduled full sync (.NET Core, Azure Functions Timer)</li>
+      <li>Cxos.Ingestion.Client NuGet package</li>
+      <li>Reverse ETL — writes CXOS behavioral/propensity score into a HubSpot custom contact property</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: contact volume is bounded by the marketing database size, not event volume — straightforward for the standard ingestion path</li>
+      <li>Latency: property-change webhooks land within seconds; full syncs run nightly</li>
+      <li>Reliability: HubSpot webhook retries are idempotent via event_id dedup</li>
+      <li>Security/Privacy: only marketing-consented contacts are synced — consent flag is checked before each Reverse ETL write</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A B2B company blends its HubSpot lead score with CXOS's real-time product-usage signals in the Analytics API to produce a unified "sales-ready" score, written back into HubSpot — letting SDRs prioritize outreach using a signal neither system could produce alone.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../data-sources.html#business-systems">&larr; Back to Business Systems</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

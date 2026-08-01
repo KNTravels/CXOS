@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Media — Customer Touchpoints — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html" class="active">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
+    <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a><span class="sep">/</span>
+    <span class="current">Social Media</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#6a4fc2">
+    <div class="step">Data Sources &rarr; Customer Touchpoints</div>
+    <h1>Social Media</h1>
+    <p>Public and owned social interactions — mentions, comments, DMs, and ad engagement — pulled from platform APIs.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Platform API polling &rarr; .NET Core microservices on Azure.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">Social Media</div><div class="stage-detail">Mentions, comments, DMs, ad engagement</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">.NET Core Connector Function</div><div class="stage-detail">Platform API polling &rarr; Cxos.Ingestion.Client</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Normalization across platforms</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Public + owned social interactions</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core AI &amp; Insights API</div><div class="stage-detail">Azure OpenAI — sentiment, share-of-voice</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Ad audience sync (Reverse ETL)</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Both a brand-perception channel and a paid-media performance channel — unifying it lets the business connect sentiment to actual purchase behavior</li>
+      <li>Powers audience sync back to ad platforms for retargeting and lookalike modeling</li>
+      <li>Owned by Social/Brand Marketing and Paid Media teams</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>A timer-triggered .NET Core Azure Function polls each platform's API (Meta, X, Instagram, TikTok, LinkedIn) on its own schedule, since most platforms don't push webhooks for every event type; each platform has a thin connector built on the shared <code>Cxos.Ingestion.Client</code> package. Ad-engagement events carry a clickthrough ID that can be matched to a session/profile; organic mentions/comments usually can't be linked to a known customer unless the user has an explicit account link (login-with-social). Azure Key Vault stores each platform's API credentials, with token refresh handled inside the connector function.</p>
+    <div class="handbook-block">
+      <h3>Typical Events</h3>
+      <div class="tag-row">
+        <span class="tag">mention_received</span>
+        <span class="tag">comment_posted</span>
+        <span class="tag">dm_received</span>
+        <span class="tag">ad_clicked</span>
+        <span class="tag">follower_gained</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128190;</span> Sample Event Payload</h2>
+    <pre class="code-block">{
+  "event": "ad_clicked",
+  "event_id": "5f0c3ab1-4d7e-4f9a-8c3b-9e1a2d5f6081",
+  "timestamp": "2026-08-01T13:12:09Z",
+  "anonymous_id": "a1b2c3d4",
+  "context": {
+    "channel": "social",
+    "platform": "meta",
+    "campaign_id": "camp_9931"
+  },
+  "properties": {
+    "ad_id": "ad_2201",
+    "creative": "summer_sale_v2",
+    "click_id": "fbclid_88x2"
+  }
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Timer-triggered Azure Functions (.NET Core) — one connector per platform</li>
+      <li><code>Cxos.Ingestion.Client</code> NuGet package — shared ingestion contract</li>
+      <li>Azure Key Vault — platform API credential storage</li>
+      <li>Reverse ETL (.NET Core Activation API) — audience sync back to ad platforms</li>
+      <li>Azure OpenAI Service — sentiment and share-of-voice analysis</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: platform API rate limits — not data volume — are usually the binding constraint; each connector function throttles independently</li>
+      <li>Latency: brand-safety/crisis mentions run on a tighter polling interval; general engagement polls hourly</li>
+      <li>Reliability: connector functions handle platform API schema changes without affecting other platforms' pipelines</li>
+      <li>Security/Privacy: public content moderation and takedown-request handling before long-term storage</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A consumer brand's Meta connector function feeds <code>ad_clicked</code> events into the Ingestion API with a clickthrough ID. When a clicked-through visitor completes a purchase within 7 days, the Activation API closes the loop back to Meta via Reverse ETL, improving return-on-ad-spend attribution and letting the media team shift 15% of budget toward the better-performing creative the following month.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../data-sources.html#customer-touchpoints">&larr; Back to Customer Touchpoints</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

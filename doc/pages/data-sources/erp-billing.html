@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERP / Billing — Business Systems — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html" class="active">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
+    <a href="../data-sources.html#business-systems">Business Systems</a><span class="sep">/</span>
+    <span class="current">ERP / Billing</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#6a4fc2">
+    <div class="step">Data Sources &rarr; Business Systems</div>
+    <h1>ERP / Billing</h1>
+    <p>Billing status, invoices, and subscription/contract data — ties financial reality to the customer profile.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>ERP/Billing system &rarr; .NET Core Connector on Azure &rarr; downstream activation.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Business System</div><div class="stage-name">ERP / Billing</div><div class="stage-detail">Invoices, payment status, contract terms</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">.NET Core ERP/Billing Connector</div><div class="stage-detail">SAP/NetSuite/Stripe API &rarr; Cxos.Ingestion.Client</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Batch Worker</div><div class="stage-detail">Invoice/payment normalization</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Billing history per account</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Payment-risk scoring, LTV</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Dunning workflows, account-health alerts</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Billing status (past due, at-risk, paid) is a direct churn and revenue-risk signal most CX platforms never see</li>
+      <li>Enables coordinated dunning/collections communication instead of a separate, disconnected finance workflow</li>
+      <li>Owned by Finance / RevOps, shared with Customer Success</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>ERP and billing systems (SAP, NetSuite, Stripe Billing) rarely expose real-time webhooks for every event — a .NET Core batch connector runs on an Azure Functions Timer trigger, pulling invoice and payment status via each system's API and normalizing it through <code>Cxos.Ingestion.Client</code>. Payment-provider webhooks (e.g., Stripe's <code>invoice.payment_failed</code>) are handled in near-real-time by a dedicated Azure Function where available.</p>
+    <div class="handbook-block">
+      <h3>Synced Events</h3>
+      <div class="tag-row">
+        <span class="tag">invoice_issued</span>
+        <span class="tag">payment_succeeded</span>
+        <span class="tag">payment_failed</span>
+        <span class="tag">subscription_renewed</span>
+        <span class="tag">account_past_due</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128190;</span> Sample Billing Event</h2>
+    <pre class="code-block">{
+  "event": "payment_failed",
+  "event_id": "a7d2e9f1-4c8b-4d3a-9e1f-6a2c8d0b7f34",
+  "timestamp": "2026-08-01T03:15:00Z",
+  "user_id": "cust_004821",
+  "context": { "channel": "billing", "platform": "stripe" },
+  "properties": { "invoice_id": "inv_9931", "amount_due": 4999, "currency": "INR", "attempt": 2 }
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>.NET Core batch connector (Azure Functions Timer) for ERP/billing systems without full webhook coverage</li>
+      <li>Stripe/payment-provider webhooks (near-real-time) via a dedicated Azure Function</li>
+      <li>Cxos.Ingestion.Client NuGet package</li>
+      <li>Activation API — triggers dunning email/SMS sequences and account-health alerts to Customer Success</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: account/invoice volume is modest relative to behavioral events; batch sync is sufficient for most fields</li>
+      <li>Latency: payment-failure events benefit from near-real-time handling to trigger timely dunning communication</li>
+      <li>Reliability: batch connector checkpoints the last successfully synced invoice ID for safe resume</li>
+      <li>Security/Privacy: no raw card data is stored — only tokenized payment status and invoice metadata cross the ingestion boundary, access-controlled via Azure AD</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A SaaS company's Stripe webhook fires <code>invoice.payment_failed</code>; the Activation API triggers a dunning email within minutes and flags the account as at-risk in the Customer Success dashboard — cutting involuntary churn from failed payments by 25% after the coordinated dunning + CS outreach workflow launched.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../data-sources.html#business-systems">&larr; Back to Business Systems</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

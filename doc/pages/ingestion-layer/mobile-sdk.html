@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile SDK — Client SDKs — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html" class="active">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../ingestion-layer.html">Ingestion Layer</a><span class="sep">/</span>
+    <a href="../ingestion-layer.html#client-sdks">Client SDKs</a><span class="sep">/</span>
+    <span class="current">Mobile SDK</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#2b7fd6">
+    <div class="step">Ingestion Layer &rarr; Client SDKs</div>
+    <h1>Mobile SDK</h1>
+    <p>Native iOS (Swift) and Android (Kotlin) client libraries, plus a React Native/Flutter wrapper, sharing the same event contract as the Web SDK.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Mobile SDK carries the same contract into native app environments.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Mobile App</div><div class="stage-detail">iOS/Android app calling Cxos.track()</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#2b7fd6"><div class="stage-label">Ingestion</div><div class="stage-name">Mobile SDK (Swift / Kotlin)</div><div class="stage-detail">Offline-queued wrapper around Cxos.Ingestion.Client</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Ingestion API</div><div class="stage-detail">Azure API Management &rarr; validation &rarr; Azure Event Hubs</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Raw event zone (Azure Data Lake Storage Gen2)</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Engagement &amp; retention analysis</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Push notification targeting</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Mobile is often the highest-engagement, highest-LTV channel for app-first businesses — instrumenting it well is a direct revenue lever</li>
+      <li>Push-notification and in-app personalization use cases depend entirely on Mobile SDK data being complete and timely</li>
+      <li>Owned by Mobile Engineering; requires app-store release cycles to update, unlike the Web SDK</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>The Mobile SDK ships as native Swift (iOS) and Kotlin (Android) packages, with React Native and Flutter wrappers on top, all generated from the same contract as <code>Cxos.Ingestion.Client</code>. It auto-instruments screen views and app lifecycle events, persists an offline event queue (SQLite) for connectivity gaps, and syncs to Azure API Management when the device is online. Push token registration is a first-class event so the Activation API can target the device directly.</p>
+    <div class="handbook-block">
+      <h3>Auto-Captured</h3>
+      <div class="tag-row">
+        <span class="tag">app_opened</span>
+        <span class="tag">screen_view</span>
+        <span class="tag">app_backgrounded</span>
+        <span class="tag">push_token_registered</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128190;</span> SDK Initialization (Swift)</h2>
+    <pre class="code-block">import CxosSDK
+
+Cxos.initialize(
+  writeKey: "wk_live_9f21ac",
+  consentRequired: true
+)
+
+Cxos.track("product_viewed", properties: [
+  "product_id": "sku-1029",
+  "price": 2499
+])</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Native Swift / Kotlin packages + React Native / Flutter wrappers</li>
+      <li>Local SQLite-backed offline event queue with a Polly-equivalent retry policy on sync</li>
+      <li>Azure API Management — HTTPS ingress once connectivity is available</li>
+      <li>Push notification token registration feeding the Activation API's real-time channel</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: batched sync reduces battery/network impact on the device</li>
+      <li>Latency: online devices sync within seconds; offline devices flush on reconnect</li>
+      <li>Reliability: offline queue survives app kills/restarts; bounded size with oldest-event eviction to avoid unbounded growth</li>
+      <li>Security/Privacy: consent state is checked before the SDK initializes any tracking, including crash/performance telemetry</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A travel app instruments the Mobile SDK across its booking flow. When a user abandons a booking mid-flow while offline (e.g., in-flight), the event queues locally and syncs on landing — letting the Activation API trigger a timely 'complete your booking' push notification instead of losing the signal entirely.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../ingestion-layer.html#client-sdks">&larr; Back to Client SDKs</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

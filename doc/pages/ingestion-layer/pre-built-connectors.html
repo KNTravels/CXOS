@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-built Connectors — Connectors — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html" class="active">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../ingestion-layer.html">Ingestion Layer</a><span class="sep">/</span>
+    <a href="../ingestion-layer.html#connectors">Connectors</a><span class="sep">/</span>
+    <span class="current">Pre-built Connectors</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#2b7fd6">
+    <div class="step">Ingestion Layer &rarr; Connectors</div>
+    <h1>Pre-built Connectors</h1>
+    <p>Maintained, ready-to-configure integrations for common SaaS platforms — no custom code required to onboard a new standard source or destination.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Pre-built connectors turn a multi-week integration into a configuration task.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">SaaS Platform</div><div class="stage-detail">Salesforce, Shopify, Zendesk, HubSpot, etc.</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#2b7fd6"><div class="stage-label">Ingestion</div><div class="stage-name">Pre-built Connector Library</div><div class="stage-detail">Cxos.Connectors.* NuGet packages</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Ingestion API</div><div class="stage-detail">Receives the connector's normalized events</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Source data alongside every other channel</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Blended with behavioral data</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Reverse ETL</div><div class="stage-detail">Writes CXOS insight back to the same platform</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Cuts integration time from weeks of engineering to hours of configuration for the ~80% of sources/destinations that are common SaaS platforms</li>
+      <li>Centralizes connector maintenance so platform upgrades (e.g., a Salesforce API version bump) happen once, not per-integration</li>
+      <li>Owned by Platform Engineering; connector roadmap is prioritized by business demand</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>Each pre-built connector is a .NET Core microservice implementing a shared <code>IConnector</code> interface (auth, extract/webhook handling, field mapping, error handling) and calling <code>Cxos.Ingestion.Client</code> for outbound events or the Activation API's equivalent for Reverse ETL. Connectors ship as their own NuGet packages (<code>Cxos.Connectors.*</code>) so they can be versioned and deployed independently, and are registered centrally so any team can enable one via configuration rather than a deployment.</p>
+    <div class="handbook-block">
+      <h3>Example Connectors</h3>
+      <div class="tag-row">
+        <span class="tag">Salesforce</span>
+        <span class="tag">Shopify</span>
+        <span class="tag">Zendesk</span>
+        <span class="tag">HubSpot</span>
+        <span class="tag">SendGrid</span>
+        <span class="tag">Twilio</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128190;</span> Connector Registration</h2>
+    <pre class="code-block">{
+  "connector": "Cxos.Connectors.Salesforce",
+  "version": "2.4.0",
+  "instance_id": "sfdc_prod",
+  "auth": { "type": "oauth2_jwt", "keyvault_ref": "sfdc-prod-cert" },
+  "sync_mode": "cdc"
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Shared IConnector interface — every pre-built connector implements the same contract</li>
+      <li>Cxos.Connectors.* NuGet packages — independently versioned per platform</li>
+      <li>Azure Key Vault — per-instance credential storage</li>
+      <li>Central connector registry — enables/configures instances without a new deployment</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: each connector instance runs and scales independently, so one integration's load never affects another's</li>
+      <li>Latency: varies by connector — webhook-based connectors are near-real-time, polling-based connectors follow their configured interval</li>
+      <li>Reliability: connector health/failure is monitored centrally, with automatic alerting to the owning team on sustained failure</li>
+      <li>Security/Privacy: connector credentials are never stored in application config — always Key Vault references resolved at runtime</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A new marketing team wants HubSpot data in CXOS. Instead of a new engineering project, they request the existing HubSpot connector be enabled for their instance, provide OAuth credentials through a secure onboarding flow, and see data flowing within the same day.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../ingestion-layer.html#connectors">&larr; Back to Connectors</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

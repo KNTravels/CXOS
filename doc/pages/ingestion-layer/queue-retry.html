@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Queue &amp; Retry — Edge Network — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html" class="active">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../ingestion-layer.html">Ingestion Layer</a><span class="sep">/</span>
+    <a href="../ingestion-layer.html#edge-network">Edge Network</a><span class="sep">/</span>
+    <span class="current">Queue &amp; Retry</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#2b7fd6">
+    <div class="step">Ingestion Layer &rarr; Edge Network</div>
+    <h1>Queue &amp; Retry</h1>
+    <p>Absorbs bursts and outages between the edge and downstream processing, so a slow or failing consumer never becomes data loss.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Queue & Retry is the buffer that decouples ingestion from every consumer.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Consent Enforcement</div><div class="stage-detail">Hands off a policy-cleared event</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#2b7fd6"><div class="stage-label">Ingestion</div><div class="stage-name">Queue &amp; Retry</div><div class="stage-detail">Azure Event Hubs buffering + Polly retries</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Primary consumer, reading from the buffer</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Ultimate durable destination</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Consumer Offset Tracking</div><div class="stage-detail">Safe backlog catch-up after an outage</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Zero Data-Loss Guarantee</div><div class="stage-detail">What makes the platform's reliability SLA possible</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Guarantees that a downstream incident (a bad deploy, a database outage) doesn't translate into lost customer data</li>
+      <li>Removes the pressure to over-provision every downstream service for worst-case traffic, since the queue absorbs the spike</li>
+      <li>Owned by Platform Engineering; its throughput/retention settings are a direct input to the platform's data-loss SLA</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>Once an event passes validation and enrichment, it's published to Azure Event Hubs, which retains events for a configurable window (default 7 days) independent of consumer health. Consumers (the Stream Worker, batch jobs) track their own read offset, so a consumer outage simply means a backlog to catch up on, not lost data. Client-side (Web/Mobile SDK) and server-side (<code>Cxos.Ingestion.Client</code>) callers additionally retry failed sends with exponential backoff via Polly before an event is ever considered lost.</p>
+    <div class="handbook-block">
+      <h3>Retry Layers</h3>
+      <div class="tag-row">
+        <span class="tag">Client-side SDK retry</span>
+        <span class="tag">Server SDK Polly policy</span>
+        <span class="tag">Event Hubs retention buffer</span>
+        <span class="tag">Dead-letter fallback</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128190;</span> Retry Policy Configuration</h2>
+    <pre class="code-block">services.AddHttpClient<CxosIngestionClient>()
+  .AddPolicyHandler(Policy
+    .Handle<HttpRequestException>()
+    .WaitAndRetryAsync(5, attempt =>
+       TimeSpan.FromSeconds(Math.Pow(2, attempt))));</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Azure Event Hubs — the durable buffer between ingestion and every consumer</li>
+      <li>Polly retry/circuit-breaker policies — built into Cxos.Ingestion.Client</li>
+      <li>Consumer offset tracking (Stream Worker, batch jobs) — enables safe backlog catch-up</li>
+      <li>Dead-letter topic — final fallback for events that exhaust retries</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: Event Hubs throughput units scale independently of consumer capacity, so ingestion never has to slow down to match a slower downstream stage</li>
+      <li>Latency: under normal conditions, queue dwell time is milliseconds; during an incident it becomes backlog depth, not data loss</li>
+      <li>Reliability: this is the mechanism that makes the rest of the platform's reliability claims possible</li>
+      <li>Security/Privacy: queued events remain subject to the same encryption-at-rest and access policies as stored data, not a lower-security holding area</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A bad deploy takes the Stream Worker offline for 40 minutes. Because Event Hubs retains events for 7 days, there is zero data loss — the worker resumes from its last committed offset and catches up on the backlog within 10 minutes of redeployment, with no customer-visible impact beyond a short delay in real-time personalization.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../ingestion-layer.html#edge-network">&larr; Back to Edge Network</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derived Event Generation — Stream Processing — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html" class="active">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../transformation-processing.html">Transformation &amp; Processing</a><span class="sep">/</span>
+    <a href="../transformation-processing.html#stream-processing">Stream Processing</a><span class="sep">/</span>
+    <span class="current">Derived Event Generation</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#0f9b8e">
+    <div class="step">Transformation &amp; Processing &rarr; Stream Processing</div>
+    <h1>Derived Event Generation</h1>
+    <p>Synthesizes new, higher-level events from patterns in the raw stream — turning 'what happened' into 'what it means'.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Derived Event Generation computes business-meaningful moments once, for everyone.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Real-time Enrichment</div><div class="stage-detail">Hands off an enriched event</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure Cache for Redis</div><div class="stage-detail">Holds in-flight windowed state per customer</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#0f9b8e"><div class="stage-label">Processing</div><div class="stage-name">Derived Event Generation</div><div class="stage-detail">.NET Core Stream Worker — pattern-based synthetic events</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Derived events are stored like any other event</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Azure Event Hubs</div><div class="stage-detail">Derived events are republished here</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Activation API</div><div class="stage-detail">Cart-abandonment recovery and similar triggers</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Business logic like 'cart abandoned' or 'browsing spree' isn't a single raw event — it's a pattern the platform computes once, so every team doesn't reinvent it</li>
+      <li>Standardizes business-meaningful moments across the company instead of each team defining its own version of 'abandonment'</li>
+      <li>Owned by Platform Engineering, with derivation rules defined in partnership with the business teams that consume them</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>The Stream Worker maintains short-lived windowed state per customer to detect patterns and emit derived events: e.g., <code>cart_abandoned</code> fires when an add_to_cart event has no matching order_paid within a configurable window (default 60 minutes); <code>browsing_spree</code> fires after N product views within M minutes. Derived events are published back onto Azure Event Hubs with the same schema as any other event, so they flow through the rest of the pipeline identically.</p>
+    <div class="handbook-block">
+      <h3>Example Derived Events</h3>
+      <div class="tag-row">
+        <span class="tag">cart_abandoned</span>
+        <span class="tag">browsing_spree</span>
+        <span class="tag">repeat_visitor</span>
+        <span class="tag">price_drop_relevant</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128190;</span> Derived Event</h2>
+    <pre class="code-block">{
+  "event": "cart_abandoned",
+  "event_id": "derived-3c8e...",
+  "user_id": "cust_004821",
+  "derived_from": ["evt_add_to_cart_991"],
+  "properties": { "cart_value": 6998, "minutes_since_add": 62 }
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>.NET Core Stream Worker — windowed pattern detection and derivation logic</li>
+      <li>Azure Cache for Redis — holds in-flight windowed state per customer</li>
+      <li>Azure Event Hubs — derived events are republished here, same as primary events</li>
+      <li>Activation API — the most common consumer of derived events (e.g., cart-abandonment recovery)</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: windowed state is sharded by customer ID and scales with the Stream Worker's partition count</li>
+      <li>Latency: derived events fire as soon as their defining window/condition is met, typically within minutes</li>
+      <li>Reliability: derivation rules are versioned; a rule change doesn't retroactively alter already-emitted derived events</li>
+      <li>Security/Privacy: derived events carry the same classification and consent handling as the raw events they're computed from</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A customer adds an item to cart and closes the tab. 62 minutes later, having seen no order_paid event, the Stream Worker emits cart_abandoned — which the Activation API picks up to trigger a recovery email, entirely without the marketing team having to build their own abandonment-detection logic.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../transformation-processing.html#stream-processing">&larr; Back to Stream Processing</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

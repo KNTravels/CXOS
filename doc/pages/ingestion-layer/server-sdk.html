@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Server SDK — Client SDKs — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html" class="active">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../ingestion-layer.html">Ingestion Layer</a><span class="sep">/</span>
+    <a href="../ingestion-layer.html#client-sdks">Client SDKs</a><span class="sep">/</span>
+    <span class="current">Server SDK</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#2b7fd6">
+    <div class="step">Ingestion Layer &rarr; Client SDKs</div>
+    <h1>Server SDK</h1>
+    <p>The server-side (.NET, Node, Python, Java) library for emitting events from backend systems — IoT gateways, kiosks, batch jobs, and internal services.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Server SDK is the direct binding used by every backend integration in this handbook.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Backend Service</div><div class="stage-detail">Payment, fulfillment, IoT gateway, batch job</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#2b7fd6"><div class="stage-label">Ingestion</div><div class="stage-name">Server SDK (Cxos.Ingestion.Client)</div><div class="stage-detail">Direct .NET binding / generated Node, Python, Java clients</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Ingestion API</div><div class="stage-detail">Azure API Management &rarr; Azure Event Hubs</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Raw event zone (Azure Data Lake Storage Gen2)</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Server-confirmed event analysis</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Downstream automation triggers</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Server-side tracking is more trustworthy than client-side — it can't be blocked by an ad blocker or browser privacy setting</li>
+      <li>Used for any event that originates or is confirmed server-side: payments, fulfillment, IoT telemetry, kiosk sessions</li>
+      <li>Owned by Backend / Platform Engineering, used by every team building a server-side integration</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>The .NET Server SDK is literally the <code>Cxos.Ingestion.Client</code> NuGet package itself — no separate wrapper needed. Non-.NET languages (Node.js, Python, Java) get thin clients generated from the same OpenAPI contract via an internal codegen pipeline, keeping every language binding schema-identical. Server SDK calls skip client-side consent gating (assumed already applied by the calling service) but still carry a required <code>consent_basis</code> field in the contract.</p>
+    <div class="handbook-block">
+      <h3>Common Callers</h3>
+      <div class="tag-row">
+        <span class="tag">IoT gateways</span>
+        <span class="tag">Kiosk clients</span>
+        <span class="tag">Batch/ETL jobs</span>
+        <span class="tag">Internal backend services</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128190;</span> Server SDK Call (.NET Core)</h2>
+    <pre class="code-block">services.AddCxosIngestionClient(options =>
+{
+    options.Endpoint = "https://ingest.cxos.example.com";
+    options.ApiKey = configuration["Cxos:ApiKey"];
+});
+
+await _cxosClient.TrackAsync(new CxosEvent
+{
+    Event = "payment_processed",
+    UserId = "cust_004821",
+    Properties = new { orderId = "ord_55123", amount = 3499 }
+});</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Cxos.Ingestion.Client NuGet package (native .NET binding)</li>
+      <li>Generated Node.js / Python / Java clients from the shared OpenAPI contract</li>
+      <li>Azure API Management — server-to-server auth via API key or Azure AD managed identity</li>
+      <li>Used directly by every other connector/gateway described elsewhere in this handbook (IoT, Kiosk, batch connectors)</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: server-side callers can emit at much higher throughput than client SDKs — the Ingestion API applies per-caller rate limits</li>
+      <li>Latency: typically sub-100ms for a synchronous call to Azure API Management within the same Azure region</li>
+      <li>Reliability: built-in Polly retry policy with circuit breaker to avoid cascading failure if the Ingestion API is degraded</li>
+      <li>Security/Privacy: server callers authenticate via Azure AD managed identity where possible, avoiding long-lived API keys</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#2b7fd6">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>The payment service calls the Server SDK synchronously the moment a payment is confirmed, guaranteeing the payment_processed event lands before the order confirmation page renders — a stronger reliability guarantee than waiting for a client-side event that might never fire if the user closes the tab.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../ingestion-layer.html#client-sdks">&larr; Back to Client SDKs</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compatibility — Event Schema &amp; Registry — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html" class="active">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../transformation-processing.html">Transformation &amp; Processing</a><span class="sep">/</span>
+    <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry</a><span class="sep">/</span>
+    <span class="current">Compatibility</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#0f9b8e">
+    <div class="step">Transformation &amp; Processing &rarr; Event Schema &amp; Registry</div>
+    <h1>Compatibility</h1>
+    <p>Automated checks that a proposed schema change won't silently break an existing consumer before it's ever allowed to ship.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Compatibility checking turns schema risk into an automated CI gate.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Versioning</div><div class="stage-detail">New version proposal to check</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Schema Diff Engine</div><div class="stage-detail">Compares proposed vs. current schema</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#0f9b8e"><div class="stage-label">Processing</div><div class="stage-name">Compatibility Checking</div><div class="stage-detail">Automated schema diff validation</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">CI/CD Pipeline</div><div class="stage-detail">Runs as a merge gate</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Governance Rules</div><div class="stage-detail">Runs alongside this check</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Prevented Breaking Changes</div><div class="stage-detail">The outcome this control delivers</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Turns "did this schema change break anything" from a question discovered in production into one answered automatically before merge</li>
+      <li>Gives teams confidence to evolve their event schemas without fear of an invisible downstream breakage</li>
+      <li>Owned by Platform Engineering</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>When a schema change is submitted to the Registry, an automated compatibility checker diffs the proposed schema against the current version using standard rules (removing a required field, narrowing a type, or removing an enum value are breaking; adding an optional field is not) and against the Registry's knowledge of active consumers where declared. Breaking changes are rejected unless explicitly submitted as a new major version with a documented migration path.</p>
+    <div class="handbook-block">
+      <h3>Breaking Change Examples</h3>
+      <div class="tag-row">
+        <span class="tag">Removing a required field</span>
+        <span class="tag">Narrowing a field type</span>
+        <span class="tag">Removing an enum value</span>
+        <span class="tag">Renaming a field</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128190;</span> Compatibility Check Result</h2>
+    <pre class="code-block">{
+  "proposed_version": "4",
+  "compatible_with": "3",
+  "result": "breaking",
+  "reason": "field 'currency' changed from optional to required"
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Schema Registry API — hosts the compatibility checker</li>
+      <li>CI/CD pipeline — schema changes run through this check before deployment, same as a code review gate</li>
+      <li>Versioning system — breaking changes are automatically routed to major-version handling</li>
+      <li>Developer portal — surfaces check results to the engineer proposing the change</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: compatibility checks are fast, schema-diff operations — no meaningful performance concern</li>
+      <li>Latency: runs synchronously in CI, adding seconds to a schema-change pull request, not minutes</li>
+      <li>Reliability: the checker itself is tested against a suite of known-breaking and known-safe change patterns</li>
+      <li>Security/Privacy: no data-privacy implications — this is a structural, not content, check</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>An engineer accidentally proposes narrowing the discount_percent field from a float to an integer. The compatibility checker flags this as breaking during the pull request, before it ever reaches production and silently truncates every discount value downstream.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../transformation-processing.html#event-schema-registry">&larr; Back to Event Schema &amp; Registry</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

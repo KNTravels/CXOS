@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>In-Store Kiosks — Customer Touchpoints — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html" class="active">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
+    <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a><span class="sep">/</span>
+    <span class="current">In-Store Kiosks</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#6a4fc2">
+    <div class="step">Data Sources &rarr; Customer Touchpoints</div>
+    <h1>In-Store Kiosks</h1>
+    <p>Self-service and point-of-sale kiosks physically located in stores, capturing in-person interactions like self-checkout, loyalty lookups, and product lookups.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Kiosk client &rarr; offline queue &rarr; .NET Core microservices on Azure.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">In-Store Kiosk</div><div class="stage-detail">Self-checkout, loyalty lookup, product lookup</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">.NET Core Kiosk Client + Ingestion API</div><div class="stage-detail">Cxos.Ingestion.Client with local offline queue</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">Azure Event Hubs &rarr; session build, identity match</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Unified with online transaction history</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Identity API</div><div class="stage-detail">Loyalty ID resolution</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Store ops dashboards, loyalty systems (Reverse ETL)</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Bridges the physical store into the same customer profile as digital channels — key for true omnichannel measurement</li>
+      <li>Enables loyalty-driven personalization at the point of physical interaction</li>
+      <li>Owned jointly by Store Operations and Digital / CX teams</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>The kiosk runs a .NET Core thin client (Blazor Hybrid or WPF) embedding the same <code>Cxos.Ingestion.Client</code> NuGet package used by every other touchpoint, so the contract never diverges between web, mobile, and in-store. Because store networks are less reliable than a data-center link, the client buffers events in a local SQLite queue and flushes to Azure API Management (&rarr; the Ingestion API on AKS) via the package's built-in Polly retry policy. Sessions are anonymous until a loyalty card, phone number, or email is scanned or entered.</p>
+    <div class="handbook-block">
+      <h3>Typical Events</h3>
+      <div class="tag-row">
+        <span class="tag">kiosk_session_started</span>
+        <span class="tag">loyalty_scanned</span>
+        <span class="tag">product_lookup</span>
+        <span class="tag">self_checkout_completed</span>
+        <span class="tag">payment_processed</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128190;</span> Sample Event Payload</h2>
+    <pre class="code-block">{
+  "event": "self_checkout_completed",
+  "event_id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+  "timestamp": "2026-08-01T14:05:33Z",
+  "user_id": "cust_004821",
+  "context": {
+    "channel": "kiosk",
+    "store_id": "store_0142",
+    "kiosk_id": "kiosk_07"
+  },
+  "properties": {
+    "order_id": "ord_55123",
+    "total": 3499,
+    "currency": "INR",
+    "items": 4
+  }
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li><code>Cxos.Ingestion.Client</code> NuGet package with local SQLite-backed offline queue</li>
+      <li>Azure API Management — ingress once store connectivity is available</li>
+      <li>POS integration — payment confirmation correlated to the session</li>
+      <li>Reverse ETL (.NET Core Activation API + Azure Functions) — store operations dashboards and loyalty systems</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: thousands of stores, bursty peak-hour traffic per location — Ingestion API scales via AKS independent of any single store</li>
+      <li>Latency: checkout flows need sub-second local response even if cloud sync lags</li>
+      <li>Reliability: offline-first design — kiosk client functions during an outage and syncs once connectivity returns</li>
+      <li>Security/Privacy: kiosks are shared physical devices — the client hard-clears the local session and queue on completion or timeout</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A grocery chain rolls out .NET Core kiosk clients across 400 stores, each carrying the same <code>Cxos.Ingestion.Client</code> package as the mobile app. Loyalty-scan events are stitched to the same customer profile through the Identity API, letting the kiosk surface a personalized coupon mid-checkout — increasing average basket size by 4.1% for enrolled loyalty members.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../data-sources.html#customer-touchpoints">&larr; Back to Customer Touchpoints</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>
