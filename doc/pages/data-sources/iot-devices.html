@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IoT Devices — Customer Touchpoints — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="data-sources.html" class="active">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../data-sources.html">Data Sources</a><span class="sep">/</span>
+    <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a><span class="sep">/</span>
+    <span class="current">IoT Devices</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#6a4fc2">
+    <div class="step">Data Sources &rarr; Customer Touchpoints</div>
+    <h1>IoT Devices</h1>
+    <p>Connected devices — smart appliances, wearables, in-vehicle systems, and industrial sensors — that emit telemetry and usage events tied to a customer or account.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Device telemetry &rarr; Azure IoT Hub &rarr; .NET Core microservices on Azure &rarr; downstream activation.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node origin" style="--card-accent:#6a4fc2"><div class="stage-label">Touchpoint</div><div class="stage-name">IoT Device</div><div class="stage-detail">Smart appliance, wearable, in-vehicle unit</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Azure IoT Hub + Ingestion API</div><div class="stage-detail">Device-to-cloud telemetry &rarr; Cxos.Ingestion.Client</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">.NET Core Stream Worker</div><div class="stage-detail">IoT Hub's Event Hub-compatible endpoint &rarr; Azure Container Apps</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Data Lakehouse</div><div class="stage-detail">Azure Data Lake Storage Gen2 (time-partitioned)</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core AI &amp; Insights API</div><div class="stage-detail">Azure Machine Learning — predictive maintenance</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">.NET Core Activation API</div><div class="stage-detail">Azure Service Bus &rarr; proactive service alerts</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Turns product usage into a continuous relationship instead of a one-time sale</li>
+      <li>Powers predictive maintenance and proactive support — reduces warranty cost and churn</li>
+      <li>Owned jointly by Connected Products and Customer Success teams</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>Devices authenticate to Azure IoT Hub using per-device certificates or SAS tokens issued via the Device Provisioning Service — IoT Hub is the device-facing front door instead of Azure API Management. IoT Hub exposes a built-in Event Hub-compatible endpoint, which the .NET Core Ingestion API consumes using the same <code>Cxos.Ingestion.Client</code> contracts as every other touchpoint, normalizing telemetry into the shared event schema. Where local batching is needed, a lightweight Device Gateway (also .NET Core) runs as an Azure IoT Edge module.</p>
+    <div class="handbook-block">
+      <h3>Typical Events</h3>
+      <div class="tag-row">
+        <span class="tag">device_status</span><span class="tag">sensor_reading</span><span class="tag">firmware_updated</span>
+        <span class="tag">device_paired</span><span class="tag">battery_low</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128190;</span> Sample Event Payload</h2>
+    <pre class="code-block">{
+  "event": "sensor_reading",
+  "event_id": "d41d8cd9-8f00-4b3f-8e5f-5c8a2f0e9b11",
+  "timestamp": "2026-08-01T10:22:00Z",
+  "device_id": "dev_88213",
+  "user_id": "cust_004821",
+  "context": {
+    "channel": "iot",
+    "firmware_version": "2.3.1",
+    "connectivity": "wifi"
+  },
+  "properties": {
+    "metric": "temperature",
+    "value": 21.4,
+    "unit": "celsius"
+  }
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Azure IoT Hub — device registry, per-device auth, telemetry ingress</li>
+      <li><code>Cxos.Ingestion.Client</code> NuGet package — consumed by the .NET Core Ingestion API reading IoT Hub's endpoint</li>
+      <li>Azure IoT Edge — optional edge-deployed .NET Core module for local batching/filtering</li>
+      <li>Azure Machine Learning — predictive maintenance / anomaly models</li>
+      <li>Identity &amp; Profile microservice — device-to-customer pairing</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: IoT Hub scales to millions of concurrently connected devices via scale units</li>
+      <li>Latency: most telemetry is near-real-time (minutes); safety-critical alerts use an Azure Function trigger for a sub-second path</li>
+      <li>Reliability: IoT Edge modules store-and-forward during connectivity loss</li>
+      <li>Security: mutual TLS/device certificates via the Device Provisioning Service; firmware version tracked per device for patch compliance</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A connected-appliance manufacturer registers 2M+ devices in Azure IoT Hub. The .NET Core Stream Worker, running on Azure Container Apps, consumes IoT Hub's Event Hub-compatible endpoint and flags an abnormal vibration pattern; the AI &amp; Insights API, backed by an Azure Machine Learning model, predicts an 85% failure probability within 30 days. The Activation API pushes a proactive service offer through Azure Service Bus — cutting unplanned service calls by 18%.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../data-sources.html#customer-touchpoints">&larr; Back to Customer Touchpoints</a></p>
+</main>
+
+<footer class="site-footer">
+  CXOS Reference Documentation — generated from <code>doc/img/cxos-architecture.jpeg</code>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

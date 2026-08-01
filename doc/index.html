@@ -167,25 +167,36 @@
     <div class="section-head">
       <div>
         <h2>End-to-End Flow (Example)</h2>
-        <p>How a single product-view event travels through the system.</p>
+        <p>How a single product-view event travels through this reference implementation's stack — Angular, .NET Core, and PostgreSQL.</p>
       </div>
     </div>
     <div class="flow-strip">
       <span class="flow-step">&#128100; User</span>
       <span class="flow-arrow">&rarr;</span>
-      <span class="flow-step">&#128421; Product Viewed</span>
+      <span class="flow-step">&#127777;&#65039; Angular App &mdash; Product Viewed</span>
       <span class="flow-arrow">&rarr;</span>
-      <span class="flow-step">&#9729; Edge</span>
+      <span class="flow-step">&#128268; .NET Core API &mdash; Ingestion</span>
       <span class="flow-arrow">&rarr;</span>
-      <span class="flow-step">&#9889; Stream Processing</span>
+      <span class="flow-step">&#9881;&#65039; .NET Core Worker &mdash; Stream Processing</span>
       <span class="flow-arrow">&rarr;</span>
-      <span class="flow-step">&#128451; Data Lakehouse</span>
+      <span class="flow-step">&#128034; PostgreSQL &mdash; Unified Store</span>
       <span class="flow-arrow">&rarr;</span>
-      <span class="flow-step">&#128202; Analytics Engine</span>
+      <span class="flow-step">&#128202; .NET Core API &mdash; Analytics</span>
       <span class="flow-arrow">&rarr;</span>
-      <span class="flow-step">&#128161; Insight</span>
+      <span class="flow-step">&#128161; Insight (ML.NET)</span>
       <span class="flow-arrow">&rarr;</span>
-      <span class="flow-step">&#128228; Activation</span>
+      <span class="flow-step">&#128228; .NET Core &mdash; Activation</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag">Angular (SPA)</span>
+      <span class="tag">.NET Core Web API</span>
+      <span class="tag">.NET Core Worker Service (IHostedService)</span>
+      <span class="tag">Entity Framework Core</span>
+      <span class="tag">PostgreSQL</span>
+    </div>
+    <div class="example-box">
+      <div class="label">Reference Implementation</div>
+      <p>A customer views a product on the Angular storefront. Angular POSTs a <code>ProductViewed</code> event to a .NET Core Web API ingestion endpoint. A .NET Core worker service (<code>IHostedService</code>) reads the event off a queue, deduplicates and enriches it, and persists it to PostgreSQL as the system of record. A .NET Core analytics API queries PostgreSQL (materialized views / window functions) to compute a propensity score, and the resulting insight triggers a .NET Core notification service that sends a personalized activation email.</p>
     </div>
   </section>
 
