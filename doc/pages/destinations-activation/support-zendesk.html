@@ -27,9 +27,61 @@
     <aside class="side-nav">
       <div class="label">All Modules</div>
       <ul class="nav-tree">
-        <li><a class="nav-tree-link" href="../../index.html">Overview</a></li>
-        <li><a class="nav-tree-link" href="../brd.html">BRD</a></li>
-        <li><a class="nav-tree-link" href="../lld.html">LLD</a></li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../../index.html" class="nav-tree-link">Overview</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Overview sections"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../../index.html#architecture">Architecture at a Glance</a></li>
+          <li><a href="../../index.html#six-verticals">The Six Verticals</a></li>
+          <li><a href="../../index.html#service-map">Full Application Service Map</a></li>
+          <li><a href="../../index.html#microservices-diagram">Microservices Architecture Diagram</a></li>
+          <li><a href="../../index.html#end-to-end-flow">End-to-End Flow</a></li>
+          <li><a href="../../index.html#horizontals">The Five Horizontals</a></li>
+          <li><a href="../../index.html#principles">Key Design Principles</a></li>
+          <li><a href="../../index.html#legend">Legend</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../brd.html" class="nav-tree-link">BRD</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle BRD sections"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../brd.html#purpose">Purpose &amp; Business Context</a></li>
+          <li><a href="../brd.html#objectives">Business Objectives</a></li>
+          <li><a href="../brd.html#scope">Scope</a></li>
+          <li><a href="../brd.html#stakeholders">Stakeholders</a></li>
+          <li><a href="../brd.html#br-data-sources">BR-1 &middot; Data Sources</a></li>
+          <li><a href="../brd.html#br-ingestion-layer">BR-2 &middot; Ingestion Layer</a></li>
+          <li><a href="../brd.html#br-transformation-processing">BR-3 &middot; Transformation &amp; Processing</a></li>
+          <li><a href="../brd.html#br-unified-data-foundation">BR-4 &middot; Unified Data Foundation</a></li>
+          <li><a href="../brd.html#br-intelligence-services">BR-5 &middot; Intelligence &amp; Services</a></li>
+          <li><a href="../brd.html#br-destinations-activation">BR-6 &middot; Destinations &amp; Activation</a></li>
+          <li><a href="../brd.html#nfr">Non-Functional Requirements</a></li>
+          <li><a href="../brd.html#assumptions">Assumptions &amp; Constraints</a></li>
+          <li><a href="../brd.html#success-metrics">Success Metrics</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../lld.html" class="nav-tree-link">LLD</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle LLD sections"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../lld.html#purpose">Purpose &amp; Scope</a></li>
+          <li><a href="../lld.html#sequence-diagram">Sequence Diagram: Event Flow</a></li>
+          <li><a href="../lld.html#component-design">Component Design</a></li>
+          <li><a href="../lld.html#data-model">Core Data Model</a></li>
+          <li><a href="../lld.html#db-schema">Database Schema Detail</a></li>
+          <li><a href="../lld.html#api-contracts">API Contracts</a></li>
+          <li><a href="../lld.html#deployment">Deployment Architecture</a></li>
+          <li><a href="../lld.html#error-handling">Error Handling &amp; Resiliency</a></li>
+          <li><a href="../lld.html#security-design">Security Design Detail</a></li>
+          <li><a href="../lld.html#observability-design">Observability Design</a></li>
+        </ul>
+      </li>
       <li class="nav-tree-module">
         <div class="nav-tree-row">
           <a href="../data-sources.html" class="nav-tree-link">1 &middot; Data Sources</a>
@@ -96,9 +148,9 @@
       <li class="nav-tree-module">
         <div class="nav-tree-row">
           <a href="../destinations-activation.html" class="nav-tree-link active">6 &middot; Destinations &amp; Activation</a>
-          <button class="nav-tree-toggle" aria-expanded="true" aria-label="Toggle Destinations &amp; Activation submodules"><span class="caret">&#8250;</span></button>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Destinations &amp; Activation submodules"><span class="caret">&#8250;</span></button>
         </div>
-        <ul class="nav-tree-sub open">
+        <ul class="nav-tree-sub">
           <li><a href="../destinations-activation.html#real-time-activation">Real-time Activation</a></li>
           <li><a href="../destinations-activation.html#batch-file-exports">Batch / File Exports</a></li>
           <li><a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks</a></li>

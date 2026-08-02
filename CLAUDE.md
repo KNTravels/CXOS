@@ -122,37 +122,35 @@ supplied as a reference. Markup per item:
 The header dropdown nav (`<nav class="main-nav">`, `.nav-list`, `.dropdown`, `.nav-toggle`
 hamburger) **has been removed from every page — HTML, CSS, and JS.** All cross-page navigation now
 lives in a collapsible module tree inside every page's `<aside class="side-nav">`. This went
-through four iterations before landing here; don't resurrect any of the earlier intermediate
-forms (a flat "All Modules" link list, or the header nav sitting alongside it) — those are gone.
+through several iterations before landing here (flat link list → tree with only the 6 modules
+collapsible → Overview/BRD nested but pre-expanded → **current: everything uniform and closed by
+default**) — don't resurrect any earlier intermediate form.
 
-**What's on the page now**, top to bottom in every `<aside class="side-nav">`:
-1. `<div class="label">All Modules</div>` + `<ul class="nav-tree">` — a collapsible tree:
-   - `Overview` and `BRD` as plain `<li><a class="nav-tree-link">` rows (no toggle, nothing to
-     expand).
-   - Each of the 6 modules is a `<li class="nav-tree-module">` containing a `.nav-tree-row`
-     (a `.nav-tree-link` to the module page **plus a separate `.nav-tree-toggle` button** — two
-     independent controls, not one: clicking the label navigates, clicking the caret button
-     expands/collapses) and a `<ul class="nav-tree-sub">` of that module's submodule anchors
-     (same list `sideModulesNavHtml()`/`MODULE_ANCHORS` in `genlib.js` already tracked, now
-     including each module's `platform-connectors` entry).
-   - The **current page's own module** ships pre-expanded — `aria-expanded="true"` on its toggle
-     and `class="open"` on its `.nav-tree-sub` — set statically at generation/edit time, not by JS
-     on load, so there's no flash-of-collapsed-content. Every *other* module ships collapsed but
-     is still expandable by clicking its toggle — `main.js`'s click handler works generically on
-     every `.nav-tree-toggle`, not just the active one.
-   - On **detail pages** (leaf pages), the current submodule anchor inside the expanded list also
-     gets `class="active"` (e.g. viewing `marketing-hubspot.html` expands "1 · Data Sources" and
-     highlights "Business Systems" within it).
-2. On **module pages**, that's the *entire* sidebar — there is no separate "On this page" block
-   anymore; the active module's own `.nav-tree-sub` (using bare `#anchor` hrefs since you're
-   already on that page) serves that purpose, so a second list would just be a duplicate.
-3. On **`brd.html`** and **`index.html`** only, a second `<div class="label">On this page</div>` +
-   `<ul>` still follows, listing that page's own non-module sections (BRD: Purpose, Objectives,
-   Scope, ... BR-1..BR-6, NFR, Assumptions, Success Metrics; `index.html`: Architecture at a
-   Glance, The Six Verticals, ... Legend) — these aren't module submodules so they can't fold into
-   the tree, and both pages have real content the tree alone doesn't cover.
-4. On **detail pages**, there's no second block at all — same reasoning as module pages, and
-   detail pages have no sub-sections of their own to list.
+**What's on the page now — one uniform tree, identical structure everywhere:**
+- `<div class="label">All Modules</div>` + `<ul class="nav-tree">` containing **9 entries, every
+  one a `<li class="nav-tree-module">`**: Overview, BRD, LLD, then the 6 numbered modules. There
+  are no plain `<li><a>` rows left in this list at all (Overview/BRD/LLD used to be plain links on
+  every page except their own — the user pointed out via screenshot that this read as "missing"
+  arrows and asked for consistency, so now all 9 always render as a toggle+sublist, everywhere,
+  including on their own page).
+- Each entry's `.nav-tree-row` has **two independent controls**: a `.nav-tree-link` (navigates to
+  that page) and a separate `.nav-tree-toggle` button (expands/collapses its `.nav-tree-sub` list
+  in place, no navigation). Clicking the label and clicking the caret do different things — don't
+  merge them into one control.
+- **Every toggle ships closed (`aria-expanded="false"`, no `.open` class) by default, on every
+  page, including the page's own entry.** An earlier version pre-expanded the current page's own
+  module so its content was visible without a click ("no flash of collapsed content") — the user
+  explicitly asked for all-closed-until-clicked instead ("initially make all the menu closed...
+  once clicked that menu will list all sub menu"), so that pre-expansion was removed everywhere.
+  The current page's **link** still gets `.active` styling (bold/brand-colored) so you can tell
+  where you are without expanding anything — only the *expansion* state changed, not the
+  "which one is current" indicator.
+- On **detail pages** (leaf pages), the current submodule anchor *within* its (collapsed) sublist
+  still carries `class="active"` too — invisible until expanded, but correct once you open it.
+- **There is no separate "On this page" block anywhere anymore.** Overview's 8 sections, BRD's 13
+  sections, and LLD's 10 sections are each that entry's own `.nav-tree-sub` — same mechanism as a
+  module's submodules, not a second list. This was the point of making Overview/BRD/LLD full tree
+  entries: one mechanism for "this top-level thing has sub-sections," used uniformly by all 9.
 
 **Three distinct relative-path schemes, by page depth — get this wrong and links break:**
 - Detail pages (`pages/<module>/<slug>.html`, two levels under `doc/`): `../index.html` for
@@ -181,6 +179,18 @@ page" below for its own content.) `CSS` for the tree (`.nav-tree*` classes) live
 right after `.side-nav li a.active` in `style.css`; the JS toggle handler
 (`.nav-tree-toggle` click → flip `aria-expanded` + toggle `.open` on `btn.closest(".nav-tree-row")
 .nextElementSibling`) is in `main.js`'s `DOMContentLoaded` handler.
+
+**The `.caret` indicator is drawn with CSS borders, not the `&#8250;` (›) character sitting in the
+markup** (`.nav-tree-toggle .caret { font-size: 0; ... }` hides that glyph; a `width`/`height` box
+with only `border-right`/`border-bottom` set, rotated via `transform`, draws the actual visual
+chevron — `rotate(45deg)` points it down when collapsed, `rotate(225deg)` flips it to point up
+when `aria-expanded="true"`). This was changed from a plain rotating `›` character (2026-08-02,
+user asked for "a small up/down arrow kind of" indicator instead) **without touching any of the
+100+ HTML files** — the `<span class="caret">&#8250;</span>` markup already existed everywhere
+from when the tree was first built, so the fix is CSS-only: the character is still technically in
+the DOM (harmless — it's invisible at `font-size: 0`) and every page picks up the new chevron
+automatically. If you ever touch this again, prefer the same trick (redefine what an existing
+class draws) over another site-wide markup edit unless the HTML itself genuinely needs to change.
 
 **`Overview` and `BRD` are now `.nav-tree-module` entries too, not plain links** — an earlier
 version treated them as plain `<li><a class="nav-tree-link">` rows with a *separate* "On this

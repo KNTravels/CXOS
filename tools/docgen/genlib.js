@@ -57,11 +57,74 @@ const MODULE_ANCHORS = {
 };
 const MODULE_ORDER = Object.keys(MODULE_ANCHORS);
 
-// Collapsible "All Modules" side-nav tree — the current module's submodule list ships
-// pre-expanded (aria-expanded="true" + .open) so there's no flash-of-collapsed-content; the
-// current submodule anchor within it is marked .active too. `main.js`'s click handler makes
-// every module's toggle expandable/collapsible, not just the active one.
+// Overview/BRD/LLD's own on-page sections, so they can be rendered as full collapsible
+// tree entries too (not plain links) — uniform with the 6 modules. Keyed by href relative to
+// `pages/` (i.e. as used from a module page or brd.html/lld.html itself); detail pages prefix
+// an extra `../` via TOP_LEVEL.hrefFromDetail below.
+const TOP_LEVEL = [
+  { file: 'index.html', hrefFromDetail: '../../index.html', hrefFromPages: '../index.html', label: 'Overview', anchors: [
+    ['architecture', 'Architecture at a Glance'],
+    ['six-verticals', 'The Six Verticals'],
+    ['service-map', 'Full Application Service Map'],
+    ['microservices-diagram', 'Microservices Architecture Diagram'],
+    ['end-to-end-flow', 'End-to-End Flow'],
+    ['horizontals', 'The Five Horizontals'],
+    ['principles', 'Key Design Principles'],
+    ['legend', 'Legend'],
+  ]},
+  { file: 'brd.html', hrefFromDetail: '../brd.html', hrefFromPages: 'brd.html', label: 'BRD', anchors: [
+    ['purpose', 'Purpose &amp; Business Context'],
+    ['objectives', 'Business Objectives'],
+    ['scope', 'Scope'],
+    ['stakeholders', 'Stakeholders'],
+    ['br-data-sources', 'BR-1 &middot; Data Sources'],
+    ['br-ingestion-layer', 'BR-2 &middot; Ingestion Layer'],
+    ['br-transformation-processing', 'BR-3 &middot; Transformation &amp; Processing'],
+    ['br-unified-data-foundation', 'BR-4 &middot; Unified Data Foundation'],
+    ['br-intelligence-services', 'BR-5 &middot; Intelligence &amp; Services'],
+    ['br-destinations-activation', 'BR-6 &middot; Destinations &amp; Activation'],
+    ['nfr', 'Non-Functional Requirements'],
+    ['assumptions', 'Assumptions &amp; Constraints'],
+    ['success-metrics', 'Success Metrics'],
+  ]},
+  { file: 'lld.html', hrefFromDetail: '../lld.html', hrefFromPages: 'lld.html', label: 'LLD', anchors: [
+    ['purpose', 'Purpose &amp; Scope'],
+    ['sequence-diagram', 'Sequence Diagram: Event Flow'],
+    ['component-design', 'Component Design'],
+    ['data-model', 'Core Data Model'],
+    ['db-schema', 'Database Schema Detail'],
+    ['api-contracts', 'API Contracts'],
+    ['deployment', 'Deployment Architecture'],
+    ['error-handling', 'Error Handling &amp; Resiliency'],
+    ['security-design', 'Security Design Detail'],
+    ['observability-design', 'Observability Design'],
+  ]},
+];
+
+// Collapsible "All Modules" side-nav tree — every entry (Overview, BRD, LLD, and all 6 modules)
+// is a toggle + sublist, and **everything ships closed by default**, everywhere, regardless of
+// which page is current (2026-08-02: an earlier version pre-expanded the current page's own
+// entry, but the user asked for all-closed-until-clicked instead, and pointed out Overview/BRD/
+// LLD lacking a toggle at all read as a visual inconsistency — so those three are now full
+// nav-tree-module entries too, not plain links, on every page including their own). The current
+// page's own link and submodule-anchor still get `.active` styling — only the *expansion* state
+// changed, not which item reads as "current".
 function sideModulesNavHtml(activeModuleFile, activeSubmoduleAnchor) {
+  const topLevel = TOP_LEVEL.map(t => {
+    const subItems = t.anchors.map(([id, label]) =>
+      `          <li><a href="${t.hrefFromDetail}#${id}">${label}</a></li>`
+    ).join('\n');
+    return `      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="${t.hrefFromDetail}" class="nav-tree-link">${t.label}</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle ${t.label} sections"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+${subItems}
+        </ul>
+      </li>`;
+  }).join('\n');
+
   const modules = MODULE_ORDER.map(file => {
     const mod = MODULE_ANCHORS[file];
     const isActive = file === activeModuleFile;
@@ -73,9 +136,9 @@ function sideModulesNavHtml(activeModuleFile, activeSubmoduleAnchor) {
     return `      <li class="nav-tree-module">
         <div class="nav-tree-row">
           <a href="../${file}"${linkClass}>${mod.num} &middot; ${mod.label}</a>
-          <button class="nav-tree-toggle" aria-expanded="${isActive}" aria-label="Toggle ${mod.label} submodules"><span class="caret">&#8250;</span></button>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle ${mod.label} submodules"><span class="caret">&#8250;</span></button>
         </div>
-        <ul class="nav-tree-sub${isActive ? ' open' : ''}">
+        <ul class="nav-tree-sub">
 ${subItems}
         </ul>
       </li>`;
@@ -84,9 +147,7 @@ ${subItems}
   return `    <aside class="side-nav">
       <div class="label">All Modules</div>
       <ul class="nav-tree">
-        <li><a class="nav-tree-link" href="../../index.html">Overview</a></li>
-        <li><a class="nav-tree-link" href="../brd.html">BRD</a></li>
-        <li><a class="nav-tree-link" href="../lld.html">LLD</a></li>
+${topLevel}
 ${modules}
       </ul>
     </aside>`;
