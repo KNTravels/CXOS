@@ -203,7 +203,7 @@
 
     <div class="service-db-grid">
 
-      <div class="service-db-card" style="--card-accent:#2b7fd6">
+      <div class="service-db-card" style="--card-accent:#2b7fd6" data-service="ingestion" role="button" tabindex="0" aria-haspopup="dialog">
         <div class="card-head"><span class="stage-tag">Stage 2 &middot; Supporting</span><span class="priority could">Command</span></div>
         <h4>&#128229; Ingestion</h4>
         <span class="ns"><code>Cxos.Ingestion.Api</code></span>
@@ -212,7 +212,7 @@
         </div>
       </div>
 
-      <div class="service-db-card" style="--card-accent:#0f9b8e">
+      <div class="service-db-card" style="--card-accent:#0f9b8e" data-service="event-processing" role="button" tabindex="0" aria-haspopup="dialog">
         <div class="card-head"><span class="stage-tag">Stage 3 &middot; Supporting</span><span class="priority must">Command</span></div>
         <h4>&#9881;&#65039; Event Processing</h4>
         <span class="ns"><code>Cxos.Processing.Api</code></span>
@@ -222,7 +222,7 @@
         </div>
       </div>
 
-      <div class="service-db-card" style="--card-accent:#0f9b8e">
+      <div class="service-db-card" style="--card-accent:#0f9b8e" data-service="schema-governance" role="button" tabindex="0" aria-haspopup="dialog">
         <div class="card-head"><span class="stage-tag">Stage 3 &middot; Supporting</span><span class="priority could">Query</span></div>
         <h4>&#128203; Schema Governance</h4>
         <span class="ns"><code>Cxos.Processing.SchemaGovernance.Api</code></span>
@@ -231,7 +231,7 @@
         </div>
       </div>
 
-      <div class="service-db-card" style="--card-accent:#2e9e5b">
+      <div class="service-db-card" style="--card-accent:#2e9e5b" data-service="data-foundation" role="button" tabindex="0" aria-haspopup="dialog">
         <div class="card-head"><span class="stage-tag">Stage 4 &middot; Supporting</span><span class="priority could">Query</span></div>
         <h4>&#127963;&#65039; Data Foundation &amp; Governance</h4>
         <span class="ns"><code>Cxos.Foundation.Api</code></span>
@@ -241,7 +241,7 @@
         </div>
       </div>
 
-      <div class="service-db-card" style="--card-accent:#d9822b">
+      <div class="service-db-card" style="--card-accent:#d9822b" data-service="customer-profile" role="button" tabindex="0" aria-haspopup="dialog">
         <div class="card-head"><span class="stage-tag">Stage 5 &middot; Core Domain</span><span class="priority could">Query</span></div>
         <h4>&#129380; Customer Profile</h4>
         <span class="ns"><code>Cxos.Profile.Api</code></span>
@@ -252,7 +252,7 @@
         </div>
       </div>
 
-      <div class="service-db-card" style="--card-accent:#d9822b">
+      <div class="service-db-card" style="--card-accent:#d9822b" data-service="analytics-ai" role="button" tabindex="0" aria-haspopup="dialog">
         <div class="card-head"><span class="stage-tag">Stage 5 &middot; Supporting</span><span class="priority should">Both</span></div>
         <h4>&#129504; Analytics &amp; AI Insights</h4>
         <span class="ns"><code>Cxos.Intelligence.Api</code></span>
@@ -263,7 +263,7 @@
         </div>
       </div>
 
-      <div class="service-db-card" style="--card-accent:#d9822b">
+      <div class="service-db-card" style="--card-accent:#d9822b" data-service="operational-services" role="button" tabindex="0" aria-haspopup="dialog">
         <div class="card-head"><span class="stage-tag">Stage 5 &middot; Supporting</span><span class="priority should">Both</span></div>
         <h4>&#128736; Operational Services</h4>
         <span class="ns"><code>Cxos.Operations.Api</code></span>
@@ -274,7 +274,7 @@
         </div>
       </div>
 
-      <div class="service-db-card" style="--card-accent:#c23b6d">
+      <div class="service-db-card" style="--card-accent:#c23b6d" data-service="activation" role="button" tabindex="0" aria-haspopup="dialog">
         <div class="card-head"><span class="stage-tag">Stage 6 &middot; Core Domain</span><span class="priority must">Command</span></div>
         <h4>&#128225; Activation</h4>
         <span class="ns"><code>Cxos.Activation.Api</code></span>
@@ -382,6 +382,60 @@
       <div class="foundation-item"><div class="icon">&#127961;</div><h4>Multi-Tenancy</h4><p>Isolation, Quotas, Limits</p></div>
       <div class="foundation-item"><div class="icon">&#9881;</div><h4>Administration</h4><p>Users, Roles, Audit, Settings</p></div>
     </div>
+
+    <div class="handbook-block">
+      <h3>Service Map</h3>
+      <p class="tech">The horizontal counterpart to the Service Map above &mdash; same database legend, one card per cross-cutting capability.</p>
+      <div class="service-db-grid">
+
+        <div class="service-db-card" style="--card-accent:#3454d1" data-service="observability" role="button" tabindex="0" aria-haspopup="dialog">
+          <div class="card-head"><span class="stage-tag">Horizontal &middot; Platform Capability</span><span class="priority should">Both</span></div>
+          <h4>&#128200; Observability</h4>
+          <span class="ns"><code>Cxos.Observability.Api</code></span>
+          <div class="db-row">
+            <span class="db-pill" style="--db-color:#d97706"><span class="pip">&#128200;</span>Data Explorer (logs, metrics, traces)</span>
+          </div>
+        </div>
+
+        <div class="service-db-card" style="--card-accent:#3454d1" data-service="security" role="button" tabindex="0" aria-haspopup="dialog">
+          <div class="card-head"><span class="stage-tag">Horizontal &middot; Platform Capability</span><span class="priority should">Both</span></div>
+          <h4>&#128272; Security</h4>
+          <span class="ns"><code>Cxos.Security.Api</code></span>
+          <div class="db-row">
+            <span class="tag">No CXOS-owned database &mdash; delegates to Azure Key Vault (secrets) + Azure AD / ADFS (identity)</span>
+          </div>
+        </div>
+
+        <div class="service-db-card" style="--card-accent:#3454d1" data-service="developer-platform" role="button" tabindex="0" aria-haspopup="dialog">
+          <div class="card-head"><span class="stage-tag">Horizontal &middot; Platform Capability</span><span class="priority could">Query</span></div>
+          <h4>&#128736; Developer Platform</h4>
+          <span class="ns"><code>Cxos.DevPlatform.Api</code></span>
+          <div class="db-row">
+            <span class="db-pill" style="--db-color:#12a4a4"><span class="pip">&#127760;</span>Cosmos DB (API catalog, sandbox state)</span>
+          </div>
+        </div>
+
+        <div class="service-db-card" style="--card-accent:#3454d1" data-service="multi-tenancy" role="button" tabindex="0" aria-haspopup="dialog">
+          <div class="card-head"><span class="stage-tag">Horizontal &middot; Platform Capability</span><span class="priority should">Both</span></div>
+          <h4>&#127961;&#65039; Multi-Tenancy</h4>
+          <span class="ns"><code>Cxos.Tenancy.Api</code></span>
+          <div class="db-row">
+            <span class="db-pill" style="--db-color:#336791"><span class="pip">&#128024;</span>PostgreSQL (tenant registry, quotas)</span>
+          </div>
+        </div>
+
+        <div class="service-db-card" style="--card-accent:#3454d1" data-service="administration" role="button" tabindex="0" aria-haspopup="dialog">
+          <div class="card-head"><span class="stage-tag">Horizontal &middot; Platform Capability</span><span class="priority should">Both</span></div>
+          <h4>&#9881;&#65039; Administration</h4>
+          <span class="ns"><code>Cxos.Admin.Api</code></span>
+          <div class="db-row">
+            <span class="db-pill" style="--db-color:#336791"><span class="pip">&#128024;</span>PostgreSQL (users, roles, settings)</span>
+            <span class="db-pill" style="--db-color:#2e9e5b"><span class="pip">&#129666;</span>ADLS Gen2 (audit logs, write-once)</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </section>
 
   <section class="section">
@@ -416,6 +470,39 @@
 </main>
 
 <div class="lightbox"><img src="" alt="Architecture diagram enlarged"></div>
+
+<div class="service-modal-backdrop" id="serviceModalBackdrop">
+  <div class="service-modal" role="dialog" aria-modal="true" aria-labelledby="serviceModalTitle">
+    <button class="service-modal-close" id="serviceModalClose" aria-label="Close">&#10005;</button>
+    <div class="service-modal-head">
+      <div class="service-modal-icon" id="serviceModalIcon"></div>
+      <div>
+        <div class="service-modal-tag" id="serviceModalTag"></div>
+        <h3 id="serviceModalTitle"></h3>
+        <code id="serviceModalNs"></code>
+      </div>
+      <span class="priority" id="serviceModalCq"></span>
+    </div>
+    <div class="service-modal-body">
+      <section>
+        <h4>Overview</h4>
+        <p id="serviceModalOverview"></p>
+      </section>
+      <section>
+        <h4>Databases</h4>
+        <div class="db-row" id="serviceModalDbs"></div>
+      </section>
+      <section>
+        <h4>DDD Layers</h4>
+        <div class="service-modal-layers" id="serviceModalLayers"></div>
+      </section>
+      <section>
+        <h4>Service Integration</h4>
+        <ul class="feature-list" id="serviceModalIntegration"></ul>
+      </section>
+    </div>
+  </div>
+</div>
 
 <script src="js/main.js"></script>
 </body>
