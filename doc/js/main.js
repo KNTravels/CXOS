@@ -1,34 +1,17 @@
 // CXOS Reference Documentation — shared behavior
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Mobile nav toggle
-  var toggle = document.querySelector(".nav-toggle");
-  var nav = document.querySelector(".main-nav");
-  if (toggle && nav) {
-    toggle.addEventListener("click", function () {
-      nav.classList.toggle("open");
+  // Collapsible module tree in the side nav (replaces the old header dropdown nav).
+  // Each module row is a link (navigates) plus a separate toggle button (expands/collapses
+  // its submodule list) — the current page's own module ships with aria-expanded="true" and
+  // .open already set server-side, so there's no flash-of-collapsed-content on load.
+  document.querySelectorAll(".nav-tree-toggle").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var sub = btn.closest(".nav-tree-row").nextElementSibling;
+      var expanded = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!expanded));
+      if (sub) sub.classList.toggle("open", !expanded);
     });
-  }
-
-  // Tap-to-open dropdowns on touch/mobile (click toggles instead of hover)
-  document.querySelectorAll(".nav-list > li").forEach(function (li) {
-    var link = li.querySelector(":scope > a");
-    var dropdown = li.querySelector(".dropdown");
-    if (!link || !dropdown) return;
-    link.addEventListener("click", function (e) {
-      if (window.matchMedia("(max-width: 860px)").matches) {
-        e.preventDefault();
-        var wasOpen = li.classList.contains("open");
-        document.querySelectorAll(".nav-list > li.open").forEach(function (o) { o.classList.remove("open"); });
-        if (!wasOpen) li.classList.add("open");
-      }
-    });
-  });
-
-  // Highlight current top-level nav item based on page path
-  var path = window.location.pathname.split("/").pop() || "index.html";
-  document.querySelectorAll(".nav-list > li[data-page]").forEach(function (li) {
-    if (li.getAttribute("data-page") === path) li.classList.add("active");
   });
 
   // Highlight active side-nav link on module pages based on scroll position

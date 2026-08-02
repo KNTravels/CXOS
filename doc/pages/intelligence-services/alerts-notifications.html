@@ -13,65 +13,6 @@
     <span class="brand-mark">CX</span>
     CXOS <span class="brand-sub">— Customer Experience Operating System</span>
   </a>
-  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
-  <nav class="main-nav">
-    <ul class="nav-list">
-      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
-      <li data-page="data-sources.html">
-        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
-          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
-          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
-        </div>
-      </li>
-      <li data-page="ingestion-layer.html">
-        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
-          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
-          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
-          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
-          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
-        </div>
-      </li>
-      <li data-page="transformation-processing.html">
-        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
-          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
-          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
-        </div>
-      </li>
-      <li data-page="unified-data-foundation.html">
-        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
-          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
-          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
-        </div>
-      </li>
-      <li data-page="intelligence-services.html" class="active">
-        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
-          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
-          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
-          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
-        </div>
-      </li>
-      <li data-page="destinations-activation.html">
-        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
-          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
-          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
-          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
-        </div>
-      </li>
-    </ul>
-  </nav>
 </header>
 
 <main class="page">
@@ -82,15 +23,101 @@
     <span class="current">Alerts &amp; Notifications</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:#d9822b">
-    <div class="step">Intelligence &amp; Services &rarr; Operational Services</div>
-    <h1>Alerts &amp; Notifications</h1>
-    <p>The routing layer that turns an anomaly, a workflow state change, or a data-quality failure into a notification the right person or team actually sees.</p>
-  </div>
+  <div class="module-page">
+    <aside class="side-nav">
+      <div class="label">All Modules</div>
+      <ul class="nav-tree">
+        <li><a class="nav-tree-link" href="../../index.html">Overview</a></li>
+        <li><a class="nav-tree-link" href="../brd.html">BRD</a></li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../data-sources.html" class="nav-tree-link">1 &middot; Data Sources</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Data Sources submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a></li>
+          <li><a href="../data-sources.html#business-systems">Business Systems</a></li>
+          <li><a href="../data-sources.html#files-integrations">Files &amp; Integrations</a></li>
+          <li><a href="../data-sources.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../ingestion-layer.html" class="nav-tree-link">2 &middot; Ingestion Layer</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Ingestion Layer submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../ingestion-layer.html#client-sdks">Client SDKs</a></li>
+          <li><a href="../ingestion-layer.html#edge-network">Edge Network</a></li>
+          <li><a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion</a></li>
+          <li><a href="../ingestion-layer.html#connectors">Connectors</a></li>
+          <li><a href="../ingestion-layer.html#protocols-supported">Protocols Supported</a></li>
+          <li><a href="../ingestion-layer.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../transformation-processing.html" class="nav-tree-link">3 &middot; Transformation &amp; Processing</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Transformation &amp; Processing submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../transformation-processing.html#stream-processing">Stream Processing</a></li>
+          <li><a href="../transformation-processing.html#batch-processing">Batch Processing</a></li>
+          <li><a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry</a></li>
+          <li><a href="../transformation-processing.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../unified-data-foundation.html" class="nav-tree-link">4 &middot; Unified Data Foundation</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Unified Data Foundation submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse</a></li>
+          <li><a href="../unified-data-foundation.html#metadata-layer">Metadata Layer</a></li>
+          <li><a href="../unified-data-foundation.html#governance-security">Governance &amp; Security</a></li>
+          <li><a href="../unified-data-foundation.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../intelligence-services.html" class="nav-tree-link active">5 &middot; Intelligence &amp; Services</a>
+          <button class="nav-tree-toggle" aria-expanded="true" aria-label="Toggle Intelligence &amp; Services submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub open">
+          <li><a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service</a></li>
+          <li><a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine</a></li>
+          <li><a href="../intelligence-services.html#ai-insights">AI &amp; Insights</a></li>
+          <li><a href="../intelligence-services.html#operational-services" class="active">Operational Services</a></li>
+          <li><a href="../intelligence-services.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../destinations-activation.html" class="nav-tree-link">6 &middot; Destinations &amp; Activation</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Destinations &amp; Activation submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../destinations-activation.html#real-time-activation">Real-time Activation</a></li>
+          <li><a href="../destinations-activation.html#batch-file-exports">Batch / File Exports</a></li>
+          <li><a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks</a></li>
+          <li><a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync</a></li>
+          <li><a href="../destinations-activation.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      </ul>
+    </aside>
 
-  <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>Alerts & Notifications is the last-mile delivery for every operational signal generated elsewhere in the platform.</p></div></div>
-    <div class="hld-diagram">
+    <div>
+      <div class="module-intro" style="--card-accent:#d9822b">
+        <div class="step">Intelligence &amp; Services &rarr; Operational Services</div>
+        <h1>Alerts &amp; Notifications</h1>
+        <p>The routing layer that turns an anomaly, a workflow state change, or a data-quality failure into a notification the right person or team actually sees.</p>
+      </div>
+
+      <section class="section" style="margin-top:20px;">
+        <div class="section-head"><div><h2>High-Level Design</h2><p>Alerts & Notifications is the last-mile delivery for every operational signal generated elsewhere in the platform.</p></div></div>
+        <div class="hld-diagram">
       <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
@@ -102,21 +129,21 @@
       <div class="hld-node origin" style="--card-accent:#d9822b"><div class="stage-label">Intelligence</div><div class="stage-name">Alerts &amp; Notifications</div><div class="stage-detail">.NET Core routing service over Azure Service Bus</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Email, Slack, PagerDuty</div><div class="stage-detail">Delivery channels for the owning team</div></div>
-    </div>
-  </section>
+        </div>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#128188;</span> Business Context</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#128188;</span> Business Context</h2>
+        <ul class="feature-list">
       <li>A detected anomaly or data-quality issue has no value if it sits in a table nobody looks at — this is what makes signals actionable</li>
       <li>Reduces mean-time-to-detect and mean-time-to-resolve by routing directly to the owning team rather than a shared, ignorable channel</li>
       <li>Owned by Platform Engineering / SRE</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>A .NET Core routing service (Docker container on Azure Container Apps) subscribes to Azure Service Bus topics published by Anomaly Detection, Data Quality Monitoring, and the Workflow Engine, matches each event against ownership metadata from the Catalog to determine the responsible team, and fans out to the configured channel (email via SendGrid, Slack webhook, or PagerDuty for severity-critical alerts) with configurable per-team severity thresholds to avoid alert fatigue.</p>
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+        <p>A .NET Core routing service (Docker container on Azure Container Apps) subscribes to Azure Service Bus topics published by Anomaly Detection, Data Quality Monitoring, and the Workflow Engine, matches each event against ownership metadata from the Catalog to determine the responsible team, and fans out to the configured channel (email via SendGrid, Slack webhook, or PagerDuty for severity-critical alerts) with configurable per-team severity thresholds to avoid alert fatigue.</p>
     <div class="handbook-block">
       <h3>Delivery Channels</h3>
       <div class="tag-row">
@@ -126,28 +153,28 @@
         <span class="tag">In-app notification</span>
       </div>
     </div>
-  </section>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#128190;</span> Alert Routing Rule</h2>
-    <pre class="code-block">{
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#128190;</span> Alert Routing Rule</h2>
+        <pre class="code-block">{
   "source": "anomaly_detection",
   "severity_threshold": "high",
   "owner_team": "platform-engineering",
   "channels": ["slack", "pagerduty"],
   "dedup_window_minutes": 30
 }</pre>
-  </section>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#128279;</span> Integration Points</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#128279;</span> Integration Points</h2>
+        <ul class="feature-list">
       <li>Azure Service Bus — the event backbone alerts are published and consumed through</li>
       <li>Anomaly Detection, Data Quality Monitoring, Workflow Engine — primary upstream signal sources</li>
       <li>Catalog (Metadata Layer) — owner metadata used to route an alert to the correct team</li>
       <li>SendGrid, Slack, PagerDuty — external delivery integrations</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
   <section class="submodule" style="--card-accent:#d9822b">
     <h2><span class="icon">&#129520;</span> Services Consumed</h2>
@@ -157,22 +184,24 @@
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+        <ul class="feature-list">
       <li>Scale: alert volume is bounded by monitored-metric and workflow count, not raw event volume</li>
       <li>Latency: alerts are delivered within seconds to minutes of the triggering condition, well inside the mean-time-to-detect targets this system exists to hit</li>
       <li>Reliability: a deduplication window prevents the same underlying issue from paging a team repeatedly within a short window</li>
       <li>Security/Privacy: alert payloads summarize the issue (metric name, severity) rather than embedding raw customer data, keeping notification channels low-sensitivity</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>A critical data-quality failure is detected at 2am. Alerts &amp; Notifications pages the owning team's on-call engineer via PagerDuty within a minute, rather than the issue being discovered the next morning when someone happens to check a dashboard.</p>
-  </section>
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+        <p>A critical data-quality failure is detected at 2am. Alerts &amp; Notifications pages the owning team's on-call engineer via PagerDuty within a minute, rather than the issue being discovered the next morning when someone happens to check a dashboard.</p>
+      </section>
 
-  <p style="margin-top:28px;"><a href="../intelligence-services.html#operational-services">&larr; Back to Operational Services</a></p>
+      <p style="margin-top:28px;"><a href="../intelligence-services.html#operational-services">&larr; Back to Operational Services</a></p>
+    </div>
+  </div>
 </main>
 
 <script src="../../js/main.js"></script>

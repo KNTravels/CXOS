@@ -10,60 +10,85 @@ const MODULES = {
   'destinations-activation': { title: 'Destinations &amp; Activation', accent: '#c23b6d', num: 6 },
 };
 
-function navHtml(activeModuleFile) {
-  const items = [
-    { file: 'data-sources.html', num: '1', label: 'Data Sources', anchors: [
-      ['customer-touchpoints', 'Customer Touchpoints', 'Web, mobile, kiosk, chat, call center'],
-      ['business-systems', 'Business Systems', 'CRM, Commerce, Support, Marketing, ERP'],
-      ['files-integrations', 'Files &amp; Integrations', 'CSV/JSON/Parquet, Databases, APIs'],
-    ]},
-    { file: 'ingestion-layer.html', num: '2', label: 'Ingestion Layer', anchors: [
-      ['client-sdks', 'Client SDKs', 'Web, Mobile, Server SDK'],
-      ['edge-network', 'Edge Network', 'Global points of presence'],
-      ['streaming-ingestion', 'Streaming Ingestion', 'Redpanda (Kafka compatible)'],
-      ['connectors', 'Connectors', 'Pre-built &amp; custom connectors'],
-      ['protocols-supported', 'Protocols Supported', 'HTTP, gRPC, Webhooks, Batch'],
-    ]},
-    { file: 'transformation-processing.html', num: '3', label: 'Transformation &amp; Processing', anchors: [
-      ['stream-processing', 'Stream Processing', 'Real-time — Bytewax / Quix Streams'],
-      ['batch-processing', 'Batch Processing', 'Near-real-time — Spark / Python Jobs'],
-      ['event-schema-registry', 'Event Schema &amp; Registry', 'Versioning, compatibility, governance'],
-    ]},
-    { file: 'unified-data-foundation.html', num: '4', label: 'Unified Data Foundation', anchors: [
-      ['data-lakehouse', 'CXOS Data Lakehouse', 'Apache Iceberg + S3-compatible storage'],
-      ['metadata-layer', 'Metadata Layer', 'Catalog, lineage, dictionary, entitlements'],
-      ['governance-security', 'Governance &amp; Security', 'Access control, privacy, audit, encryption'],
-    ]},
-    { file: 'intelligence-services.html', num: '5', label: 'Intelligence &amp; Services', anchors: [
-      ['identity-profile', 'Identity &amp; Profile Service', 'Unified profile, identity graph'],
-      ['query-analytics-engine', 'Query &amp; Analytics Engine', 'DataFusion SQL engine, semantic layer'],
-      ['ai-insights', 'AI &amp; Insights', 'Anomaly detection, propensity, copilot'],
-      ['operational-services', 'Operational Services', 'Workflow, alerts, data quality, billing'],
-    ]},
-    { file: 'destinations-activation.html', num: '6', label: 'Destinations &amp; Activation', anchors: [
-      ['real-time-activation', 'Real-time Activation', 'Email, SMS/Push, Ad Platforms'],
-      ['batch-file-exports', 'Batch / File Exports', 'S3/GCS/Azure, SFTP, Warehouses'],
-      ['apis-webhooks', 'APIs &amp; Webhooks', 'Journeys, automation, integrations'],
-      ['reverse-etl-cdp-sync', 'Reverse ETL / CDP Sync', 'Sync back to CRM, Support, Marketing'],
-    ]},
-  ];
+// Module + submodule-anchor catalog backing the collapsible "All Modules" tree in every page's
+// side-nav. This replaced the header dropdown nav entirely (2026-08-02) — there is no more
+// top-of-page nav, this tree is the only cross-module navigation on the site now.
+const MODULE_ANCHORS = {
+  'data-sources.html': { num: '1', label: 'Data Sources', anchors: [
+    ['customer-touchpoints', 'Customer Touchpoints'],
+    ['business-systems', 'Business Systems'],
+    ['files-integrations', 'Files &amp; Integrations'],
+    ['platform-connectors', 'Platform Connectors'],
+  ]},
+  'ingestion-layer.html': { num: '2', label: 'Ingestion Layer', anchors: [
+    ['client-sdks', 'Client SDKs'],
+    ['edge-network', 'Edge Network'],
+    ['streaming-ingestion', 'Streaming Ingestion'],
+    ['connectors', 'Connectors'],
+    ['protocols-supported', 'Protocols Supported'],
+    ['platform-connectors', 'Platform Connectors'],
+  ]},
+  'transformation-processing.html': { num: '3', label: 'Transformation &amp; Processing', anchors: [
+    ['stream-processing', 'Stream Processing'],
+    ['batch-processing', 'Batch Processing'],
+    ['event-schema-registry', 'Event Schema &amp; Registry'],
+    ['platform-connectors', 'Platform Connectors'],
+  ]},
+  'unified-data-foundation.html': { num: '4', label: 'Unified Data Foundation', anchors: [
+    ['data-lakehouse', 'CXOS Data Lakehouse'],
+    ['metadata-layer', 'Metadata Layer'],
+    ['governance-security', 'Governance &amp; Security'],
+    ['platform-connectors', 'Platform Connectors'],
+  ]},
+  'intelligence-services.html': { num: '5', label: 'Intelligence &amp; Services', anchors: [
+    ['identity-profile', 'Identity &amp; Profile Service'],
+    ['query-analytics-engine', 'Query &amp; Analytics Engine'],
+    ['ai-insights', 'AI &amp; Insights'],
+    ['operational-services', 'Operational Services'],
+    ['platform-connectors', 'Platform Connectors'],
+  ]},
+  'destinations-activation.html': { num: '6', label: 'Destinations &amp; Activation', anchors: [
+    ['real-time-activation', 'Real-time Activation'],
+    ['batch-file-exports', 'Batch / File Exports'],
+    ['apis-webhooks', 'APIs &amp; Webhooks'],
+    ['reverse-etl-cdp-sync', 'Reverse ETL / CDP Sync'],
+    ['platform-connectors', 'Platform Connectors'],
+  ]},
+};
+const MODULE_ORDER = Object.keys(MODULE_ANCHORS);
 
-  const lis = items.map(it => {
-    const active = it.file === activeModuleFile ? ' class="active"' : '';
-    const dropdown = it.anchors.map(([id, label, desc]) =>
-      `          <a href="../${it.file}#${id}">${label}<span class="desc">${desc}</span></a>`
-    ).join('\n');
-    return `      <li data-page="${it.file}"${active}>
-        <a href="../${it.file}">${it.num} · ${it.label} <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-${dropdown}
+// Collapsible "All Modules" side-nav tree — the current module's submodule list ships
+// pre-expanded (aria-expanded="true" + .open) so there's no flash-of-collapsed-content; the
+// current submodule anchor within it is marked .active too. `main.js`'s click handler makes
+// every module's toggle expandable/collapsible, not just the active one.
+function sideModulesNavHtml(activeModuleFile, activeSubmoduleAnchor) {
+  const modules = MODULE_ORDER.map(file => {
+    const mod = MODULE_ANCHORS[file];
+    const isActive = file === activeModuleFile;
+    const linkClass = isActive ? ' class="nav-tree-link active"' : ' class="nav-tree-link"';
+    const subItems = mod.anchors.map(([id, label]) => {
+      const itemActive = (isActive && id === activeSubmoduleAnchor) ? ' class="active"' : '';
+      return `          <li><a href="../${file}#${id}"${itemActive}>${label}</a></li>`;
+    }).join('\n');
+    return `      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../${file}"${linkClass}>${mod.num} &middot; ${mod.label}</a>
+          <button class="nav-tree-toggle" aria-expanded="${isActive}" aria-label="Toggle ${mod.label} submodules"><span class="caret">&#8250;</span></button>
         </div>
+        <ul class="nav-tree-sub${isActive ? ' open' : ''}">
+${subItems}
+        </ul>
       </li>`;
   }).join('\n');
 
-  return `      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
-${lis}`;
+  return `    <aside class="side-nav">
+      <div class="label">All Modules</div>
+      <ul class="nav-tree">
+        <li><a class="nav-tree-link" href="../../index.html">Overview</a></li>
+        <li><a class="nav-tree-link" href="../brd.html">BRD</a></li>
+${modules}
+      </ul>
+    </aside>`;
 }
 
 function hldNodeHtml(node, isOrigin, accent) {
@@ -94,7 +119,6 @@ function buildHld(moduleFile, hldSelf) {
 function renderItem(moduleFile, submoduleAnchor, submoduleName, item) {
   const mod = MODULES[moduleFile];
   const accent = mod.accent;
-  const nav = navHtml(moduleFile + '.html');
 
   const hldNodes = item.hld ? item.hld : buildHld(moduleFile, item.hldSelf);
   const hldParts = [];
@@ -137,12 +161,6 @@ ${li(item.servicesConsumed)}
     <span class="brand-mark">CX</span>
     CXOS <span class="brand-sub">— Customer Experience Operating System</span>
   </a>
-  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
-  <nav class="main-nav">
-    <ul class="nav-list">
-${nav}
-    </ul>
-  </nav>
 </header>
 
 <main class="page">
@@ -153,56 +171,62 @@ ${nav}
     <span class="current">${item.name}</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:${accent}">
-    <div class="step">${mod.title.replace('&amp;', '&amp;')} &rarr; ${submoduleName}</div>
-    <h1>${item.name}</h1>
-    <p>${item.tagline}</p>
-  </div>
+  <div class="module-page">
+${sideModulesNavHtml(moduleFile + '.html', submoduleAnchor)}
 
-  <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>${item.hldCaption}</p></div></div>
-    <div class="hld-diagram">
+    <div>
+      <div class="module-intro" style="--card-accent:${accent}">
+        <div class="step">${mod.title.replace('&amp;', '&amp;')} &rarr; ${submoduleName}</div>
+        <h1>${item.name}</h1>
+        <p>${item.tagline}</p>
+      </div>
+
+      <section class="section" style="margin-top:20px;">
+        <div class="section-head"><div><h2>High-Level Design</h2><p>${item.hldCaption}</p></div></div>
+        <div class="hld-diagram">
 ${hldParts.join('\n')}
-    </div>
-  </section>
+        </div>
+      </section>
 
-  <section class="submodule" style="--card-accent:${accent}">
-    <h2><span class="icon">&#128188;</span> Business Context</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:${accent}">
+        <h2><span class="icon">&#128188;</span> Business Context</h2>
+        <ul class="feature-list">
 ${li(item.business)}
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:${accent}">
-    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>${item.technical}</p>${chipsBlock}
-  </section>
+      <section class="submodule" style="--card-accent:${accent}">
+        <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+        <p>${item.technical}</p>${chipsBlock}
+      </section>
 
-  <section class="submodule" style="--card-accent:${accent}">
-    <h2><span class="icon">&#128190;</span> ${item.artifactTitle}</h2>
-    <pre class="code-block">${item.artifactCode}</pre>
-  </section>
+      <section class="submodule" style="--card-accent:${accent}">
+        <h2><span class="icon">&#128190;</span> ${item.artifactTitle}</h2>
+        <pre class="code-block">${item.artifactCode}</pre>
+      </section>
 
-  <section class="submodule" style="--card-accent:${accent}">
-    <h2><span class="icon">&#128279;</span> Integration Points</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:${accent}">
+        <h2><span class="icon">&#128279;</span> Integration Points</h2>
+        <ul class="feature-list">
 ${li(item.integration)}
-    </ul>
-  </section>
+        </ul>
+      </section>
 ${servicesConsumedBlock}
-  <section class="submodule" style="--card-accent:${accent}">
-    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:${accent}">
+        <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+        <ul class="feature-list">
 ${li(item.nfr)}
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:${accent}">
-    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>${item.example}</p>
-  </section>
+      <section class="submodule" style="--card-accent:${accent}">
+        <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+        <p>${item.example}</p>
+      </section>
 
-  <p style="margin-top:28px;"><a href="../${moduleFile}.html#${submoduleAnchor}">&larr; Back to ${submoduleName}</a></p>
+      <p style="margin-top:28px;"><a href="../${moduleFile}.html#${submoduleAnchor}">&larr; Back to ${submoduleName}</a></p>
+    </div>
+  </div>
 </main>
 
 <script src="../../js/main.js"></script>
