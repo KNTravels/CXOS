@@ -13,65 +13,6 @@
     <span class="brand-mark">CX</span>
     CXOS <span class="brand-sub">— Customer Experience Operating System</span>
   </a>
-  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
-  <nav class="main-nav">
-    <ul class="nav-list">
-      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
-      <li data-page="data-sources.html">
-        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
-          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
-          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
-        </div>
-      </li>
-      <li data-page="ingestion-layer.html" class="active">
-        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
-          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
-          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
-          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
-          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
-        </div>
-      </li>
-      <li data-page="transformation-processing.html">
-        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
-          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
-          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
-        </div>
-      </li>
-      <li data-page="unified-data-foundation.html">
-        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
-          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
-          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
-        </div>
-      </li>
-      <li data-page="intelligence-services.html">
-        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
-          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
-          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
-          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
-        </div>
-      </li>
-      <li data-page="destinations-activation.html">
-        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
-          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
-          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
-          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
-        </div>
-      </li>
-    </ul>
-  </nav>
 </header>
 
 <main class="page">
@@ -82,15 +23,101 @@
     <span class="current">Custom Connectors</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:#2b7fd6">
-    <div class="step">Ingestion Layer &rarr; Connectors</div>
-    <h1>Custom Connectors</h1>
-    <p>The framework for building a new source or destination integration when no pre-built connector exists, using the same contracts and tooling.</p>
-  </div>
+  <div class="module-page">
+    <aside class="side-nav">
+      <div class="label">All Modules</div>
+      <ul class="nav-tree">
+        <li><a class="nav-tree-link" href="../../index.html">Overview</a></li>
+        <li><a class="nav-tree-link" href="../brd.html">BRD</a></li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../data-sources.html" class="nav-tree-link">1 &middot; Data Sources</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Data Sources submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a></li>
+          <li><a href="../data-sources.html#business-systems">Business Systems</a></li>
+          <li><a href="../data-sources.html#files-integrations">Files &amp; Integrations</a></li>
+          <li><a href="../data-sources.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../ingestion-layer.html" class="nav-tree-link active">2 &middot; Ingestion Layer</a>
+          <button class="nav-tree-toggle" aria-expanded="true" aria-label="Toggle Ingestion Layer submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub open">
+          <li><a href="../ingestion-layer.html#client-sdks">Client SDKs</a></li>
+          <li><a href="../ingestion-layer.html#edge-network">Edge Network</a></li>
+          <li><a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion</a></li>
+          <li><a href="../ingestion-layer.html#connectors" class="active">Connectors</a></li>
+          <li><a href="../ingestion-layer.html#protocols-supported">Protocols Supported</a></li>
+          <li><a href="../ingestion-layer.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../transformation-processing.html" class="nav-tree-link">3 &middot; Transformation &amp; Processing</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Transformation &amp; Processing submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../transformation-processing.html#stream-processing">Stream Processing</a></li>
+          <li><a href="../transformation-processing.html#batch-processing">Batch Processing</a></li>
+          <li><a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry</a></li>
+          <li><a href="../transformation-processing.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../unified-data-foundation.html" class="nav-tree-link">4 &middot; Unified Data Foundation</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Unified Data Foundation submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse</a></li>
+          <li><a href="../unified-data-foundation.html#metadata-layer">Metadata Layer</a></li>
+          <li><a href="../unified-data-foundation.html#governance-security">Governance &amp; Security</a></li>
+          <li><a href="../unified-data-foundation.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../intelligence-services.html" class="nav-tree-link">5 &middot; Intelligence &amp; Services</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Intelligence &amp; Services submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service</a></li>
+          <li><a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine</a></li>
+          <li><a href="../intelligence-services.html#ai-insights">AI &amp; Insights</a></li>
+          <li><a href="../intelligence-services.html#operational-services">Operational Services</a></li>
+          <li><a href="../intelligence-services.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../destinations-activation.html" class="nav-tree-link">6 &middot; Destinations &amp; Activation</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Destinations &amp; Activation submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../destinations-activation.html#real-time-activation">Real-time Activation</a></li>
+          <li><a href="../destinations-activation.html#batch-file-exports">Batch / File Exports</a></li>
+          <li><a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks</a></li>
+          <li><a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync</a></li>
+          <li><a href="../destinations-activation.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      </ul>
+    </aside>
 
-  <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>Custom connectors extend the platform without leaving its standard patterns.</p></div></div>
-    <div class="hld-diagram">
+    <div>
+      <div class="module-intro" style="--card-accent:#2b7fd6">
+        <div class="step">Ingestion Layer &rarr; Connectors</div>
+        <h1>Custom Connectors</h1>
+        <p>The framework for building a new source or destination integration when no pre-built connector exists, using the same contracts and tooling.</p>
+      </div>
+
+      <section class="section" style="margin-top:20px;">
+        <div class="section-head"><div><h2>High-Level Design</h2><p>Custom connectors extend the platform without leaving its standard patterns.</p></div></div>
+        <div class="hld-diagram">
       <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Any External System</div><div class="stage-detail">Proprietary or long-tail integration</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node origin" style="--card-accent:#2b7fd6"><div class="stage-label">Ingestion</div><div class="stage-name">Custom Connector Framework</div><div class="stage-detail">IConnector interface + scaffolding</div></div>
@@ -102,21 +129,21 @@
       <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">.NET Core Analytics API</div><div class="stage-detail">Blended with behavioral data</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Reverse ETL (optional)</div><div class="stage-detail">Where the integration requires it</div></div>
-    </div>
-  </section>
+        </div>
+      </section>
 
-  <section class="submodule" style="--card-accent:#2b7fd6">
-    <h2><span class="icon">&#128188;</span> Business Context</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#2b7fd6">
+        <h2><span class="icon">&#128188;</span> Business Context</h2>
+        <ul class="feature-list">
       <li>Ensures a one-off or proprietary integration doesn't become a maintenance orphan outside the platform's standard patterns</li>
       <li>Lets teams extend the platform to long-tail or internal systems without waiting on the core platform team's roadmap</li>
       <li>Owned by whichever team needs the integration, with architectural review from Platform Engineering</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:#2b7fd6">
-    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>A custom connector is a .NET Core project scaffolded from an internal template implementing the same <code>IConnector</code> interface as every pre-built connector, referencing <code>Cxos.Ingestion.Client</code> directly for outbound events. The scaffolding includes the standard cross-cutting concerns (Key Vault credential resolution, Polly retry, structured logging, health-check endpoint) so a team only has to implement the source-specific extract/transform logic.</p>
+      <section class="submodule" style="--card-accent:#2b7fd6">
+        <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+        <p>A custom connector is a .NET Core project scaffolded from an internal template implementing the same <code>IConnector</code> interface as every pre-built connector, referencing <code>Cxos.Ingestion.Client</code> directly for outbound events. The scaffolding includes the standard cross-cutting concerns (Key Vault credential resolution, Polly retry, structured logging, health-check endpoint) so a team only has to implement the source-specific extract/transform logic.</p>
     <div class="handbook-block">
       <h3>Scaffolding Includes</h3>
       <div class="tag-row">
@@ -126,11 +153,11 @@
         <span class="tag">Health-check endpoint</span>
       </div>
     </div>
-  </section>
+      </section>
 
-  <section class="submodule" style="--card-accent:#2b7fd6">
-    <h2><span class="icon">&#128190;</span> Custom Connector Skeleton</h2>
-    <pre class="code-block">public class AcmePartnerConnector : IConnector
+      <section class="submodule" style="--card-accent:#2b7fd6">
+        <h2><span class="icon">&#128190;</span> Custom Connector Skeleton</h2>
+        <pre class="code-block">public class AcmePartnerConnector : IConnector
 {
     public async Task SyncAsync(CancellationToken ct)
     {
@@ -139,17 +166,17 @@
             await _cxosClient.TrackAsync(MapToEvent(r));
     }
 }</pre>
-  </section>
+      </section>
 
-  <section class="submodule" style="--card-accent:#2b7fd6">
-    <h2><span class="icon">&#128279;</span> Integration Points</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#2b7fd6">
+        <h2><span class="icon">&#128279;</span> Integration Points</h2>
+        <ul class="feature-list">
       <li>IConnector interface + internal scaffolding template</li>
       <li>Cxos.Ingestion.Client NuGet package</li>
       <li>Azure Key Vault — credential storage, same pattern as pre-built connectors</li>
       <li>Platform Engineering architectural review — before a custom connector goes to production</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
   <section class="submodule" style="--card-accent:#2b7fd6">
     <h2><span class="icon">&#129520;</span> Services Consumed</h2>
@@ -159,22 +186,24 @@
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#2b7fd6">
-    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#2b7fd6">
+        <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+        <ul class="feature-list">
       <li>Scale: no different from a pre-built connector once built — same deployment and scaling model (Azure Container Apps or AKS)</li>
       <li>Latency: determined by the connector author's chosen sync mode (webhook vs. polling)</li>
       <li>Reliability: required to implement the same health-check contract as pre-built connectors so it participates in standard platform monitoring</li>
       <li>Security/Privacy: subject to the same architectural review as any new integration — credential handling and PII mapping are checked before go-live</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:#2b7fd6">
-    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>A team needs to integrate a proprietary in-house loyalty system with no equivalent pre-built connector. Using the scaffolding, an engineer ships a working custom connector in two days instead of building ingestion plumbing from scratch — inheriting retry, credential management, and monitoring for free.</p>
-  </section>
+      <section class="submodule" style="--card-accent:#2b7fd6">
+        <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+        <p>A team needs to integrate a proprietary in-house loyalty system with no equivalent pre-built connector. Using the scaffolding, an engineer ships a working custom connector in two days instead of building ingestion plumbing from scratch — inheriting retry, credential management, and monitoring for free.</p>
+      </section>
 
-  <p style="margin-top:28px;"><a href="../ingestion-layer.html#connectors">&larr; Back to Connectors</a></p>
+      <p style="margin-top:28px;"><a href="../ingestion-layer.html#connectors">&larr; Back to Connectors</a></p>
+    </div>
+  </div>
 </main>
 
 <script src="../../js/main.js"></script>

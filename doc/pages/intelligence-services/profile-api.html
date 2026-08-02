@@ -13,65 +13,6 @@
     <span class="brand-mark">CX</span>
     CXOS <span class="brand-sub">— Customer Experience Operating System</span>
   </a>
-  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
-  <nav class="main-nav">
-    <ul class="nav-list">
-      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
-      <li data-page="data-sources.html">
-        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
-          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
-          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
-        </div>
-      </li>
-      <li data-page="ingestion-layer.html">
-        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
-          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
-          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
-          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
-          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
-        </div>
-      </li>
-      <li data-page="transformation-processing.html">
-        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
-          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
-          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
-        </div>
-      </li>
-      <li data-page="unified-data-foundation.html">
-        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
-          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
-          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
-        </div>
-      </li>
-      <li data-page="intelligence-services.html" class="active">
-        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
-          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
-          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
-          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
-        </div>
-      </li>
-      <li data-page="destinations-activation.html">
-        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
-          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
-          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
-          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
-        </div>
-      </li>
-    </ul>
-  </nav>
 </header>
 
 <main class="page">
@@ -82,15 +23,101 @@
     <span class="current">Profile API</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:#d9822b">
-    <div class="step">Intelligence &amp; Services &rarr; Identity &amp; Profile Service</div>
-    <h1>Profile API</h1>
-    <p>The single, versioned API surface every internal service and external destination uses to read (never directly query) customer profile data.</p>
-  </div>
+  <div class="module-page">
+    <aside class="side-nav">
+      <div class="label">All Modules</div>
+      <ul class="nav-tree">
+        <li><a class="nav-tree-link" href="../../index.html">Overview</a></li>
+        <li><a class="nav-tree-link" href="../brd.html">BRD</a></li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../data-sources.html" class="nav-tree-link">1 &middot; Data Sources</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Data Sources submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a></li>
+          <li><a href="../data-sources.html#business-systems">Business Systems</a></li>
+          <li><a href="../data-sources.html#files-integrations">Files &amp; Integrations</a></li>
+          <li><a href="../data-sources.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../ingestion-layer.html" class="nav-tree-link">2 &middot; Ingestion Layer</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Ingestion Layer submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../ingestion-layer.html#client-sdks">Client SDKs</a></li>
+          <li><a href="../ingestion-layer.html#edge-network">Edge Network</a></li>
+          <li><a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion</a></li>
+          <li><a href="../ingestion-layer.html#connectors">Connectors</a></li>
+          <li><a href="../ingestion-layer.html#protocols-supported">Protocols Supported</a></li>
+          <li><a href="../ingestion-layer.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../transformation-processing.html" class="nav-tree-link">3 &middot; Transformation &amp; Processing</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Transformation &amp; Processing submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../transformation-processing.html#stream-processing">Stream Processing</a></li>
+          <li><a href="../transformation-processing.html#batch-processing">Batch Processing</a></li>
+          <li><a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry</a></li>
+          <li><a href="../transformation-processing.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../unified-data-foundation.html" class="nav-tree-link">4 &middot; Unified Data Foundation</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Unified Data Foundation submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse</a></li>
+          <li><a href="../unified-data-foundation.html#metadata-layer">Metadata Layer</a></li>
+          <li><a href="../unified-data-foundation.html#governance-security">Governance &amp; Security</a></li>
+          <li><a href="../unified-data-foundation.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../intelligence-services.html" class="nav-tree-link active">5 &middot; Intelligence &amp; Services</a>
+          <button class="nav-tree-toggle" aria-expanded="true" aria-label="Toggle Intelligence &amp; Services submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub open">
+          <li><a href="../intelligence-services.html#identity-profile" class="active">Identity &amp; Profile Service</a></li>
+          <li><a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine</a></li>
+          <li><a href="../intelligence-services.html#ai-insights">AI &amp; Insights</a></li>
+          <li><a href="../intelligence-services.html#operational-services">Operational Services</a></li>
+          <li><a href="../intelligence-services.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../destinations-activation.html" class="nav-tree-link">6 &middot; Destinations &amp; Activation</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Destinations &amp; Activation submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../destinations-activation.html#real-time-activation">Real-time Activation</a></li>
+          <li><a href="../destinations-activation.html#batch-file-exports">Batch / File Exports</a></li>
+          <li><a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks</a></li>
+          <li><a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync</a></li>
+          <li><a href="../destinations-activation.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      </ul>
+    </aside>
 
-  <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>One API surface, so every consumer gets the same governed view of the profile.</p></div></div>
-    <div class="hld-diagram">
+    <div>
+      <div class="module-intro" style="--card-accent:#d9822b">
+        <div class="step">Intelligence &amp; Services &rarr; Identity &amp; Profile Service</div>
+        <h1>Profile API</h1>
+        <p>The single, versioned API surface every internal service and external destination uses to read (never directly query) customer profile data.</p>
+      </div>
+
+      <section class="section" style="margin-top:20px;">
+        <div class="section-head"><div><h2>High-Level Design</h2><p>One API surface, so every consumer gets the same governed view of the profile.</p></div></div>
+        <div class="hld-diagram">
       <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
@@ -102,21 +129,21 @@
       <div class="hld-node origin" style="--card-accent:#d9822b"><div class="stage-label">Intelligence</div><div class="stage-name">Profile API</div><div class="stage-detail">.NET Core Analytics/AI API behind Azure API Management</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Every Consumer</div><div class="stage-detail">Support tools, activation destinations, other microservices</div></div>
-    </div>
-  </section>
+        </div>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#128188;</span> Business Context</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#128188;</span> Business Context</h2>
+        <ul class="feature-list">
       <li>Prevents every consuming team from writing its own SQL against the profile table, which would create N different, drifting interpretations of 'the customer'</li>
       <li>Gives Governance &amp; Security a single enforcement point for field-level access instead of N direct-query paths to audit</li>
       <li>Owned by Data Engineering / Platform Engineering</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>The Profile API is a .NET Core service — packaged as a Docker container and deployed on AKS — fronted by Azure API Management, which applies rate limiting, authentication, and request logging consistently with the Ingestion Layer's gateway pattern. It exposes REST and gRPC endpoints backed by the Unified Customer Profile and Identity Graph, enforcing the same RBAC/ABAC and column-masking policies defined in Governance &amp; Security so a caller's permitted fields are consistent whether they call the API from a support tool or an activation service.</p>
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+        <p>The Profile API is a .NET Core service — packaged as a Docker container and deployed on AKS — fronted by Azure API Management, which applies rate limiting, authentication, and request logging consistently with the Ingestion Layer's gateway pattern. It exposes REST and gRPC endpoints backed by the Unified Customer Profile and Identity Graph, enforcing the same RBAC/ABAC and column-masking policies defined in Governance &amp; Security so a caller's permitted fields are consistent whether they call the API from a support tool or an activation service.</p>
     <div class="handbook-block">
       <h3>Endpoints</h3>
       <div class="tag-row">
@@ -126,27 +153,27 @@
         <span class="tag">POST /profile/batch</span>
       </div>
     </div>
-  </section>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#128190;</span> Profile API Request</h2>
-    <pre class="code-block">GET /v1/profile/cust_004821
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#128190;</span> Profile API Request</h2>
+        <pre class="code-block">GET /v1/profile/cust_004821
 Authorization: Bearer <service-token>
 
 200 OK
 { "customer_key": "cust_004821", "lifecycle_stage": "active", "ltv_band": "gold" }
 -- fields the caller is not entitled to are omitted, not nulled</pre>
-  </section>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#128279;</span> Integration Points</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#128279;</span> Integration Points</h2>
+        <ul class="feature-list">
       <li>Azure API Management — gateway: auth, rate limiting, request logging</li>
       <li>Unified Customer Profile, Identity Graph, Relationships — the underlying data this API serves</li>
       <li>Access Control (RBAC/ABAC) — enforced per request, per field</li>
       <li>Application Insights — per-request tracing and dependency tracking across every call</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
   <section class="submodule" style="--card-accent:#d9822b">
     <h2><span class="icon">&#129520;</span> Services Consumed</h2>
@@ -156,22 +183,24 @@ Authorization: Bearer <service-token>
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+        <ul class="feature-list">
       <li>Scale: stateless service scales horizontally on AKS behind API Management; read-heavy traffic is absorbed by the Redis cache layer beneath it</li>
       <li>Latency: p99 under 100ms for single-customer reads; batch endpoint is used for bulk activation exports rather than looping single calls</li>
       <li>Reliability: circuit breakers and retry policies (Polly) protect callers if the underlying PostgreSQL store is under load</li>
       <li>Security/Privacy: every response is entitlement-filtered per caller identity — omitting fields the caller lacks access to, not just masking them</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:#d9822b">
-    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>The Real-time Activation service calls the Profile API to check consent and preferred channel before sending a promotional email, and the same API — with different caller entitlements — powers a support agent's console, guaranteeing both see a consistent, correctly-governed view of the customer.</p>
-  </section>
+      <section class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+        <p>The Real-time Activation service calls the Profile API to check consent and preferred channel before sending a promotional email, and the same API — with different caller entitlements — powers a support agent's console, guaranteeing both see a consistent, correctly-governed view of the customer.</p>
+      </section>
 
-  <p style="margin-top:28px;"><a href="../intelligence-services.html#identity-profile">&larr; Back to Identity &amp; Profile Service</a></p>
+      <p style="margin-top:28px;"><a href="../intelligence-services.html#identity-profile">&larr; Back to Identity &amp; Profile Service</a></p>
+    </div>
+  </div>
 </main>
 
 <script src="../../js/main.js"></script>

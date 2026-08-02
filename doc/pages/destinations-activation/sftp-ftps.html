@@ -13,65 +13,6 @@
     <span class="brand-mark">CX</span>
     CXOS <span class="brand-sub">— Customer Experience Operating System</span>
   </a>
-  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
-  <nav class="main-nav">
-    <ul class="nav-list">
-      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
-      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
-      <li data-page="data-sources.html">
-        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
-          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
-          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
-        </div>
-      </li>
-      <li data-page="ingestion-layer.html">
-        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
-          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
-          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
-          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
-          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
-        </div>
-      </li>
-      <li data-page="transformation-processing.html">
-        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
-          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
-          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
-        </div>
-      </li>
-      <li data-page="unified-data-foundation.html">
-        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
-          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
-          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
-        </div>
-      </li>
-      <li data-page="intelligence-services.html">
-        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
-          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
-          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
-          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
-        </div>
-      </li>
-      <li data-page="destinations-activation.html" class="active">
-        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
-        <div class="dropdown">
-          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
-          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
-          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
-          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
-        </div>
-      </li>
-    </ul>
-  </nav>
 </header>
 
 <main class="page">
@@ -82,15 +23,101 @@
     <span class="current">SFTP / FTPS</span>
   </div>
 
-  <div class="module-intro" style="--card-accent:#c23b6d">
-    <div class="step">Destinations &amp; Activation &rarr; Batch / File Exports</div>
-    <h1>SFTP / FTPS</h1>
-    <p>File-based export over a secure legacy transfer protocol, still required by many enterprise partners and financial institutions that don't accept cloud-storage delivery.</p>
-  </div>
+  <div class="module-page">
+    <aside class="side-nav">
+      <div class="label">All Modules</div>
+      <ul class="nav-tree">
+        <li><a class="nav-tree-link" href="../../index.html">Overview</a></li>
+        <li><a class="nav-tree-link" href="../brd.html">BRD</a></li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../data-sources.html" class="nav-tree-link">1 &middot; Data Sources</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Data Sources submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../data-sources.html#customer-touchpoints">Customer Touchpoints</a></li>
+          <li><a href="../data-sources.html#business-systems">Business Systems</a></li>
+          <li><a href="../data-sources.html#files-integrations">Files &amp; Integrations</a></li>
+          <li><a href="../data-sources.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../ingestion-layer.html" class="nav-tree-link">2 &middot; Ingestion Layer</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Ingestion Layer submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../ingestion-layer.html#client-sdks">Client SDKs</a></li>
+          <li><a href="../ingestion-layer.html#edge-network">Edge Network</a></li>
+          <li><a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion</a></li>
+          <li><a href="../ingestion-layer.html#connectors">Connectors</a></li>
+          <li><a href="../ingestion-layer.html#protocols-supported">Protocols Supported</a></li>
+          <li><a href="../ingestion-layer.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../transformation-processing.html" class="nav-tree-link">3 &middot; Transformation &amp; Processing</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Transformation &amp; Processing submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../transformation-processing.html#stream-processing">Stream Processing</a></li>
+          <li><a href="../transformation-processing.html#batch-processing">Batch Processing</a></li>
+          <li><a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry</a></li>
+          <li><a href="../transformation-processing.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../unified-data-foundation.html" class="nav-tree-link">4 &middot; Unified Data Foundation</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Unified Data Foundation submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse</a></li>
+          <li><a href="../unified-data-foundation.html#metadata-layer">Metadata Layer</a></li>
+          <li><a href="../unified-data-foundation.html#governance-security">Governance &amp; Security</a></li>
+          <li><a href="../unified-data-foundation.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../intelligence-services.html" class="nav-tree-link">5 &middot; Intelligence &amp; Services</a>
+          <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Intelligence &amp; Services submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub">
+          <li><a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service</a></li>
+          <li><a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine</a></li>
+          <li><a href="../intelligence-services.html#ai-insights">AI &amp; Insights</a></li>
+          <li><a href="../intelligence-services.html#operational-services">Operational Services</a></li>
+          <li><a href="../intelligence-services.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      <li class="nav-tree-module">
+        <div class="nav-tree-row">
+          <a href="../destinations-activation.html" class="nav-tree-link active">6 &middot; Destinations &amp; Activation</a>
+          <button class="nav-tree-toggle" aria-expanded="true" aria-label="Toggle Destinations &amp; Activation submodules"><span class="caret">&#8250;</span></button>
+        </div>
+        <ul class="nav-tree-sub open">
+          <li><a href="../destinations-activation.html#real-time-activation">Real-time Activation</a></li>
+          <li><a href="../destinations-activation.html#batch-file-exports" class="active">Batch / File Exports</a></li>
+          <li><a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks</a></li>
+          <li><a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync</a></li>
+          <li><a href="../destinations-activation.html#platform-connectors">Platform Connectors</a></li>
+        </ul>
+      </li>
+      </ul>
+    </aside>
 
-  <section class="section" style="margin-top:20px;">
-    <div class="section-head"><div><h2>High-Level Design</h2><p>SFTP/FTPS exists for the partners who genuinely cannot receive data any other way.</p></div></div>
-    <div class="hld-diagram">
+    <div>
+      <div class="module-intro" style="--card-accent:#c23b6d">
+        <div class="step">Destinations &amp; Activation &rarr; Batch / File Exports</div>
+        <h1>SFTP / FTPS</h1>
+        <p>File-based export over a secure legacy transfer protocol, still required by many enterprise partners and financial institutions that don't accept cloud-storage delivery.</p>
+      </div>
+
+      <section class="section" style="margin-top:20px;">
+        <div class="section-head"><div><h2>High-Level Design</h2><p>SFTP/FTPS exists for the partners who genuinely cannot receive data any other way.</p></div></div>
+        <div class="hld-diagram">
       <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
@@ -102,21 +129,21 @@
       <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Query &amp; Analytics Engine</div><div class="stage-detail">Executes the export query</div></div>
       <div class="hld-arrow">&rarr;</div>
       <div class="hld-node origin" style="--card-accent:#c23b6d"><div class="stage-label">Activation</div><div class="stage-name">SFTP / FTPS</div><div class="stage-detail">Scheduled .NET Core job pushing to a partner-managed SFTP server</div></div>
-    </div>
-  </section>
+        </div>
+      </section>
 
-  <section class="submodule" style="--card-accent:#c23b6d">
-    <h2><span class="icon">&#128188;</span> Business Context</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#128188;</span> Business Context</h2>
+        <ul class="feature-list">
       <li>Many enterprise, banking, and healthcare partners mandate SFTP/FTPS for compliance or legacy-integration reasons — cloud-bucket delivery is simply not an accepted option for them</li>
       <li>Keeping this path well-supported avoids losing otherwise-viable partnerships over a transport-protocol requirement</li>
       <li>Owned by Data Engineering / Partner Integrations</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:#c23b6d">
-    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
-    <p>The same export pipeline used for S3/GCS/Azure Blob generates the file, but delivery is via SSH.NET-based SFTP (or FTPS where SFTP isn't supported) to a partner-managed server, running as a Docker container job on Azure Container Apps Jobs with credentials rotated through Azure Key Vault. Because SFTP servers vary widely in reliability, this path includes stricter retry-with-backoff and a dead-letter alert if delivery fails after the maximum retry window.</p>
+      <section class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+        <p>The same export pipeline used for S3/GCS/Azure Blob generates the file, but delivery is via SSH.NET-based SFTP (or FTPS where SFTP isn't supported) to a partner-managed server, running as a Docker container job on Azure Container Apps Jobs with credentials rotated through Azure Key Vault. Because SFTP servers vary widely in reliability, this path includes stricter retry-with-backoff and a dead-letter alert if delivery fails after the maximum retry window.</p>
     <div class="handbook-block">
       <h3>Protocol Support</h3>
       <div class="tag-row">
@@ -126,11 +153,11 @@
         <span class="tag">Retry with backoff</span>
       </div>
     </div>
-  </section>
+      </section>
 
-  <section class="submodule" style="--card-accent:#c23b6d">
-    <h2><span class="icon">&#128190;</span> SFTP Delivery Config</h2>
-    <pre class="code-block">{
+      <section class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#128190;</span> SFTP Delivery Config</h2>
+        <pre class="code-block">{
   "partner": "acme_financial",
   "protocol": "sftp",
   "host": "sftp.acmefinancial.example",
@@ -138,17 +165,17 @@
   "encryption": "pgp",
   "max_retries": 5
 }</pre>
-  </section>
+      </section>
 
-  <section class="submodule" style="--card-accent:#c23b6d">
-    <h2><span class="icon">&#128279;</span> Integration Points</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#128279;</span> Integration Points</h2>
+        <ul class="feature-list">
       <li>Query &amp; Analytics Engine — executes the export query, same as other batch destinations</li>
       <li>Azure Key Vault — SFTP credentials and PGP keys</li>
       <li>Azure Container Apps Jobs — runs the scheduled delivery job</li>
       <li>Alerts &amp; Notifications — pages the owning team on repeated delivery failure</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
   <section class="submodule" style="--card-accent:#c23b6d">
     <h2><span class="icon">&#129520;</span> Services Consumed</h2>
@@ -158,22 +185,24 @@
     </ul>
   </section>
 
-  <section class="submodule" style="--card-accent:#c23b6d">
-    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
-    <ul class="feature-list">
+      <section class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+        <ul class="feature-list">
       <li>Scale: per-partner file sizes are typically modest (single-digit GB), sized to the partner's own ingestion capability, not the lakehouse</li>
       <li>Latency: batch by design, on a defined schedule agreed with each partner</li>
       <li>Reliability: stricter retry/backoff than cloud-storage delivery, since partner-managed SFTP servers are outside CXOS's reliability guarantees</li>
       <li>Security/Privacy: PGP file-level encryption is used in addition to transport encryption for the most sensitive partner exports (e.g., financial data)</li>
-    </ul>
-  </section>
+        </ul>
+      </section>
 
-  <section class="submodule" style="--card-accent:#c23b6d">
-    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
-    <p>A banking partner's compliance team only accepts PGP-encrypted files over SFTP. The export pipeline reuses the same query and file-generation logic as every other batch destination, differing only in the delivery and encryption step — avoiding a duplicate pipeline just for one partner's transport requirement.</p>
-  </section>
+      <section class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+        <p>A banking partner's compliance team only accepts PGP-encrypted files over SFTP. The export pipeline reuses the same query and file-generation logic as every other batch destination, differing only in the delivery and encryption step — avoiding a duplicate pipeline just for one partner's transport requirement.</p>
+      </section>
 
-  <p style="margin-top:28px;"><a href="../destinations-activation.html#batch-file-exports">&larr; Back to Batch / File Exports</a></p>
+      <p style="margin-top:28px;"><a href="../destinations-activation.html#batch-file-exports">&larr; Back to Batch / File Exports</a></p>
+    </div>
+  </div>
 </main>
 
 <script src="../../js/main.js"></script>

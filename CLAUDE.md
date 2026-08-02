@@ -110,6 +110,111 @@ supplied as a reference. Markup per item:
   (Business Context, Integration Points, NFRs on detail pages, and other prose lists) — it's not
   dead, just no longer used for submodule item grids on any of the 6 module pages.
 
+### "All Modules" collapsible tree side menu — the site's only nav now (2026-08-02)
+
+The header dropdown nav (`<nav class="main-nav">`, `.nav-list`, `.dropdown`, `.nav-toggle`
+hamburger) **has been removed from every page — HTML, CSS, and JS.** All cross-page navigation now
+lives in a collapsible module tree inside every page's `<aside class="side-nav">`. This went
+through four iterations before landing here; don't resurrect any of the earlier intermediate
+forms (a flat "All Modules" link list, or the header nav sitting alongside it) — those are gone.
+
+**What's on the page now**, top to bottom in every `<aside class="side-nav">`:
+1. `<div class="label">All Modules</div>` + `<ul class="nav-tree">` — a collapsible tree:
+   - `Overview` and `BRD` as plain `<li><a class="nav-tree-link">` rows (no toggle, nothing to
+     expand).
+   - Each of the 6 modules is a `<li class="nav-tree-module">` containing a `.nav-tree-row`
+     (a `.nav-tree-link` to the module page **plus a separate `.nav-tree-toggle` button** — two
+     independent controls, not one: clicking the label navigates, clicking the caret button
+     expands/collapses) and a `<ul class="nav-tree-sub">` of that module's submodule anchors
+     (same list `sideModulesNavHtml()`/`MODULE_ANCHORS` in `genlib.js` already tracked, now
+     including each module's `platform-connectors` entry).
+   - The **current page's own module** ships pre-expanded — `aria-expanded="true"` on its toggle
+     and `class="open"` on its `.nav-tree-sub` — set statically at generation/edit time, not by JS
+     on load, so there's no flash-of-collapsed-content. Every *other* module ships collapsed but
+     is still expandable by clicking its toggle — `main.js`'s click handler works generically on
+     every `.nav-tree-toggle`, not just the active one.
+   - On **detail pages** (leaf pages), the current submodule anchor inside the expanded list also
+     gets `class="active"` (e.g. viewing `marketing-hubspot.html` expands "1 · Data Sources" and
+     highlights "Business Systems" within it).
+2. On **module pages**, that's the *entire* sidebar — there is no separate "On this page" block
+   anymore; the active module's own `.nav-tree-sub` (using bare `#anchor` hrefs since you're
+   already on that page) serves that purpose, so a second list would just be a duplicate.
+3. On **`brd.html`** and **`index.html`** only, a second `<div class="label">On this page</div>` +
+   `<ul>` still follows, listing that page's own non-module sections (BRD: Purpose, Objectives,
+   Scope, ... BR-1..BR-6, NFR, Assumptions, Success Metrics; `index.html`: Architecture at a
+   Glance, The Six Verticals, ... Legend) — these aren't module submodules so they can't fold into
+   the tree, and both pages have real content the tree alone doesn't cover.
+4. On **detail pages**, there's no second block at all — same reasoning as module pages, and
+   detail pages have no sub-sections of their own to list.
+
+**Three distinct relative-path schemes, by page depth — get this wrong and links break:**
+- Detail pages (`pages/<module>/<slug>.html`, two levels under `doc/`): `../index.html` for
+  Overview, `../<module>.html` (or bare `#anchor` for none — detail pages never self-reference)
+  for modules.
+- Module pages and `brd.html` (`pages/<file>.html`, one level under `doc/`): `../index.html` for
+  Overview, **bare** `<module>.html` / `brd.html` (no `../`, same directory) for module links, and
+  bare `#anchor` for the *active* module's own submodules specifically (any other module's
+  submodules still need `<module>.html#anchor`).
+- `index.html` (`doc/` root): `pages/<file>.html` for BRD/modules (no `../`), plain `#anchor` for
+  its own on-page sections.
+
+**Active-state classes are static (set per-page at generation/hand-edit time), separate from the
+scroll-based JS highlighting** in `main.js`'s `updateActiveSideLink()` — that function only
+touches `.side-nav a[href^='#']` (bare-anchor links) via scroll position, so it never conflicts
+with the page-to-page `.nav-tree-link.active`/`.nav-tree-sub li a.active` classes, and the two
+coexist in the same `<aside>` without stepping on each other.
+
+**If a 7th module or a new hand-written top-level page is ever added**, update **all three**
+places this tree is defined — there's no single source of truth across page types:
+`MODULE_ANCHORS`/`sideModulesNavHtml()` in `genlib.js` (92 detail pages, regenerate after), the
+hand-inserted tree block in each of the 6 module pages + `brd.html`, and `index.html`'s copy —
+each with its own path scheme per the list above. `CSS` for the tree (`.nav-tree*` classes) lives
+right after `.side-nav li a.active` in `style.css`; the JS toggle handler
+(`.nav-tree-toggle` click → flip `aria-expanded` + toggle `.open` on `btn.closest(".nav-tree-row")
+.nextElementSibling`) is in `main.js`'s `DOMContentLoaded` handler.
+
+**`Overview` and `BRD` are now `.nav-tree-module` entries too, not plain links** — an earlier
+version treated them as plain `<li><a class="nav-tree-link">` rows with a *separate* "On this
+page" `<div class="label">`+`<ul>` block floating below all 6 modules; the user flagged (again,
+with a screenshot) that this made the on-page section list look visually disconnected from
+Overview/BRD instead of nested under them like every module's submodules are. Fixed by converting
+both into `.nav-tree-module` rows — same link+toggle+`.nav-tree-sub` structure as the 6 modules —
+with their own page's sections as the sublist, pre-expanded (`aria-expanded="true"` + `.open`)
+since you're always "on" Overview when viewing `index.html` and "on" BRD when viewing `brd.html`.
+The separate "On this page" block was then deleted from both files — it's fully subsumed by the
+nested sublist now. **Detail pages and the 6 module pages don't need this same fix**: detail pages
+never had a second on-page list to begin with, and module pages already fold their own submodule
+list into their own tree entry (this was true since the collapsible tree was introduced) — only
+`index.html`'s Overview and `brd.html`'s BRD had a page-with-its-own-sections-plus-a-place-in-the-
+module-list situation, which is why they were the odd ones out.
+
+**On `index.html` specifically, the sidebar starts at the very top of the page content, not partway
+down.** An earlier version kept `.hero`, `.intro-story`, and `.badge-strip` full-width *above* the
+`.module-page` grid (so the sidebar only appeared once you scrolled past them) — the user flagged
+this with a screenshot showing the sidebar starting well below the fold and asked for it "from the
+top left" instead. Fixed by moving `.hero`/`.intro-story`/`.badge-strip` **inside** the grid's
+content `<div>` (right after `<aside>` closes, before the `#architecture` section) instead of
+before `<div class="module-page">` — so now `<main class="page"> → <div class="module-page">
+→ <aside>...` is the very first thing after the header on every page, `index.html` included, no
+exception. None of `.hero`/`.intro-story`/`.badge-strip`'s CSS uses fixed/viewport widths (hero
+uses `clamp()` for its `<h1>`, the badge grid is `repeat(auto-fit, minmax(170px, 1fr))`), so they
+reflow naturally into the narrower content column — don't add special-casing to make them
+full-width again, that would reintroduce the exact layout this fix removed.
+
+**Header, post-removal:** `<header class="site-header">` still exists on every page with just the
+brand logo (`<a class="brand">...CXOS...</a>`) — only the `<nav>`/toggle-button were removed, not
+the header element itself. Corresponding dead CSS (`nav.main-nav`, `.nav-list`, `.nav-list > li`,
+`.dropdown`, `.nav-caret`, `.nav-toggle`, and their `@media (max-width: 860px)` overrides) and dead
+JS (mobile hamburger toggle, tap-to-open dropdown, active-nav-by-page-path highlighting) were
+removed too — don't re-add stubs for markup that no longer exists.
+
+If you hand-edit `genlib.js`'s `renderItem()` template again, keep the indentation-nesting in mind
+even though it's cosmetic-only: the body sections are one level deeper (inside `<div>` inside
+`.module-page`) than the pre-sidebar version of this template, but browsers don't care about HTML
+whitespace, so don't spend time re-indenting `li()`-generated `<li>` blocks or
+`servicesConsumedBlock` to match — only fix indentation if you're touching that literal block
+anyway.
+
 ### Platform Connectors section (`.doc-table`, hand-written, one per module page)
 
 Every one of the 6 module pages ends with a `<section id="platform-connectors">` (just before
@@ -124,9 +229,9 @@ unnecessary for this table and asked for the column removed entirely across all 
 **don't re-add it.** If per-connector service dependencies are ever needed again, that's what
 `brd.html`'s DDD-layered Infrastructure rows are for (see "Microservices catalog" below) — don't
 duplicate that detail back into this table. Each module page also has a matching
-`<li><a href="#platform-connectors">` entry appended to its own side-nav (`aside.side-nav`) — this
-section is intentionally **not** added to the header dropdown nav (`genlib.js`'s `navHtml()`),
-since that would require regenerating all 92 detail pages just to add one more anchor.
+`<li><a href="#platform-connectors">` entry appended to its own side-nav (`aside.side-nav`), and
+(since the header dropdown nav was removed entirely, see "All Modules collapsible tree" above)
+also to every other page's copy of that module's submodule list in the tree.
 
 The `Cxos.Connectors.<System>` naming convention (e.g. `Cxos.Connectors.Salesforce`) originates
 from `data-sources-2.js`'s Business Systems items and `ingestion-layer.js`'s Connectors submodule
@@ -449,10 +554,11 @@ so cross-links between pages (e.g., "→ see Ingestion Layer's Queue & Retry") s
   accent), NFRs, assumptions, success metrics. BR-5/BR-6 no longer carry the "Planned" badge —
   their tables, the Scope section's "(Stage 5/6 — planned)" notes, and the Assumptions section's
   phased-delivery note were all updated when those two modules shipped. Uses `.doc-table` /
-  `.doc-meta-table` / `.priority` (must/should/could) CSS components. **BRD is a top-level nav
-  item** (added in `genlib.js`'s `navHtml()`, so it's already on all 92 generated pages — if you
-  ever hand-edit a module page's header nav, remember to add the `<li data-page="brd.html">`
-  entry there too, or it'll silently drop off just that page.
+  `.doc-meta-table` / `.priority` (must/should/could) CSS components. **BRD is a top-level entry
+  in the "All Modules" tree** (see that section above) on every page — it was originally a header
+  nav item back when the header nav still existed; that history is moot now since the header nav
+  is gone, but if you ever add a new top-level page, remember it needs an entry in all three tree
+  locations (`genlib.js` + 6 module pages/BRD + `index.html`), same as BRD does.
 - `index.html`'s intro copy and all 6 module cards reflect all six stages being fully specified
   (no "next"/"planned" language remaining for Intelligence & Services or Destinations &
   Activation).
