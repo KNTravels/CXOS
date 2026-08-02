@@ -249,6 +249,48 @@ adapts automatically. If you ever need to support browsers without `color-mix()`
 but don't remove the `color-mix()` version — it's what keeps this section low-maintenance across
 light/dark without duplicating every hex twice.
 
+**Horizontal counterpart** (2026-08-02): "The Five Horizontals" section (formerly "Cross-Cutting
+Foundation") has its own `<div class="handbook-block"><h3>Service Map</h3>...</div>` right after
+its `.foundation-grid`, reusing the identical `.service-db-grid`/`.service-db-card`/`.db-pill`
+markup — 5 cards (`Cxos.Observability.Api`, `Cxos.Security.Api`, `Cxos.DevPlatform.Api`,
+`Cxos.Tenancy.Api`, `Cxos.Admin.Api`), none of which exist yet in `brd.html`'s BR-1..BR-6 catalog
+since horizontals aren't one of the six verticals. All 5 use `--card-accent:#3454d1` (the same
+brand-blue already used for `brd.html`'s cross-cutting sections — Document Control, NFR,
+Assumptions, Success Metrics — rather than any of the six per-vertical accent colors), since a
+horizontal doesn't belong to one stage. `Cxos.Security.Api` intentionally has **no `.db-pill`** —
+it delegates to Azure Key Vault/Azure AD rather than owning a database, shown as a plain `.tag`
+note instead ("No CXOS-owned database — delegates to...") so the absence of a pill reads as a
+deliberate architectural choice, not a missing entry. If these 5 horizontal services are ever
+formalized with a full DDD breakdown, add them to `brd.html` as their own subsection (they don't
+fit under any single BR-1..BR-6) and keep this card grid's namespaces in sync with that.
+
+**Clickable, with a detail modal (2026-08-02):** every one of the 13 `.service-db-card`s (8
+vertical + 5 horizontal) is clickable — `data-service="<slug>"` + `role="button"` + `tabindex="0"`
+on the card, opening `#serviceModalBackdrop` (markup at the bottom of `index.html`, next to the
+existing `.lightbox`) populated from a `SERVICE_DETAILS` JS object in `js/main.js`. Each entry has
+four sections rendered into the modal: **Overview** (1-2 sentences), **Databases** (reuses the
+same `.db-pill` markup as the card, or a plain `.tag` note for the no-database case —
+`security`'s entry has `dbs: []` + `dbNote` instead, don't give it a fake pill), **DDD Layers**
+(all 4 — Domain/Application/Infrastructure/Api — even for the 5 horizontal entries, which don't
+exist in `brd.html`'s catalog; written fresh but in the same structure so the modal template stays
+uniform across all 13), and **Service Integration** (3-4 bullets, reusing `brd.html`'s
+"Interacts With" language for the 8 verticals so the two don't drift apart, hand-written but
+consistent for the 5 horizontals).
+
+- `initServiceModal()` in `main.js` is guarded (`if (!backdrop) return`) since `main.js` loads on
+  every page but the modal markup only exists on `index.html` — don't remove that guard.
+- **`SERVICE_DETAILS` keys must exactly match every card's `data-service` value** — if you add a
+  14th card (a new vertical or horizontal service), add both the `data-service` attribute and a
+  matching object entry, or the click handler silently no-ops (`if (!data) return`). After editing
+  either side, cross-check with a quick script that extracts every `data-service="..."` from
+  `index.html` and every top-level key from the `SERVICE_DETAILS` object in `main.js` and diffs
+  the two lists — don't rely on visual inspection for this, it's easy to typo a slug.
+- Close behavior: click the &#10005; button, click the backdrop (not the modal itself — checked
+  via `e.target === backdrop`), or Escape. Focus moves to the close button on open and returns to
+  the triggering card on close, for basic keyboard-nav hygiene — keep both when editing.
+- The modal reuses `.db-pill`, `.priority`, and `.feature-list` (for the integration bullets) —
+  don't introduce parallel one-off styles for content that already has a site-wide class.
+
 ### "How to Consume" blocks (all 22 submodule sections, hand-written on the 6 module pages)
 
 Every submodule `<section>` across all 6 module pages (the same 22 sections that hold a
