@@ -22,12 +22,18 @@ throwaway/local-only site.
 
 ```
 doc/
-├── index.html                 Overview: hero, architecture diagram, 6 module cards,
-│                               end-to-end flow, cross-cutting foundation, principles
+├── index.html                 Overview: hero, architecture diagram, 6 module cards, Full
+│                               Application Service Map, microservices diagram, end-to-end
+│                               flow, cross-cutting horizontals, principles, legend
 ├── css/style.css               Shared styles (light/dark aware)
-├── js/main.js                  Nav dropdowns/mobile menu, active-link highlighting, lightbox
-├── img/cxos-architecture.jpeg  The source diagram (do not delete — index.html embeds it)
+├── js/main.js                  Nav-tree collapsible toggles, active-link highlighting,
+│                                lightbox, Service Map detail modal
+├── img/cxos-architecture.jpeg  Original conceptual architecture diagram (index.html)
+├── img/cxos-microservices-architecture.svg   Hand-authored microservices flow diagram (index.html)
+├── img/lld-*.svg                Three LLD diagrams (sequence, ERD, deployment) — see LLD page below
 └── pages/
+    ├── brd.html                            Business Requirements Document (top-level, not a module)
+    ├── lld.html                             Low-Level Design (top-level, not a module) — see below
     ├── data-sources.html                  \_
     ├── ingestion-layer.html                |  6 hand-written module pages.
     ├── transformation-processing.html      |  Each has a sticky side-nav, a module-intro
@@ -46,8 +52,9 @@ doc/
     └── destinations-activation/*.html
 ```
 
-Header nav = the 6 modules; each has a dropdown of its submodule anchors. Module pages are
-3 clicks from home; detail pages are 4 (module → submodule anchor → detail page).
+**There is no header nav anymore** (removed 2026-08-02, see "All Modules collapsible tree" below).
+All navigation — Overview, BRD, LLD, and the 6 modules with their submodules nested underneath —
+lives in the collapsible tree inside every page's `<aside class="side-nav">`.
 
 ## The generator (`tools/docgen/`)
 
@@ -167,8 +174,10 @@ coexist in the same `<aside>` without stepping on each other.
 **If a 7th module or a new hand-written top-level page is ever added**, update **all three**
 places this tree is defined — there's no single source of truth across page types:
 `MODULE_ANCHORS`/`sideModulesNavHtml()` in `genlib.js` (92 detail pages, regenerate after), the
-hand-inserted tree block in each of the 6 module pages + `brd.html`, and `index.html`'s copy —
-each with its own path scheme per the list above. `CSS` for the tree (`.nav-tree*` classes) lives
+hand-inserted tree block in each of the 6 module pages + `brd.html` + `lld.html`, and `index.html`'s
+copy — each with its own path scheme per the list above. (`lld.html` was added 2026-08-02 as a
+4th top-level page, right after BRD in every one of these copies — see "Low-Level Design (LLD)
+page" below for its own content.) `CSS` for the tree (`.nav-tree*` classes) lives
 right after `.side-nav li a.active` in `style.css`; the JS toggle handler
 (`.nav-tree-toggle` click → flip `aria-expanded` + toggle `.open` on `btn.closest(".nav-tree-row")
 .nextElementSibling`) is in `main.js`'s `DOMContentLoaded` handler.
@@ -438,6 +447,55 @@ consistent for the 5 horizontals).
 - The modal reuses `.db-pill`, `.priority`, and `.feature-list` (for the integration bullets) —
   don't introduce parallel one-off styles for content that already has a site-wide class.
 
+### Low-Level Design (LLD) page (`pages/lld.html`) — added 2026-08-02, right after BRD
+
+A 4th top-level page, alongside Overview/BRD/the 6 modules — the implementation-grade companion
+to the BRD (business requirements) and the module pages (conceptual architecture): concrete
+sequence flows, database schemas, REST API contracts, and deployment topology. Structurally it's
+built exactly like `brd.html` — same header (brand only, no nav), same `.module-page` grid, same
+"All Modules" tree in the sidebar with its own page sections nested under a `.nav-tree-module`
+entry for "LLD" (pre-expanded, matching how BRD and Overview nest their own sections) — copy
+`brd.html`'s skeleton if you need a reference for the pattern rather than starting from scratch.
+
+**Ten sections**, in order: Purpose & Scope · Sequence Diagram (event flow) · Component Design
+(`Cxos.Ingestion.Api` internal layering, worked through as the one representative example so the
+pattern is clear for every other `Cxos.*.Api`) · Core Data Model (ERD) · Database Schema Detail
+(one concrete schema artifact per store in the polyglot design — PostgreSQL DDL, Cosmos DB
+document JSON, Cosmos DB Gremlin traversal, Redis key patterns, Iceberg table DDL) · API Contracts
+(request/response JSON for the three calls shown in the sequence diagram) · Deployment
+Architecture · Error Handling & Resiliency (a `.doc-table` of failure scenario → strategy →
+owning service) · Security Design Detail · Observability Design.
+
+**Three hand-authored SVG diagrams** in `doc/img/`, using the exact same `.diagram-frame` +
+click-to-zoom pattern as `index.html`'s two diagrams (the lightbox JS already generically supports
+any number of `.diagram-frame img` elements per page — see the note above, nothing further needed
+to wire these up):
+- `lld-sequence-event-flow.svg` — a classic UML-style sequence diagram, 7 lifelines (Customer →
+  Web/Mobile App → Cxos.Ingestion.Api → Azure Event Hubs → Cxos.Processing.Api →
+  Cxos.Profile.Api → Cxos.Activation.Api, plus an "external" SendGrid box with no lifeline of its
+  own), numbered messages (solid = call, dashed = response), and dashed note boxes for
+  internal/passive steps (e.g. "dedupe · stitch identity · enrich") rather than true self-loop
+  arrows, which are fiddly to hand-draw correctly in raw SVG — notes are genuine UML convention,
+  not a shortcut.
+- `lld-entity-relationship.svg` — 8 entities (Tenant, CustomerProfile, IdentityGraph, Event,
+  EventSchema, PropensityScore, ActivationDispatch, UsageRecord), box color = owning database
+  (reuses the exact same hex values as the homepage's DB legend — `#336791` Postgres, `#12a4a4`
+  Cosmos DB, `#2e9e5b` ADLS Gen2 — **keep these in sync if the DB legend colors ever change**),
+  relationship lines with cardinality labels.
+- `lld-deployment-topology.svg` — Azure infra grouped into trust/network zones (Client, Edge/
+  Ingress, Compute–AKS, Compute–Azure Container Apps, Messaging, Data, and a cross-cutting
+  Security & Ops band at the bottom) — same "band underneath everything" visual language as the
+  Horizontals band in the microservices architecture diagram.
+
+**All three were hand-authored the same way as `cxos-microservices-architecture.svg`** — this
+environment has no raster image-generation tool, so SVG (plain XML, buildable directly) is the
+only way to produce supporting diagrams. **Same validation requirement applies**: strict XML only
+recognizes `&amp; &lt; &gt; &apos; &quot;` as named entities — `&middot;` is *not* valid (all three
+LLD diagrams originally used it and had to be swept for `&#183;` after the fact); check any new
+diagram with a throwaway Node script before considering it done, not just visually. If you extend
+one of these diagrams, keep the numbered-step / entity-box / zone-box conventions already
+established rather than inventing a new visual language per diagram.
+
 ### "How to Consume" blocks (all 22 submodule sections, hand-written on the 6 module pages)
 
 Every submodule `<section>` across all 6 module pages (the same 22 sections that hold a
@@ -540,7 +598,8 @@ so cross-links between pages (e.g., "→ see Ingestion Layer's Queue & Retry") s
 
 ## Status (update this section as work continues)
 
-**Done** (92 generated detail pages + 6 module pages + `index.html` + `pages/brd.html` = 100 pages total, all link-validated):
+**Done** (92 generated detail pages + 6 module pages + `index.html` + `pages/brd.html` +
+`pages/lld.html` = 101 pages total, all link-validated):
 - Data Sources — all 3 submodules (15 items)
 - Ingestion Layer — all 5 submodules (15 items)
 - Transformation & Processing — all 3 submodules (14 items)
@@ -555,13 +614,26 @@ so cross-links between pages (e.g., "→ see Ingestion Layer's Queue & Retry") s
   their tables, the Scope section's "(Stage 5/6 — planned)" notes, and the Assumptions section's
   phased-delivery note were all updated when those two modules shipped. Uses `.doc-table` /
   `.doc-meta-table` / `.priority` (must/should/could) CSS components. **BRD is a top-level entry
-  in the "All Modules" tree** (see that section above) on every page — it was originally a header
-  nav item back when the header nav still existed; that history is moot now since the header nav
-  is gone, but if you ever add a new top-level page, remember it needs an entry in all three tree
-  locations (`genlib.js` + 6 module pages/BRD + `index.html`), same as BRD does.
+  in the "All Modules" tree** on every page (see that section above) — same for **LLD**, added
+  right after it (2026-08-02). Adding a new top-level page means updating all 4 tree locations
+  (`genlib.js` + 6 module pages + BRD + LLD's own copy + `index.html`), same as both do.
+- `pages/lld.html` — Low-Level Design: sequence diagram (event flow), component/class-layer
+  design for `Cxos.Ingestion.Api`, core data model (ERD), per-store database schema DDL, REST API
+  contracts, deployment topology, error handling, security, and observability design. Three
+  hand-authored SVG diagrams in `doc/img/lld-*.svg` (sequence, ERD, deployment) — see "Low-Level
+  Design (LLD) page" section above for detail on each and how to extend them.
 - `index.html`'s intro copy and all 6 module cards reflect all six stages being fully specified
   (no "next"/"planned" language remaining for Intelligence & Services or Destinations &
   Activation).
+- **Mobile responsiveness pass (2026-08-02):** fixed a latent bug where `.side-nav`'s
+  `position: static` mobile override was silently ignored (an unconditional `.side-nav { position:
+  sticky }` rule appeared *later* in `style.css` than the `@media (max-width: 860px)` override
+  that was supposed to beat it — equal specificity means source order decides, so the override
+  never actually applied). Also bumped touch targets for `.nav-tree-toggle` and side-nav links to
+  ~40-44px on mobile, made the Service Map detail modal a full-width bottom sheet under 600px, and
+  removed a fully duplicated `.hld-diagram`/`.code-block` CSS block (the second copy, later in the
+  file and therefore the one actually governing behavior, already had `-webkit-overflow-scrolling:
+  touch`; the dead first copy lacked it and was deleted, not the other way round).
 
 All six stages of the architecture are now fully specified end to end. Future work here is
 either refining existing content or building out `code/` (currently empty, no relationship to

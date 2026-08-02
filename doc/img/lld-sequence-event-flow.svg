@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 760" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="seqSolid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1b1f2e"/>
+    </marker>
+    <marker id="seqDashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5a6072"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1280" height="760" fill="#f7f8fc"/>
+  <text x="30" y="30" font-size="17" font-weight="800" fill="#1b1f2e">Sequence Diagram &#8212; End-to-End Event Flow ("Product Viewed" &#8594; Activation)</text>
+  <text x="30" y="49" font-size="11.5" fill="#5a6072">Solid arrow = synchronous/async call &#183; Dashed arrow = response &#183; Dashed box = internal step (note)</text>
+
+  <!-- Lifeline headers -->
+  <g font-size="11.5" font-weight="700" text-anchor="middle" fill="#1b1f2e">
+    <rect x="15" y="66" width="120" height="40" rx="8" fill="#ffffff" stroke="#6a4fc2" stroke-width="2"/>
+    <text x="75" y="90">Customer</text>
+
+    <rect x="185" y="66" width="120" height="40" rx="8" fill="#e9f1fc" stroke="#2b7fd6" stroke-width="2"/>
+    <text x="245" y="84">Web/Mobile</text>
+    <text x="245" y="98">App (SDK)</text>
+
+    <rect x="365" y="66" width="130" height="40" rx="8" fill="#e9f1fc" stroke="#2b7fd6" stroke-width="2"/>
+    <text x="430" y="90">Cxos.Ingestion.Api</text>
+
+    <rect x="545" y="66" width="120" height="40" rx="8" fill="#f3effc" stroke="#6a4fc2" stroke-width="2"/>
+    <text x="605" y="84">Azure</text>
+    <text x="605" y="98">Event Hubs</text>
+
+    <rect x="725" y="66" width="130" height="40" rx="8" fill="#e5f4f2" stroke="#0f9b8e" stroke-width="2"/>
+    <text x="790" y="90">Cxos.Processing.Api</text>
+
+    <rect x="905" y="66" width="120" height="40" rx="8" fill="#fbf0e3" stroke="#d9822b" stroke-width="2"/>
+    <text x="965" y="90">Cxos.Profile.Api</text>
+
+    <rect x="1085" y="66" width="130" height="40" rx="8" fill="#fbe9ef" stroke="#c23b6d" stroke-width="2"/>
+    <text x="1150" y="90">Cxos.Activation.Api</text>
+  </g>
+
+  <!-- Lifelines -->
+  <g stroke="#c7cbdb" stroke-width="1.5" stroke-dasharray="3,3">
+    <line x1="75" y1="106" x2="75" y2="740"/>
+    <line x1="245" y1="106" x2="245" y2="740"/>
+    <line x1="430" y1="106" x2="430" y2="740"/>
+    <line x1="605" y1="106" x2="605" y2="740"/>
+    <line x1="790" y1="106" x2="790" y2="740"/>
+    <line x1="965" y1="106" x2="965" y2="740"/>
+    <line x1="1150" y1="106" x2="1150" y2="740"/>
+  </g>
+
+  <!-- Messages -->
+  <g font-size="11" fill="#1b1f2e">
+    <line x1="75" y1="132" x2="238" y2="132" stroke="#1b1f2e" stroke-width="1.6" marker-end="url(#seqSolid)"/>
+    <text x="80" y="126">1. views product</text>
+
+    <line x1="245" y1="168" x2="423" y2="168" stroke="#1b1f2e" stroke-width="1.6" marker-end="url(#seqSolid)"/>
+    <text x="250" y="162">2. POST /v1/events (product_viewed)</text>
+
+    <line x1="430" y1="204" x2="598" y2="204" stroke="#1b1f2e" stroke-width="1.6" marker-end="url(#seqSolid)"/>
+    <text x="435" y="198">3. publish (validated + enriched, consent checked)</text>
+
+    <line x1="430" y1="240" x2="252" y2="240" stroke="#5a6072" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#seqDashed)"/>
+    <text x="250" y="234" text-anchor="end">4. 202 Accepted</text>
+
+    <line x1="605" y1="276" x2="783" y2="276" stroke="#1b1f2e" stroke-width="1.6" marker-end="url(#seqSolid)"/>
+    <text x="610" y="270">5. consume (stream-worker consumer group)</text>
+
+    <rect x="700" y="292" width="180" height="34" rx="6" fill="#ffffff" stroke="#0f9b8e" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="790" y="306" text-anchor="middle" font-size="10">dedupe &#183; stitch identity &#183; enrich</text>
+    <text x="790" y="319" text-anchor="middle" font-size="10">write curated.* (ADLS Gen2, Iceberg)</text>
+
+    <line x1="790" y1="358" x2="958" y2="358" stroke="#1b1f2e" stroke-width="1.6" marker-end="url(#seqSolid)"/>
+    <text x="795" y="352">6. (dbt, scheduled) rebuild marts.customer_profile</text>
+
+    <rect x="875" y="374" width="180" height="34" rx="6" fill="#ffffff" stroke="#d9822b" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="965" y="388" text-anchor="middle" font-size="10">upsert profile document</text>
+    <text x="965" y="401" text-anchor="middle" font-size="10">(Cosmos DB Core API)</text>
+
+    <line x1="1150" y1="440" x2="973" y2="440" stroke="#1b1f2e" stroke-width="1.6" marker-end="url(#seqSolid)"/>
+    <text x="1145" y="434" text-anchor="end">7. GET /v1/profile/{customer_key}</text>
+
+    <line x1="965" y1="476" x2="1142" y2="476" stroke="#5a6072" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#seqDashed)"/>
+    <text x="970" y="470">8. 200 OK {consent_basis, ltv_band, churn_risk}</text>
+
+    <rect x="1085" y="512" width="150" height="20" rx="6" fill="#ffffff" stroke="#c23b6d" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="1160" y="526" text-anchor="middle" font-size="10">consent check passes</text>
+
+    <rect x="1000" y="552" width="230" height="34" rx="8" fill="#fbe9ef" stroke="#c23b6d" stroke-width="2"/>
+    <text x="1115" y="566" text-anchor="middle" font-size="11" font-weight="700">External: SendGrid</text>
+    <text x="1115" y="579" text-anchor="middle" font-size="9.5">(Cxos.Connectors.SendGrid)</text>
+
+    <line x1="1150" y1="606" x2="1120" y2="596" stroke="#1b1f2e" stroke-width="1.6" marker-end="url(#seqSolid)"/>
+    <text x="900" y="612">9. POST send (templated email, consent_checked: true)</text>
+
+    <line x1="1115" y1="642" x2="1145" y2="632" stroke="#5a6072" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#seqDashed)"/>
+    <text x="900" y="648">10. delivery status (sent/bounced/opened/clicked)</text>
+
+    <rect x="990" y="666" width="260" height="34" rx="6" fill="#ffffff" stroke="#c23b6d" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="1120" y="680" text-anchor="middle" font-size="10">delivery event republished to Azure Event Hubs</text>
+    <text x="1120" y="693" text-anchor="middle" font-size="10">as a new touchpoint (closes the loop)</text>
+  </g>
+
+  <text x="30" y="745" font-size="10.5" fill="#5a6072">Full field-level request/response schemas: see "API Contracts" below. Namespace/database ownership: see the Full Application Service Map on the homepage.</text>
+</svg>

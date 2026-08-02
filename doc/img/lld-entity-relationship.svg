@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 780" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="erdArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5a6072"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1280" height="780" fill="#f7f8fc"/>
+  <text x="30" y="30" font-size="17" font-weight="800" fill="#1b1f2e">Core Data Model &#8212; Entity Relationships Across the Polyglot Stores</text>
+  <text x="30" y="49" font-size="11.5" fill="#5a6072">Box color = owning database (matches the DB legend on the homepage) &#183; PK = primary key &#183; FK = foreign key</text>
+
+  <!-- Legend -->
+  <g font-size="10.5" fill="#1b1f2e">
+    <rect x="900" y="18" width="14" height="14" rx="3" fill="#e6eafb" stroke="#336791" stroke-width="1.5"/>
+    <text x="919" y="29">PostgreSQL</text>
+    <rect x="1000" y="18" width="14" height="14" rx="3" fill="#e0f7f5" stroke="#12a4a4" stroke-width="1.5"/>
+    <text x="1019" y="29">Cosmos DB</text>
+    <rect x="1105" y="18" width="14" height="14" rx="3" fill="#e8f5ec" stroke="#2e9e5b" stroke-width="1.5"/>
+    <text x="1124" y="29">ADLS Gen2</text>
+  </g>
+
+  <!-- Tenant -->
+  <g>
+    <rect x="40" y="66" width="230" height="112" rx="10" fill="#e6eafb" stroke="#336791" stroke-width="2"/>
+    <rect x="40" y="66" width="230" height="28" rx="10" fill="#336791"/>
+    <text x="155" y="85" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Tenant</text>
+    <text x="52" y="110" font-size="10.5" fill="#1b1f2e">tenant_id <tspan fill="#5a6072">(PK)</tspan></text>
+    <text x="52" y="126" font-size="10.5" fill="#1b1f2e">name</text>
+    <text x="52" y="142" font-size="10.5" fill="#1b1f2e">quota_limits</text>
+    <text x="52" y="158" font-size="10.5" fill="#5a6072">Cxos.Tenancy.Api</text>
+  </g>
+
+  <!-- EventSchema -->
+  <g>
+    <rect x="1010" y="66" width="230" height="112" rx="10" fill="#e6eafb" stroke="#336791" stroke-width="2"/>
+    <rect x="1010" y="66" width="230" height="28" rx="10" fill="#336791"/>
+    <text x="1125" y="85" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">EventSchema</text>
+    <text x="1022" y="110" font-size="10.5" fill="#1b1f2e">event_type, version <tspan fill="#5a6072">(PK)</tspan></text>
+    <text x="1022" y="126" font-size="10.5" fill="#1b1f2e">owner_team</text>
+    <text x="1022" y="142" font-size="10.5" fill="#1b1f2e">compatibility</text>
+    <text x="1022" y="158" font-size="10.5" fill="#5a6072">Cxos.Processing.SchemaGovernance.Api</text>
+  </g>
+
+  <!-- IdentityGraph -->
+  <g>
+    <rect x="40" y="300" width="230" height="112" rx="10" fill="#e0f7f5" stroke="#12a4a4" stroke-width="2"/>
+    <rect x="40" y="300" width="230" height="28" rx="10" fill="#12a4a4"/>
+    <text x="155" y="319" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">IdentityGraph (edge)</text>
+    <text x="52" y="344" font-size="10.5" fill="#1b1f2e">identifier_value, type <tspan fill="#5a6072">(PK)</tspan></text>
+    <text x="52" y="360" font-size="10.5" fill="#1b1f2e">customer_key <tspan fill="#5a6072">(FK)</tspan></text>
+    <text x="52" y="376" font-size="10.5" fill="#1b1f2e">confidence</text>
+    <text x="52" y="392" font-size="10.5" fill="#5a6072">Cosmos DB Gremlin API</text>
+  </g>
+
+  <!-- CustomerProfile (center, larger) -->
+  <g>
+    <rect x="510" y="290" width="260" height="132" rx="10" fill="#e0f7f5" stroke="#12a4a4" stroke-width="3"/>
+    <rect x="510" y="290" width="260" height="30" rx="10" fill="#12a4a4"/>
+    <text x="640" y="310" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">CustomerProfile</text>
+    <text x="522" y="337" font-size="10.5" fill="#1b1f2e">customer_key <tspan fill="#5a6072">(PK)</tspan></text>
+    <text x="522" y="353" font-size="10.5" fill="#1b1f2e">tenant_id <tspan fill="#5a6072">(FK)</tspan></text>
+    <text x="522" y="369" font-size="10.5" fill="#1b1f2e">lifecycle_stage, ltv_band</text>
+    <text x="522" y="385" font-size="10.5" fill="#1b1f2e">consent_basis</text>
+    <text x="522" y="401" font-size="10.5" fill="#1b1f2e">churn_risk, conversion_propensity</text>
+    <text x="522" y="417" font-size="10.5" fill="#5a6072">Cxos.Profile.Api &#183; Core Domain</text>
+  </g>
+
+  <!-- Event -->
+  <g>
+    <rect x="1010" y="290" width="230" height="132" rx="10" fill="#e8f5ec" stroke="#2e9e5b" stroke-width="2"/>
+    <rect x="1010" y="290" width="230" height="28" rx="10" fill="#2e9e5b"/>
+    <text x="1125" y="309" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Event</text>
+    <text x="1022" y="334" font-size="10.5" fill="#1b1f2e">event_id <tspan fill="#5a6072">(PK)</tspan></text>
+    <text x="1022" y="350" font-size="10.5" fill="#1b1f2e">customer_key <tspan fill="#5a6072">(FK)</tspan></text>
+    <text x="1022" y="366" font-size="10.5" fill="#1b1f2e">event_type, version <tspan fill="#5a6072">(FK)</tspan></text>
+    <text x="1022" y="382" font-size="10.5" fill="#1b1f2e">timestamp, properties (JSON)</text>
+    <text x="1022" y="405" font-size="10.5" fill="#5a6072">curated.identity_stitched_events</text>
+    <text x="1022" y="419" font-size="10.5" fill="#5a6072">ADLS Gen2 (Iceberg)</text>
+  </g>
+
+  <!-- PropensityScore -->
+  <g>
+    <rect x="40" y="560" width="230" height="112" rx="10" fill="#e0f7f5" stroke="#12a4a4" stroke-width="2"/>
+    <rect x="40" y="560" width="230" height="28" rx="10" fill="#12a4a4"/>
+    <text x="155" y="579" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">PropensityScore</text>
+    <text x="52" y="604" font-size="10.5" fill="#1b1f2e">customer_key <tspan fill="#5a6072">(FK)</tspan></text>
+    <text x="52" y="620" font-size="10.5" fill="#1b1f2e">churn_risk, conversion_propensity</text>
+    <text x="52" y="636" font-size="10.5" fill="#1b1f2e">model_version, scored_at</text>
+    <text x="52" y="652" font-size="10.5" fill="#5a6072">Cxos.Intelligence.Api (writes to Profile)</text>
+  </g>
+
+  <!-- ActivationDispatch -->
+  <g>
+    <rect x="510" y="560" width="260" height="112" rx="10" fill="#e0f7f5" stroke="#12a4a4" stroke-width="2"/>
+    <rect x="510" y="560" width="260" height="28" rx="10" fill="#12a4a4"/>
+    <text x="640" y="579" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">ActivationDispatch</text>
+    <text x="522" y="604" font-size="10.5" fill="#1b1f2e">dispatch_id <tspan fill="#5a6072">(PK)</tspan></text>
+    <text x="522" y="620" font-size="10.5" fill="#1b1f2e">customer_key <tspan fill="#5a6072">(FK)</tspan> &#183; trigger &#183; channel</text>
+    <text x="522" y="636" font-size="10.5" fill="#1b1f2e">status, dispatched_at</text>
+    <text x="522" y="652" font-size="10.5" fill="#5a6072">Cxos.Activation.Api &#183; Core Domain</text>
+  </g>
+
+  <!-- UsageRecord -->
+  <g>
+    <rect x="1010" y="560" width="230" height="112" rx="10" fill="#e6eafb" stroke="#336791" stroke-width="2"/>
+    <rect x="1010" y="560" width="230" height="28" rx="10" fill="#336791"/>
+    <text x="1125" y="579" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">UsageRecord</text>
+    <text x="1022" y="604" font-size="10.5" fill="#1b1f2e">tenant_id, period <tspan fill="#5a6072">(PK)</tspan></text>
+    <text x="1022" y="620" font-size="10.5" fill="#1b1f2e">ingestion_events, compute_minutes</text>
+    <text x="1022" y="636" font-size="10.5" fill="#1b1f2e">storage_gb, estimated_cost_usd</text>
+    <text x="1022" y="652" font-size="10.5" fill="#5a6072">Cxos.Operations.Api</text>
+  </g>
+
+  <!-- Relationships -->
+  <g stroke="#5a6072" stroke-width="1.5" fill="none">
+    <path d="M270,120 C 380,120 400,290 510,330" marker-end="url(#erdArrow)"/>
+    <path d="M270,366 L 510,356" marker-end="url(#erdArrow)"/>
+    <path d="M770,356 L 1010,356" marker-end="url(#erdArrow)"/>
+    <path d="M1125,178 L 1125,290" marker-end="url(#erdArrow)"/>
+    <path d="M600,422 L 300,560" marker-end="url(#erdArrow)"/>
+    <path d="M660,422 L 660,560" marker-end="url(#erdArrow)"/>
+    <path d="M270,110 C 700,110 1000,300 1010,585" marker-end="url(#erdArrow)"/>
+  </g>
+  <g font-size="10" fill="#1b1f2e">
+    <text x="330" y="230">1&#8212;* owns</text>
+    <text x="330" y="360" text-anchor="middle">resolves to (1&#8212;1)</text>
+    <text x="880" y="350" text-anchor="middle">generates (1&#8212;*)</text>
+    <text x="1140" y="240">validates (1&#8212;*)</text>
+    <text x="410" y="500">scored (1&#8212;*)</text>
+    <text x="670" y="500">targeted by (1&#8212;*)</text>
+    <text x="850" y="240">meters (1&#8212;*)</text>
+  </g>
+
+  <text x="30" y="745" font-size="10.5" fill="#5a6072">Simplified for readability &#8212; e.g. IdentityGraph is really a set of edges per customer, not one row. Full field lists: see the database schema section below.</text>
+</svg>
