@@ -542,11 +542,26 @@ img { max-width: 100%; display: block; }
 }
 .nav-tree-toggle:hover { background: var(--surface-alt); }
 .nav-tree-toggle .caret {
+  /* Drawn with CSS borders, not the '>' glyph in the markup (font-size:0 hides
+     it) — a small chevron reads more clearly at this size than a rotated
+     angle-quote character, and this way no HTML file needs to change. */
   display: inline-block;
-  font-size: 12px;
-  transition: transform 0.15s ease;
+  font-size: 0;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  border-radius: 1px;
+  transform: rotate(45deg);
+  margin-top: -3px;
+  transition: transform 0.18s ease, margin-top 0.18s ease;
 }
-.nav-tree-toggle[aria-expanded="true"] .caret { transform: rotate(90deg); }
+.nav-tree-toggle[aria-expanded="true"] .caret {
+  /* Collapsed = chevron pointing down ("more below, tap to open").
+     Expanded = chevron pointing up ("tap to collapse"). */
+  transform: rotate(225deg);
+  margin-top: 3px;
+}
 .nav-tree-sub {
   list-style: none;
   margin: 2px 0 6px 8px;
@@ -618,7 +633,7 @@ img { max-width: 100%; display: block; }
   /* Bigger touch targets for the collapsible tree — 24px is below the ~40-44px
      minimum recommended tap size on touch devices. */
   .nav-tree-toggle { width: 40px; height: 40px; }
-  .nav-tree-toggle .caret { font-size: 15px; }
+  .nav-tree-toggle .caret { width: 8px; height: 8px; }
   .side-nav li a, .nav-tree-link { padding: 10px 10px; }
   .nav-tree-sub li a { padding: 9px 10px; }
 }
