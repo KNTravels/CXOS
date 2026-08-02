@@ -41,15 +41,8 @@ module.exports = [
           'Reverse ETL (.NET Core Activation API) — writes CXOS-computed fields (propensity, LTV) back to Salesforce custom fields',
         ],
         servicesConsumed: [
-          'Azure Key Vault (Connected App JWT cert)',
-          'Azure Kubernetes Service (hosts the connector + Ingestion API)',
-          'Azure API Management (Ingestion API gateway)',
-          'Cxos.Ingestion.Client (shared ingestion contract)',
-          'Azure Event Hubs (Batch/Stream Worker CDC merge)',
-          'Azure Functions Timer (scheduled Bulk API re-sync)',
-          'Azure Data Lake Storage Gen2 (CRM entity tables)',
-          'Application Insights (per-request tracing)',
-          'Salesforce Bulk API &amp; CDC (source-side)',
+          'Owning microservice &mdash; <code>Cxos.Connectors.Salesforce</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: CDC keeps sync incremental — full re-syncs are scheduled off-peak via an Azure Functions Timer trigger',
@@ -99,14 +92,8 @@ module.exports = [
           'Analytics API — LTV/RFM computation for downstream personalization',
         ],
         servicesConsumed: [
-          'Azure Functions (webhook receiver, consumption plan)',
-          'Azure Key Vault (Shopify app credentials)',
-          'Cxos.Ingestion.Client',
-          'Azure Event Hubs (order/line-item normalization stream)',
-          'Azure Functions Timer (nightly Bulk Operations reconciliation)',
-          'Azure Data Lake Storage Gen2 (order history)',
-          'Application Insights',
-          'Shopify Admin API &amp; Bulk Operations API (source-side)',
+          'Owning microservice &mdash; <code>Cxos.Connectors.Shopify</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: webhook volume spikes during flash sales — Azure Functions consumption plan scales automatically',
@@ -151,13 +138,8 @@ module.exports = [
           'Reverse ETL — writes CXOS profile context (LTV, tier) into the Zendesk ticket sidebar via a custom app',
         ],
         servicesConsumed: [
-          'Azure Functions (webhook receiver)',
-          'Azure Key Vault (Zendesk API credentials)',
-          'Cxos.Ingestion.Client',
-          'Azure Functions Timer (scheduled Search API backfill sync)',
-          'Azure Data Lake Storage Gen2 (ticket history)',
-          'Application Insights',
-          'Zendesk Webhooks API &amp; Search API (source-side)',
+          'Owning microservice &mdash; <code>Cxos.Connectors.Zendesk</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: ticket volume is modest compared to behavioral events — a webhook-first design is sufficient without a heavy queue',
@@ -202,13 +184,8 @@ module.exports = [
           'Reverse ETL — writes CXOS behavioral/propensity score into a HubSpot custom contact property',
         ],
         servicesConsumed: [
-          'Azure Functions (webhook receiver for property-change events)',
-          'Azure Functions Timer (scheduled CRM API full sync)',
-          'Azure Key Vault (HubSpot API credentials)',
-          'Cxos.Ingestion.Client',
-          'Azure Data Lake Storage Gen2 (marketing engagement history)',
-          'Application Insights',
-          'HubSpot Webhooks API &amp; CRM API (source-side)',
+          'Owning microservice &mdash; <code>Cxos.Connectors.HubSpot</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: contact volume is bounded by the marketing database size, not event volume — straightforward for the standard ingestion path',
@@ -253,14 +230,8 @@ module.exports = [
           'Activation API — triggers dunning email/SMS sequences and account-health alerts to Customer Success',
         ],
         servicesConsumed: [
-          'Azure Functions Timer (scheduled ERP/billing pull)',
-          'Azure Functions (near-real-time Stripe webhook handling)',
-          'Azure Key Vault (SAP/NetSuite/Stripe credentials)',
-          'Cxos.Ingestion.Client',
-          'Azure Data Lake Storage Gen2 (billing history)',
-          'Azure AD / Entra ID (access control on tokenized payment metadata)',
-          'Application Insights',
-          'SAP / NetSuite / Stripe APIs (source-side)',
+          'Owning microservice &mdash; <code>Cxos.Connectors.ErpBilling</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: account/invoice volume is modest relative to behavioral events; batch sync is sufficient for most fields',
@@ -310,6 +281,10 @@ module.exports = [
           'Cxos.Ingestion.Client NuGet package — batch mode',
           'Dead-letter Blob container — quarantined malformed records for review',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.Files</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
+        ],
         nfr: [
           'Scale: large historical backfills (10M+ rows) are chunked and streamed rather than loaded into memory',
           'Latency: file-based ingestion is inherently batch — typically processed within the hour of landing, not real-time',
@@ -350,6 +325,10 @@ module.exports = [
           'Scheduled watermark-based extract (.NET Core + Dapper, Azure Functions Timer) as a fallback',
           'Cxos.Ingestion.Client NuGet package',
           'Azure Event Hubs — change-event stream consumed by the Stream Worker',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.Cdc</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: CDC is designed to add minimal read load to the source database; extract jobs are rate-limited to protect OLTP performance',
@@ -394,6 +373,10 @@ module.exports = [
           'Cxos.Ingestion.Client NuGet package — shared contract, called by every configured connector instance',
           'Azure Key Vault — per-connector credential storage',
           'Azure API Management — inbound webhook endpoint exposure and throttling',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.Generic</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: each connector instance is independently rate-limited and scaled, so one noisy integration can\'t starve another',

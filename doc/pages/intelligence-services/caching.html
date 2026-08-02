@@ -145,6 +145,14 @@ Invalidated on: rollups_aggregations job completion</pre>
   </section>
 
   <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#129520;</span> Services Consumed</h2>
+    <ul class="feature-list">
+      <li>Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)</li>
+      <li>Database &mdash; Azure Database for PostgreSQL (semantic layer) + Azure Cache for Redis (query cache)</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
       <li>Scale: cache sizing tracks distinct-query cardinality among popular dashboards, not total data volume</li>

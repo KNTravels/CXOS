@@ -36,6 +36,10 @@ module.exports = [
           'Identity Graph — supplies the resolved customer_key this record is keyed on',
           'Profile API — the read path every downstream service and destination uses',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Profile.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (Core API + Gremlin API) + Azure Cache for Redis',
+        ],
         nfr: [
           'Scale: profile table grows linearly with customer count, not event count, keeping it compact relative to the raw event volume',
           'Latency: point lookups by customer_key return in single-digit milliseconds via Redis cache in front of PostgreSQL',
@@ -78,6 +82,10 @@ module.exports = [
           'Unified Customer Profile — resolves customer_key via this graph before every profile read',
           'AI &amp; Insights — anomaly detection flags identity edges with unusually low confidence',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Profile.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (Core API + Gremlin API) + Azure Cache for Redis',
+        ],
         nfr: [
           'Scale: edge count grows faster than customer count (many identifiers per customer), so the graph table is partitioned by customer_key for traversal performance',
           'Latency: single-hop resolution is cache-served in single-digit milliseconds; rare multi-hop traversals fall back to PostgreSQL and complete in under 100ms',
@@ -118,6 +126,10 @@ module.exports = [
           'Unified Customer Profile — household/account context is attached to profile reads on request',
           'Real-time Activation — household-level suppression rules (e.g., one offer email per household) read from this endpoint',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Profile.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (Core API + Gremlin API) + Azure Cache for Redis',
+        ],
         nfr: [
           'Scale: relationship edges are a small fraction of total customer count, so the table stays compact even at enterprise scale',
           'Latency: relationship lookups are cached alongside profile lookups and return in single-digit milliseconds',
@@ -157,6 +169,10 @@ Authorization: Bearer <service-token>
           'Unified Customer Profile, Identity Graph, Relationships — the underlying data this API serves',
           'Access Control (RBAC/ABAC) — enforced per request, per field',
           'Application Insights — per-request tracing and dependency tracking across every call',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Profile.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (Core API + Gremlin API) + Azure Cache for Redis',
         ],
         nfr: [
           'Scale: stateless service scales horizontally on AKS behind API Management; read-heavy traffic is absorbed by the Redis cache layer beneath it',
@@ -202,6 +218,10 @@ Authorization: Bearer <service-token>
           'AI Copilot — translates natural language into semantic-layer metric requests rather than raw SQL',
           'BI tools (Power BI, Looker-class tools) — connect via the semantic layer\'s query API, not directly to marts tables',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL (semantic layer) + Azure Cache for Redis (query cache)',
+        ],
         nfr: [
           'Scale: metric definitions grow with business complexity, not data volume — a governance/curation concern more than an infrastructure one',
           'Latency: metric compilation to SQL adds negligible overhead; actual query latency is dominated by the Query Optimizer and Caching layers beneath it',
@@ -245,6 +265,10 @@ Authorization: Bearer <service-token>
           'BI tools — query the catalog to populate metric picker UIs',
           'AI Copilot — uses the catalog to ground natural-language questions in valid, approved metrics',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL (semantic layer) + Azure Cache for Redis (query cache)',
+        ],
         nfr: [
           'Scale: catalog size tracks metric count (dozens to low hundreds), trivial relative to data volume',
           'Latency: catalog reads are cached aggressively since the list changes infrequently relative to query traffic',
@@ -285,6 +309,10 @@ WHERE event_date >= '2026-07-26';
           'Snowflake / Spark — offload targets for workloads beyond DataFusion\'s efficient range, via the same Iceberg tables',
           'Caching — the layer the optimizer checks before planning a fresh execution',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL (semantic layer) + Azure Cache for Redis (query cache)',
+        ],
         nfr: [
           'Scale: partition pruning keeps query cost roughly constant as total lakehouse size grows, since only relevant partitions are ever touched',
           'Latency: p95 interactive dashboard queries return in under 2 seconds against multi-billion-row fact tables',
@@ -321,6 +349,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Rollups &amp; Aggregations — actively invalidates cache entries on batch completion',
           'Query Optimizer — checks the cache before planning a fresh execution',
           'AI Copilot — benefits from cache hits on the common questions it fields repeatedly',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL (semantic layer) + Azure Cache for Redis (query cache)',
         ],
         nfr: [
           'Scale: cache sizing tracks distinct-query cardinality among popular dashboards, not total data volume',
@@ -369,6 +401,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Alerts &amp; Notifications (Operational Services) — routes detected anomalies to the owning team',
           'Data Quality Monitoring (Operational Services) — a related but distinct signal source; anomalies here are metric-level, not row-level',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Explorer/Kusto (scoring time series) + Azure Database for PostgreSQL',
+        ],
         nfr: [
           'Scale: scoring runs once per metric per refresh cycle, so cost scales with catalog size, not raw event volume',
           'Latency: anomalies are detected within one refresh cycle of the underlying metric — typically within the hour',
@@ -409,6 +445,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Azure Machine Learning — training, experiment tracking, model registry',
           'Propensity Scores — the primary consumer of trained model outputs',
           'Application Insights — tracks scoring-endpoint latency and error rates in production',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Explorer/Kusto (scoring time series) + Azure Database for PostgreSQL',
         ],
         nfr: [
           'Scale: training runs on a scheduled cadence (not per-request), so cost scales with retraining frequency, not query volume',
@@ -451,6 +491,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Real-time Activation — segments audiences by propensity threshold for campaigns',
           'Reverse ETL / CDP Sync — pushes scores into CRM so sales/support see them in their native workflow',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Explorer/Kusto (scoring time series) + Azure Database for PostgreSQL',
+        ],
         nfr: [
           'Scale: daily batch scoring covers the full active customer base; on-demand scoring is reserved for high-value, low-volume triggers to control cost',
           'Latency: batch scores are available by start of business; on-demand scores return in under 200ms',
@@ -487,6 +531,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Semantic Layer — the constrained vocabulary the model is grounded in',
           'Query Optimizer / Caching — executes the resolved query the normal way, no special-cased path',
           'AI Copilot — the conversational interface built on top of this capability',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Explorer/Kusto (scoring time series) + Azure Database for PostgreSQL',
         ],
         nfr: [
           'Scale: language parsing cost scales with question volume, not data volume, and is bounded by the fixed size of the semantic vocabulary',
@@ -525,6 +573,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Natural Language Query, Propensity Scores, Anomaly Detection — the capabilities the copilot composes',
           'Profile API — resolves customer_keys returned by other capabilities into readable profile summaries',
           'Application Insights — traces the full function-call chain per conversation for debugging and cost tracking',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Intelligence.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Explorer/Kusto (scoring time series) + Azure Database for PostgreSQL',
         ],
         nfr: [
           'Scale: conversation volume scales with active business users, a much smaller number than raw event volume',
@@ -572,6 +624,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Alerts &amp; Notifications — subscribes to workflow state-change events',
           'Application Insights — traces each workflow\'s step-by-step execution',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Operations.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL + Azure Cosmos DB Table API + Azure Data Explorer',
+        ],
         nfr: [
           'Scale: workflow volume is operational (dozens to hundreds concurrently), several orders of magnitude below customer event volume',
           'Latency: state transitions occur within seconds of the triggering event via Service Bus, not on a polling delay',
@@ -612,6 +668,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Anomaly Detection, Data Quality Monitoring, Workflow Engine — primary upstream signal sources',
           'Catalog (Metadata Layer) — owner metadata used to route an alert to the correct team',
           'SendGrid, Slack, PagerDuty — external delivery integrations',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Operations.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL + Azure Cosmos DB Table API + Azure Data Explorer',
         ],
         nfr: [
           'Scale: alert volume is bounded by monitored-metric and workflow count, not raw event volume',
@@ -654,6 +714,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Alerts &amp; Notifications — receives test-failure events for routing',
           'Catalog — quality scorecard is surfaced alongside each table\'s catalog entry',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Operations.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL + Azure Cosmos DB Table API + Azure Data Explorer',
+        ],
         nfr: [
           'Scale: test execution overhead scales with model count and test count, tuned to run within the existing batch window',
           'Latency: quality issues are caught within one dbt run cycle of the data landing — typically within the hour for high-frequency models',
@@ -695,6 +759,10 @@ Invalidated on: rollups_aggregations job completion`,
           'Query Optimizer — reports compute time per query for attribution',
           'Azure Data Lake Storage Gen2 — source of per-zone, per-tenant storage bytes',
           'Reverse ETL / CDP Sync — can push usage summaries into a finance system\'s native workflow',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Operations.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL + Azure Cosmos DB Table API + Azure Data Explorer',
         ],
         nfr: [
           'Scale: metering aggregation runs as a nightly rollup, decoupled from real-time request paths so it never adds latency to ingestion or query traffic',

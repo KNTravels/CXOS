@@ -49,6 +49,10 @@ module.exports = [
           'Azure AD B2C — end-user authentication / consent context',
           'Application Insights — end-to-end request tracing from the SDK through every downstream microservice',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
+        ],
         nfr: [
           'Scale: AKS autoscaling + Event Hubs throughput units absorb flash-sale traffic spikes without event loss',
           'Latency: sub-200ms edge-to-ingest typical, needed for real-time personalization',
@@ -101,6 +105,10 @@ module.exports = [
           'Azure Machine Learning — predictive maintenance / anomaly models',
           'Identity &amp; Profile microservice — device-to-customer pairing',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
+        ],
         nfr: [
           'Scale: IoT Hub scales to millions of concurrently connected devices via scale units',
           'Latency: most telemetry is near-real-time (minutes); safety-critical alerts use an Azure Function trigger for a sub-second path',
@@ -152,6 +160,10 @@ module.exports = [
           'POS integration — payment confirmation correlated to the session',
           'Reverse ETL (.NET Core Activation API + Azure Functions) — store operations dashboards and loyalty systems',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
+        ],
         nfr: [
           'Scale: thousands of stores, bursty peak-hour traffic per location — Ingestion API scales via AKS independent of any single store',
           'Latency: checkout flows need sub-second local response even if cloud sync lags',
@@ -202,6 +214,10 @@ module.exports = [
           'Azure OpenAI Service — intent/sentiment classification, AI Copilot',
           'Activation API + Azure Service Bus — agent handoff and journey triggers',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
+        ],
         nfr: [
           'Scale: bursty around support incidents/outages — Azure Functions consumption plan absorbs spikes without pre-provisioned capacity',
           'Latency: handoff/escalation events route through a dedicated high-priority Service Bus topic',
@@ -250,6 +266,10 @@ module.exports = [
           '<code>Cxos.Ingestion.Client</code> NuGet package — shared contract for the outbound call into the Ingestion API',
           'Azure Event Hubs — dual consumer groups (standard vs. compliance-priority)',
           'Reverse ETL (.NET Core Activation API + Azure Functions) — suppression list sync back to the ESP',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
         ],
         nfr: [
           'Scale: campaign sends can generate millions of webhook callbacks in a short burst — Azure Functions consumption plan scales out automatically',
@@ -302,6 +322,10 @@ module.exports = [
           'Azure OpenAI Service — transcript topic/sentiment modeling',
           'Reverse ETL — CRM case sync via the Activation API',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
+        ],
         nfr: [
           'Scale: call volume spikes correlate with outages/incidents — the batch pipeline is decoupled from real-time load',
           'Latency: most call analytics run as scheduled batch (hourly); escalation-risk flags use a near-real-time path where the CCaaS platform supports it',
@@ -352,6 +376,10 @@ module.exports = [
           'Azure Key Vault — platform API credential storage',
           'Reverse ETL (.NET Core Activation API) — audience sync back to ad platforms',
           'Azure OpenAI Service — sentiment and share-of-voice analysis',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
         ],
         nfr: [
           'Scale: platform API rate limits — not data volume — are usually the binding constraint; each connector function throttles independently',

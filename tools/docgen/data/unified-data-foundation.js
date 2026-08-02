@@ -31,6 +31,10 @@ marts.revenue_by_category_daily`,
           'Transformation &amp; Processing (Stream/Batch Workers) — populate curated and marts zones',
           'Query &amp; Analytics Engine — primarily reads from marts, falls back to curated for ad hoc queries',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Infrastructure</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Lake Storage Gen2 (Iceberg) &mdash; the lakehouse itself',
+        ],
         nfr: [
           'Scale: each zone scales independently; raw grows unboundedly while marts stays compact via aggregation',
           "Latency: raw zone is near-real-time; curated lags by the Stream Worker's processing time; marts lags by the batch schedule",
@@ -71,6 +75,10 @@ marts.revenue_by_category_daily`,
           'Query &amp; Analytics Engine (DataFusion) — primary read engine',
           'Any Iceberg-compatible engine (Spark, Trino, Snowflake via external tables) — can attach without migration',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Infrastructure</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Lake Storage Gen2 (Iceberg) &mdash; the lakehouse itself',
+        ],
         nfr: [
           "Scale: Iceberg's manifest-based metadata scales to very large tables without the small-file listing problems of raw Parquet/Hive tables",
           'Latency: metadata operations (snapshot listing, partition pruning) are fast regardless of table size',
@@ -110,6 +118,10 @@ spark.read.format("iceberg").load("curated.identity_stitched_events")`,
           'Query &amp; Analytics Engine, Azure Machine Learning, ad hoc tools — all read the same tables',
           'Governance &amp; Security — single point of access control since there is only one copy to secure',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Infrastructure</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Lake Storage Gen2 (Iceberg) &mdash; the lakehouse itself',
+        ],
         nfr: [
           'Scale: avoids the storage cost multiplication of N tools each holding their own copy',
           'Latency: no ETL delay between "data is ready" and "every tool can see it" — it is the same moment',
@@ -147,6 +159,10 @@ WHERE customer_key = 'cust_004821';`,
           'Query &amp; Analytics Engine — exposes the AS OF query syntax',
           'Audit Logs (Governance &amp; Security) — often cross-referenced with a specific snapshot for investigations',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Infrastructure</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Lake Storage Gen2 (Iceberg) &mdash; the lakehouse itself',
+        ],
         nfr: [
           'Scale: snapshot metadata overhead is small relative to data size; old snapshots are expired on a retention policy to bound storage growth',
           'Latency: querying a historical snapshot has the same performance characteristics as querying current data',
@@ -183,6 +199,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Event Schema &amp; Registry — governs which changes are safe to propagate into the lakehouse',
           'Data Modeling — dimensional tables evolve using this capability as business entities change',
           'Query &amp; Analytics Engine — must handle nulls gracefully for newly added columns on historical rows',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Infrastructure</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Lake Storage Gen2 (Iceberg) &mdash; the lakehouse itself',
         ],
         nfr: [
           'Scale: schema changes are metadata-only operations, independent of table size — no multi-hour rewrite of historical data',
@@ -222,6 +242,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Query &amp; Analytics Engine — partition pruning happens transparently during query planning',
           'Rollups &amp; Aggregations — batch jobs are designed around the date-partition boundary',
           'Azure Data Lake Storage Gen2 — physical file layout follows the partition structure',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Infrastructure</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Lake Storage Gen2 (Iceberg) &mdash; the lakehouse itself',
         ],
         nfr: [
           'Scale: good partitioning is what allows query performance to stay roughly constant as total table size grows',
@@ -263,6 +287,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Apache Iceberg snapshot expiration — bounds time-travel storage overhead',
           'Governance &amp; Security — defines retention and erasure requirements',
           'Scheduled .NET Core job (Azure Functions Timer) — executes the policy',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Infrastructure</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Data Lake Storage Gen2 (Iceberg) &mdash; the lakehouse itself',
         ],
         nfr: [
           'Scale: tiering and expiration run as background jobs sized to process the full lakehouse on a rolling schedule without impacting query performance',
@@ -310,6 +338,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Developer portal — surfaces catalog search to engineers',
           'Data Lakehouse — every table is auto-registered on creation',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Azure Database for PostgreSQL (policy/retention state)',
+        ],
         nfr: [
           'Scale: catalog scanning runs incrementally, not a full rescan of the lakehouse on every change',
           'Latency: catalog lookups are cached and fast; not a bottleneck for query planning',
@@ -351,6 +383,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Catalog — lineage is displayed alongside catalog entries',
           'Impact-analysis tooling — used before schema changes or deprecations',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Azure Database for PostgreSQL (policy/retention state)',
+        ],
         nfr: [
           'Scale: lineage graph grows with the number of tables and jobs, not event volume — manageable at any realistic pipeline count',
           'Latency: lineage updates as jobs run; current to the pipeline execution level, not the event level',
@@ -391,6 +427,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Query &amp; Analytics Engine\'s semantic layer — surfaces definitions in BI tools',
           'Domain teams — contribute and own definitions for their business terms',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Azure Database for PostgreSQL (policy/retention state)',
+        ],
         nfr: [
           'Scale: dictionary entries grow with business term count, not data volume — a curation effort, not an infrastructure concern',
           'Latency: not applicable — this is reference metadata, not a runtime dependency',
@@ -430,6 +470,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Azure AD (Entra ID) — role and group source of truth',
           'Shared policy-evaluation library — used by every lakehouse-reading service',
           "Governance & Security's Access Control — the enforcement mechanism this metadata drives",
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Azure Database for PostgreSQL (policy/retention state)',
         ],
         nfr: [
           'Scale: policy evaluation is a metadata lookup, not a per-row computation, keeping overhead low even on large tables',
@@ -479,6 +523,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Shared policy-evaluation library — enforced consistently across every lakehouse-reading service',
           'Audit Logs — every access decision is logged',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Azure Database for PostgreSQL (policy/retention state)',
+        ],
         nfr: [
           'Scale: policy evaluation adds negligible overhead per query regardless of lakehouse size',
           'Latency: sub-millisecond policy checks via cached role/attribute lookups',
@@ -518,6 +566,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           "Governance & Security's policy engine — purpose-based query-time filtering",
           'Preference center — source of consent state changes',
           'Query &amp; Analytics Engine — respects consent_basis on every purpose-tagged query',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Azure Database for PostgreSQL (policy/retention state)',
         ],
         nfr: [
           'Scale: consent state is a small, frequently-read field per customer — well within normal query patterns',
@@ -559,6 +611,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Catalog — stores classification alongside technical schema',
           'Access Control (RBAC/ABAC) — masking rules are driven by classification',
           'Encryption — sensitive-PII may warrant stronger encryption keys/rotation policy',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Azure Database for PostgreSQL (policy/retention state)',
         ],
         nfr: [
           'Scale: classification is metadata, not a runtime computation — no performance concern',
@@ -602,6 +658,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Compliance reporting tools — query the audit log store',
           'Azure Monitor — operational alerting on suspicious audit patterns',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Azure Database for PostgreSQL (policy/retention state)',
+        ],
         nfr: [
           'Scale: audit logging is append-only and write-optimized, sized for governance-relevant decision volume, not raw event volume',
           'Latency: audit writes are asynchronous relative to the action they log, so they never slow down the primary operation',
@@ -641,6 +701,10 @@ ADD COLUMN tax_amount DECIMAL(10,2);
           'Azure Key Vault — key management and rotation',
           'TLS 1.2+ / mTLS — in-transit encryption across every service boundary',
           "Azure AD managed identities — used instead of long-lived keys where possible to reduce exposure further",
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Foundation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Azure Database for PostgreSQL (policy/retention state)',
         ],
         nfr: [
           'Scale: encryption/decryption overhead is negligible relative to network and query time at this scale',

@@ -31,6 +31,10 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           'Queue &amp; Retry layer — the reason this control exists (at-least-once delivery upstream)',
           'Azure Monitor — dedup-rate metric, a useful early signal of upstream retry storms',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
+        ],
         nfr: [
           'Scale: Redis lookups are sub-millisecond even at high event throughput',
           'Latency: adds negligible per-event latency',
@@ -73,6 +77,10 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           'Analytics API — consumes session_start/session_end as first-class events',
           "Identity & Profile Service — sessions roll up into the customer's broader activity timeline",
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
+        ],
         nfr: [
           "Scale: session state is sharded by customer ID, scaling horizontally with the Stream Worker's partition count",
           'Latency: session_end fires within the configured timeout window, not instantly — an inherent tradeoff of inactivity-based sessionization',
@@ -114,6 +122,10 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           'Azure Database for PostgreSQL — identity graph storage',
           '.NET Core Stream Worker — calls the Identity API inline during processing to resolve/attach identity',
           'Every downstream consumer (Analytics, AI &amp; Insights, Activation) — reads the resolved user_id, not raw anonymous IDs',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
         ],
         nfr: [
           'Scale: identity graph lookups are cached for active sessions to avoid a database round-trip per event',
@@ -158,6 +170,10 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           'Data-quality dashboard (built on the Analytics API) — visibility for domain teams',
           "Event Schema & Registry — check rules are partly derived from the registered schema's constraints",
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
+        ],
         nfr: [
           'Scale: runs as a lightweight parallel stream, sized independently of the primary processing path',
           'Latency: checks operate on rolling windows (typically 15 minutes), trading a small detection delay for statistical stability',
@@ -196,6 +212,10 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           'Identity &amp; Profile Service — source of customer-tier/LTV enrichment',
           'Product catalog service — source of category/price enrichment',
           '.NET Core Stream Worker — where the joins are performed inline',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
         ],
         nfr: [
           'Scale: cache-backed lookups keep enrichment cost roughly constant regardless of event volume',
@@ -237,6 +257,10 @@ await _redis.StringSetAsync($"dedup:{evt.EventId}", 1, TimeSpan.FromHours(48));`
           'Azure Cache for Redis — holds in-flight windowed state per customer',
           'Azure Event Hubs — derived events are republished here, same as primary events',
           'Activation API — the most common consumer of derived events (e.g., cart-abandonment recovery)',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
         ],
         nfr: [
           "Scale: windowed state is sharded by customer ID and scales with the Stream Worker's partition count",
@@ -289,6 +313,10 @@ group by 1, 2`,
           "Data Lakehouse analytics-marts zone, or Snowflake via dbt's adapter — write destination",
           'Query &amp; Analytics Engine — the primary consumer of rollup tables for dashboards',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
+        ],
         nfr: [
           "Scale: dbt's incremental materialization processes only the current day/week partition rather than the full historical table, keeping runtime predictable as data grows",
           'Latency: rollups are typically available a few hours after the day/week closes — not real-time by design',
@@ -332,6 +360,10 @@ from {{ ref('stg_customer_profile') }}`,
           "Data Lakehouse analytics-marts zone, or Snowflake via dbt's adapter — model materialization target",
           "Query & Analytics Engine's semantic layer — maps business terms onto marts models",
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
+        ],
         nfr: [
           'Scale: dbt chooses incremental or full-refresh materialization per model based on data volume and change rate, keeping build times manageable as history grows',
           "Latency: models typically refresh on an hourly-to-daily cadence, matching the rollups' cadence",
@@ -368,6 +400,10 @@ from {{ ref('stg_customer_profile') }}`,
           'Iceberg time travel / versioning — enables safe, validated cutover before the new snapshot becomes current',
           'Docker container on Azure Container Apps Jobs — long-running backfill execution',
           'dbt test — runs against the validation target before the backfilled data is promoted',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
         ],
         nfr: [
           'Scale: large backfills (months to years of history) are chunked by date range and run as parallel dbt invocations',
@@ -409,6 +445,10 @@ def model(dbt, session):
           'Feature store table (Data Lakehouse) — where computed features are written',
           'AI &amp; Insights API — reads features at inference time',
           'Azure Machine Learning — training jobs read point-in-time feature snapshots',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)',
         ],
         nfr: [
           "Scale: dbt's incremental materialization updates only changed customers' feature rows rather than a full recompute each run",
@@ -457,6 +497,10 @@ def model(dbt, session):
           'Azure Database for PostgreSQL — schema definition storage',
           'Developer portal — self-service schema lookup for engineering teams',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.SchemaGovernance.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL (relational, ACID)',
+        ],
         nfr: [
           'Scale: schema lookups are cached aggressively since schemas change far less often than events flow',
           'Latency: not on the hot path for event processing — validation caches the current schema rather than calling the registry per event',
@@ -499,6 +543,10 @@ def model(dbt, session):
           'Consumers (Analytics API, AI &amp; Insights, Activation API) — declare which schema version they are built against',
           'Developer portal — surfaces deprecation timelines to integration owners',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.SchemaGovernance.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL (relational, ACID)',
+        ],
         nfr: [
           'Scale: version history storage grows slowly relative to event volume — a non-issue operationally',
           'Latency: not applicable — versioning is a design-time concern, not a runtime performance factor',
@@ -539,6 +587,10 @@ def model(dbt, session):
           'Versioning system — breaking changes are automatically routed to major-version handling',
           'Developer portal — surfaces check results to the engineer proposing the change',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.SchemaGovernance.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL (relational, ACID)',
+        ],
         nfr: [
           'Scale: compatibility checks are fast, schema-diff operations — no meaningful performance concern',
           'Latency: runs synchronously in CI, adding seconds to a schema-change pull request, not minutes',
@@ -578,6 +630,10 @@ def model(dbt, session):
           'Governance &amp; Security\'s data classification taxonomy — the source of valid PII tags',
           'Data Governance team — reviews and updates the rule set over time',
           'Audit Logs — every governance rejection is logged for compliance visibility',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Processing.SchemaGovernance.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Database for PostgreSQL (relational, ACID)',
         ],
         nfr: [
           'Scale: policy checks are rule-based and fast, no different in cost from compatibility checking',

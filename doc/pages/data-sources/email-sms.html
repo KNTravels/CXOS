@@ -159,6 +159,14 @@
   </section>
 
   <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#129520;</span> Services Consumed</h2>
+    <ul class="feature-list">
+      <li>Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)</li>
+      <li>Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
       <li>Scale: campaign sends can generate millions of webhook callbacks in a short burst — Azure Functions consumption plan scales out automatically</li>
