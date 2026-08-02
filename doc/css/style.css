@@ -557,11 +557,64 @@ img { max-width: 100%; display: block; }
 .nav-tree-sub.open { display: block; }
 .nav-tree-sub li a { font-size: 12.5px; color: var(--text-muted); }
 
+/* Off-canvas mobile drawer: hidden by default (base rules, always loaded), the sidebar
+   slides in from the left over a dim backdrop instead of sitting inline. The hamburger
+   button and backdrop element are both created by main.js (initSidebarDrawer()), not
+   present in the HTML source — search there before adding markup for them. */
+.nav-toggle { display: none; }
+.sidenav-backdrop { display: none; }
+
 @media (max-width: 860px) {
-  /* Sidebar stacks above content instead of sticking down the page once the grid
-     collapses to one column — this must come after the base .side-nav rule above
-     (equal specificity, later wins) or the override is silently ignored. */
-  .side-nav { position: static; margin-bottom: 20px; }
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--text);
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  .nav-toggle:hover { background: var(--surface-alt); }
+
+  /* This must come after the base .side-nav rule above (equal specificity, later
+     wins) or the override is silently ignored — this exact bug bit the previous
+     `position: static` version of this override too. */
+  .side-nav {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    z-index: 500;
+    border-radius: 0;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+  .side-nav.open { transform: translateX(0); }
+
+  .sidenav-backdrop {
+    display: block;
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 12, 20, 0.5);
+    z-index: 400;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .sidenav-backdrop.open { opacity: 1; pointer-events: auto; }
+
   /* Bigger touch targets for the collapsible tree — 24px is below the ~40-44px
      minimum recommended tap size on touch devices. */
   .nav-tree-toggle { width: 40px; height: 40px; }
