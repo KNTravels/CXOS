@@ -67,14 +67,16 @@ document.addEventListener("DOMContentLoaded", function () {
     updateActiveSideLink();
   }
 
-  // Lightbox for the architecture diagram
-  var diagramImg = document.querySelector(".diagram-frame img");
+  // Lightbox for architecture diagrams (there can be more than one on a page)
+  var diagramImgs = document.querySelectorAll(".diagram-frame img");
   var lightbox = document.querySelector(".lightbox");
-  if (diagramImg && lightbox) {
+  if (diagramImgs.length && lightbox) {
     var lightboxImg = lightbox.querySelector("img");
-    diagramImg.addEventListener("click", function () {
-      lightboxImg.src = diagramImg.src;
-      lightbox.classList.add("open");
+    diagramImgs.forEach(function (diagramImg) {
+      diagramImg.addEventListener("click", function () {
+        lightboxImg.src = diagramImg.src;
+        lightbox.classList.add("open");
+      });
     });
     lightbox.addEventListener("click", function () {
       lightbox.classList.remove("open");

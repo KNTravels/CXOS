@@ -152,6 +152,14 @@
   </section>
 
   <section class="submodule" style="--card-accent:#0f9b8e">
+    <h2><span class="icon">&#129520;</span> Services Consumed</h2>
+    <ul class="feature-list">
+      <li>Owning microservice &mdash; <code>Cxos.Processing.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)</li>
+      <li>Database &mdash; ADLS Gen2 (Iceberg) + Cosmos DB Table API (stream checkpoints)</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#0f9b8e">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
       <li>Scale: runs as a lightweight parallel stream, sized independently of the primary processing path</li>

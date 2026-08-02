@@ -170,7 +170,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="service-map">
     <div class="section-head">
       <div>
         <h2>Full Application Service Map</h2>
@@ -303,6 +303,19 @@
         <span class="tag">Cxos.Connectors.BatchExport</span>
       </div>
     </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Microservices Architecture Diagram</h2>
+        <p>Every <code>Cxos.*.Api</code> service from the map above, laid out as an actual flow &mdash; click to zoom.</p>
+      </div>
+    </div>
+    <div class="diagram-frame">
+      <img src="img/cxos-microservices-architecture.svg" alt="CXOS microservices architecture diagram: inbound connectors flow into Ingestion, Event Processing (validated by Schema Governance), Data Foundation & Governance, then fan out to Customer Profile and Analytics & AI Insights (which signal Operational Services), converging on Activation and out through outbound connectors, with Observability, Security, Developer Platform, Multi-Tenancy, and Administration running horizontally beneath every service.">
+    </div>
+    <p class="diagram-caption">Source diagram: doc/img/cxos-microservices-architecture.svg &mdash; solid = real-time/command flow, dashed = batch/query flow, dotted = signals &amp; cross-cutting. Full per-service detail (DDD layers, databases, integration points): click any card in the <a href="#service-map">Service Map above</a>, or see the <a href="pages/brd.html">BRD</a>.</p>
   </section>
 
   <section class="section">

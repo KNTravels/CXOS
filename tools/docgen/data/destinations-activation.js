@@ -35,6 +35,10 @@ module.exports = [
           'SendGrid — email delivery provider',
           'Azure Event Hubs — delivery/engagement events written back as new touchpoint data',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Activation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (dispatch log) + Azure Cache for Redis (frequency caps)',
+        ],
         nfr: [
           'Scale: designed for bursty campaign sends (tens of thousands of triggers in a short window) without backing up the Service Bus queue',
           'Latency: real-time triggers fire within 5 minutes of the qualifying event, per BR-6.2',
@@ -75,6 +79,10 @@ module.exports = [
           'Firebase Cloud Messaging — mobile push delivery provider',
           'Unified Customer Profile — device tokens, phone numbers, and channel-specific consent',
           'Workflow Engine (Operational Services) — enforces per-customer frequency caps across sends',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Activation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (dispatch log) + Azure Cache for Redis (frequency caps)',
         ],
         nfr: [
           'Scale: lower volume than email by design, given frequency capping — sized for bursty but bounded traffic',
@@ -117,6 +125,10 @@ module.exports = [
           'Google Ads Customer Match API / Meta Conversions API — destination platforms',
           'Consent Enforcement — audiences exclude customers who have withdrawn marketing consent before the sync ever runs',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Activation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (dispatch log) + Azure Cache for Redis (frequency caps)',
+        ],
         nfr: [
           'Scale: audience syncs run on a scheduled batch cadence (typically daily), sized for list sizes in the hundreds of thousands without per-record API calls',
           'Latency: not real-time by design — ad platform audience syncs typically run within the platform\'s own daily refresh window',
@@ -158,6 +170,10 @@ module.exports = [
           'Azure Cache for Redis — keeps response latency inside a page-render budget',
           'Azure API Management — gateway in front of the personalization endpoint',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Activation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (dispatch log) + Azure Cache for Redis (frequency caps)',
+        ],
         nfr: [
           'Scale: must handle full site/app traffic concurrency, not just campaign-triggered bursts — the highest-QPS destination in this module',
           'Latency: p99 under 150ms, since this call sits directly in the page-render or session-start critical path',
@@ -197,6 +213,10 @@ module.exports = [
           'Stream Worker (Transformation &amp; Processing) — evaluates in-session behavioral rules in real time',
           'Azure Service Bus — carries the triggering event to the Activation API',
           'Workflow Engine (Operational Services) — shared frequency-capping mechanism with SMS/Push',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Activation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (dispatch log) + Azure Cache for Redis (frequency caps)',
         ],
         nfr: [
           'Scale: bounded by concurrent active sessions, not total customer base — spikes with traffic, not campaign size',
@@ -245,6 +265,10 @@ module.exports = [
           'Azure Functions (Timer trigger) — runs the scheduled export job',
           'Audit Logs — records every export run for compliance traceability',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.BatchExport</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
+        ],
         nfr: [
           'Scale: export size scales with the requested table/date range, not total lakehouse size, since each export is scoped by query',
           'Latency: batch by design — runs on a defined schedule (typically daily/hourly), not on-demand',
@@ -287,6 +311,10 @@ module.exports = [
           'Azure Container Apps Jobs — runs the scheduled delivery job',
           'Alerts &amp; Notifications — pages the owning team on repeated delivery failure',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.BatchExport</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
+        ],
         nfr: [
           'Scale: per-partner file sizes are typically modest (single-digit GB), sized to the partner\'s own ingestion capability, not the lakehouse',
           'Latency: batch by design, on a defined schedule agreed with each partner',
@@ -328,6 +356,10 @@ CREATE EXTERNAL TABLE partner_db.order_fact
           'Governance &amp; Security — reviews and grants external-table access before any warehouse can attach',
           'Azure Data Lake Storage Gen2 — the physical location Snowflake attaches to directly',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.BatchExport</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
+        ],
         nfr: [
           'Scale: Snowflake attachment has no export-size limit since no copy is made; BigQuery load jobs are sized to the scheduled table/range like any batch export',
           'Latency: Snowflake external tables reflect the lakehouse in near-real-time (as fast as the underlying dbt refresh); BigQuery lags by its load schedule',
@@ -364,6 +396,10 @@ df = spark.read.format("iceberg") \\
           'Query &amp; Analytics Engine — read path for the Redshift scheduled load',
           'Governance &amp; Security — grants and reviews Databricks workspace access to lakehouse tables',
           'Predictive Models — Databricks is a common environment for ad hoc feature exploration ahead of formal dbt Python model changes',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.BatchExport</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: Databricks attachment has no export-size ceiling; Redshift loads are sized like any scheduled batch export',
@@ -410,6 +446,10 @@ df = spark.read.format("iceberg") \\
           'Workflow Engine (Operational Services) — tracks per-subscription delivery state and retries',
           'Azure Key Vault — stores per-subscriber signing secrets for payload verification',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Activation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (dispatch log) + Azure Cache for Redis (frequency caps)',
+        ],
         nfr: [
           'Scale: fan-out is designed for hundreds of concurrent subscribers without per-subscriber delivery becoming a bottleneck for any one',
           'Latency: webhook delivery typically completes within seconds of the source event, well inside the real-time activation SLA',
@@ -452,6 +492,10 @@ Authorization: Bearer <partner-scoped-token>
           'Profile API, Propensity Scores — underlying data this surface wraps with external-appropriate scoping',
           'Application Insights — per-partner usage and error tracking',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Activation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (dispatch log) + Azure Cache for Redis (frequency caps)',
+        ],
         nfr: [
           'Scale: rate limits are set per registered application to prevent one partner\'s traffic from degrading service for others',
           'Latency: p99 under 200ms, comparable to the internal Profile API since it wraps the same underlying data path',
@@ -492,6 +536,10 @@ Authorization: Bearer <partner-scoped-token>
           'Shared connector template — the scaffold every custom connector starts from',
           'Application Insights / Azure Monitor — standard observability every connector inherits',
           'Query &amp; Analytics Engine — common read path when a connector needs lakehouse data beyond the triggering event',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Activation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cosmos DB (dispatch log) + Azure Cache for Redis (frequency caps)',
         ],
         nfr: [
           'Scale: each custom connector is sized to its own destination\'s needs — no shared infrastructure bottleneck across unrelated connectors',
@@ -541,6 +589,10 @@ Authorization: Bearer <partner-scoped-token>
           'Salesforce Bulk API — the write mechanism for efficient high-volume upsert',
           'Consent Enforcement — synced fields respect the same purpose-based consent rules as any other consumer',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.Salesforce (write path)</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
+        ],
         nfr: [
           'Scale: bulk API upsert handles the full account/contact base in a single scheduled run rather than per-record calls',
           'Latency: hourly sync cadence by default, tunable per field group based on how time-sensitive the insight is',
@@ -582,6 +634,10 @@ Authorization: Bearer <partner-scoped-token>
           'Journeys &amp; Automation\'s webhook dispatcher — reused for the real-time sidebar context path',
           'Relationships (Identity &amp; Profile Service) — household ticket context surfaced in the sidebar',
           'Profile API — underlying data source for both the bulk and real-time paths',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.Zendesk (write path)</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: bulk sync covers the full customer base on a schedule; real-time sidebar calls scale with concurrent open tickets, a much smaller number',
@@ -625,6 +681,10 @@ Authorization: Bearer <partner-scoped-token>
           'Semantic Layer — the same governed segment definitions used for Ad Platforms sync, reused here for consistency',
           'HubSpot Contacts API — the write mechanism for list membership and contact properties',
           'Consent Enforcement — contacts who have withdrawn marketing consent are excluded from segment sync',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.HubSpot (write path)</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: contact sync runs against the full active-customer segment population on a schedule, not per-contact calls',

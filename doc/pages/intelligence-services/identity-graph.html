@@ -152,6 +152,14 @@
   </section>
 
   <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#129520;</span> Services Consumed</h2>
+    <ul class="feature-list">
+      <li>Owning microservice &mdash; <code>Cxos.Profile.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)</li>
+      <li>Database &mdash; Azure Cosmos DB (Core API + Gremlin API) + Azure Cache for Redis</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
       <li>Scale: edge count grows faster than customer count (many identifiers per customer), so the graph table is partitioned by customer_key for traversal performance</li>

@@ -40,6 +40,10 @@ Cxos.track('product_viewed', {
           'Consent Management Platform hook — gates SDK initialization until consent is granted',
           'Ingestion API (ASP.NET Core on AKS) — validates and publishes to Azure Event Hubs',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only)',
+        ],
         nfr: [
           'Scale: client-side batching (configurable flush interval/size) reduces request volume during high-traffic pages',
           'Latency: events are queued in-memory and flushed asynchronously so tracking never blocks page rendering',
@@ -84,6 +88,10 @@ Cxos.track("product_viewed", properties: [
           'Local SQLite-backed offline event queue with a Polly-equivalent retry policy on sync',
           'Azure API Management — HTTPS ingress once connectivity is available',
           "Push notification token registration feeding the Activation API's real-time channel",
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only)',
         ],
         nfr: [
           'Scale: batched sync reduces battery/network impact on the device',
@@ -132,6 +140,10 @@ await _cxosClient.TrackAsync(new CxosEvent
           'Application Insights — the SDK propagates the caller\'s trace context automatically, so a server-emitted event is traceable end-to-end alongside client-emitted ones',
           'Used directly by every other connector/gateway described elsewhere in this handbook (IoT, Kiosk, batch connectors)',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only)',
+        ],
         nfr: [
           "Scale: server-side callers can emit at much higher throughput than client SDKs — the Ingestion API applies per-caller rate limits",
           'Latency: typically sub-100ms for a synchronous call to Azure API Management within the same Azure region',
@@ -178,6 +190,10 @@ await _cxosClient.TrackAsync(new CxosEvent
           'Application Insights — per-request distributed tracing and exception telemetry',
           'Azure Monitor — collection-tier health and throughput dashboards',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Application</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
+        ],
         nfr: [
           'Scale: AKS horizontal pod autoscaling keeps collection latency flat under load; acknowledgment happens before any heavy processing',
           'Latency: target is sub-100ms acknowledgment at the 99th percentile',
@@ -220,6 +236,10 @@ await _cxosClient.TrackAsync(new CxosEvent
           'Event Schema & Registry — schema versioning and compatibility rules',
           "Azure Monitor alert — notifies the owning team when their integration's failure rate spikes",
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Application</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
+        ],
         nfr: [
           'Scale: validation is a stateless, in-memory check — negligible latency overhead per event',
           'Latency: adds low-single-digit milliseconds to the collection-to-acknowledgment path',
@@ -257,6 +277,10 @@ await _cxosClient.TrackAsync(new CxosEvent
           '.NET Core Ingestion API middleware — enrichment runs inline before publishing to Event Hubs',
           'User-Agent parsing library — device/browser classification',
           "Identity & Profile Service — enriched geo/device fields feed the unified profile's device graph",
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Application</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
         ],
         nfr: [
           'Scale: enrichment lookups are cache-backed to keep per-event latency low even at high throughput',
@@ -299,6 +323,10 @@ await _cxosClient.TrackAsync(new CxosEvent
           '.NET Core Ingestion API — enforcement point, before Event Hubs publish',
           'Audit Logs (Governance & Security) — every consent decision is logged for compliance review',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Application</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
+        ],
         nfr: [
           'Scale: policy lookups are cached per consent-basis combination to avoid a database round-trip per event',
           'Latency: consent check adds negligible latency — it\'s a policy-table lookup, not an external call',
@@ -337,6 +365,10 @@ await _cxosClient.TrackAsync(new CxosEvent
           'Polly retry/circuit-breaker policies — built into Cxos.Ingestion.Client',
           'Consumer offset tracking (Stream Worker, batch jobs) — enables safe backlog catch-up',
           'Dead-letter topic — final fallback for events that exhaust retries',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Application</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only, no system-of-record database)',
         ],
         nfr: [
           'Scale: Event Hubs throughput units scale independently of consumer capacity, so ingestion never has to slow down to match a slower downstream stage',
@@ -384,6 +416,10 @@ await _cxosClient.TrackAsync(new CxosEvent
           'Schema Registry — enforces the Cxos.Ingestion.Client contract at the broker level',
           'Azure Monitor — broker-level throughput, consumer lag, and partition-skew dashboards',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Infrastructure</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; Azure Event Hubs is a message stream, not a store',
+        ],
         nfr: [
           'Scale: partition count is sized for peak expected throughput with headroom; partitioning by customer ID keeps load reasonably balanced',
           'Latency: sub-second producer-to-consumer latency under normal load',
@@ -430,6 +466,10 @@ await _cxosClient.TrackAsync(new CxosEvent
           'Azure Key Vault — per-instance credential storage',
           'Central connector registry — enables/configures instances without a new deployment',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.* (registry family)</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
+        ],
         nfr: [
           "Scale: each connector instance runs and scales independently, so one integration's load never affects another's",
           'Latency: varies by connector — webhook-based connectors are near-real-time, polling-based connectors follow their configured interval',
@@ -472,6 +512,10 @@ await _cxosClient.TrackAsync(new CxosEvent
           'Cxos.Ingestion.Client NuGet package',
           'Azure Key Vault — credential storage, same pattern as pre-built connectors',
           'Platform Engineering architectural review — before a custom connector goes to production',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Connectors.* (registry family)</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'No dedicated database &mdash; stateless connector (see Platform Connectors above)',
         ],
         nfr: [
           'Scale: no different from a pre-built connector once built — same deployment and scaling model (Azure Container Apps or AKS)',
@@ -518,6 +562,10 @@ Content-Type: application/json
           'Used by every SDK and most connectors as the default transport',
           'Azure Front Door — global entry point and DDoS protection ahead of API Management',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only)',
+        ],
         nfr: [
           'Scale: horizontally scaled behind Azure API Management; the default and most battle-tested transport',
           'Latency: typically the lowest-latency option for low-to-moderate throughput callers',
@@ -555,6 +603,10 @@ Content-Type: application/json
           'Protocol Buffers schema — compiled from the same source contract as the REST/JSON schema',
           'Used by the IoT Hub bridge and other high-throughput server-side producers',
           'Azure API Management — gRPC-aware routing where supported, or direct AKS ingress for internal callers',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only)',
         ],
         nfr: [
           'Scale: streaming RPCs let a single connection carry sustained high-throughput traffic without per-request HTTP overhead',
@@ -599,6 +651,10 @@ public async Task<HttpResponseData> Run(
           'Cxos.Ingestion.Client NuGet package — shared contract for the outbound call',
           'Azure API Management — public webhook endpoint exposure and throttling',
         ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only)',
+        ],
         nfr: [
           "Scale: Azure Functions consumption plan scales each receiver independently based on that platform's traffic pattern",
           'Latency: near-real-time — events land within seconds of the source platform\'s push',
@@ -640,6 +696,10 @@ public async Task<HttpResponseData> Run(
           "SFTP endpoint — Azure Blob Storage's native SFTP support for partners requiring it",
           'Blob-triggered Azure Function (.NET Core) — validation and batch ingestion',
           'Cxos.Ingestion.Client NuGet package — batch mode, same contract as real-time transports',
+        ],
+        servicesConsumed: [
+          'Owning microservice &mdash; <code>Cxos.Ingestion.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)',
+          'Database &mdash; Azure Cache for Redis (cache only)',
         ],
         nfr: [
           'Scale: large files are streamed and chunked rather than loaded into memory, supporting multi-million-row batches',

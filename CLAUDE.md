@@ -249,6 +249,48 @@ adapts automatically. If you ever need to support browsers without `color-mix()`
 but don't remove the `color-mix()` version — it's what keeps this section low-maintenance across
 light/dark without duplicating every hex twice.
 
+**`id="service-map"`** is on the section itself — every cross-page link to the Service Map (all 92
+detail pages' "Services Consumed" bullets, the diagram caption below, `SERVICE_DETAILS` modal
+content) points to `../../index.html#service-map` (or `#service-map` from `index.html` itself).
+Don't remove or rename this id without updating every one of those references.
+
+### Microservices architecture diagram (`doc/img/cxos-microservices-architecture.svg`)
+
+A hand-authored SVG (not a photo/screenshot like `cxos-architecture.jpeg`) added 2026-08-02,
+placed in its own `<section>` directly after "Full Application Service Map" on `index.html`,
+reusing the same `.diagram-frame` + click-to-zoom lightbox pattern as the original architecture
+diagram. It shows all 15 `Cxos.*.Api`/connector boxes (10 main-flow: inbound connectors →
+Ingestion → Event Processing ⟷ Schema Governance → Data Foundation & Governance → {Customer
+Profile, Analytics & AI Insights ⟷ Operational Services} → Activation → outbound connectors; plus
+5 horizontal-band boxes for Observability/Security/Developer Platform/Multi-Tenancy/Administration
+underneath everything) with arrows styled per the **same line-style legend already established in
+the "Legend" section further down `index.html`**: solid = real-time/command flow, dashed =
+batch/query flow, dotted = signals/cross-cutting. Core Domain boxes (Customer Profile, Activation)
+get a thicker border; Supporting Subdomain boxes with dashed borders (Schema Governance,
+Operational Services) sit off the main horizontal spine as satellite services.
+
+**Why hand-authored SVG, not a generated image:** this environment has no raster image-generation
+tool, but SVG is just XML that can be authored directly and displays identically via `<img
+src="...svg">` — same as the jpeg. **If you regenerate or edit this file, validate it's
+well-formed XML before committing** (a stray named HTML entity like `&mdash;` is invalid in strict
+XML/SVG and will fail to render — only `&amp; &lt; &gt; &apos; &quot;` and numeric refs like
+`&#8212;` are valid; literal UTF-8 characters like em dashes are also fine directly in the text).
+There's no bundled XML validator in this repo — a quick stack-based tag-balance + entity check via
+a throwaway Node script is sufficient (see how this file was originally validated: entity names
+were extracted via regex and checked against the 5 XML-predefined ones).
+
+**`main.js`'s lightbox was updated to support multiple diagrams per page** —
+`document.querySelectorAll(".diagram-frame img")` + `forEach`, not the original
+`querySelector` (singular), since `index.html` now has two `.diagram-frame` sections. If a third
+diagram is ever added anywhere, it'll automatically pick up click-to-zoom via the same lightbox
+element — no further JS changes needed.
+
+This diagram is intentionally not exhaustive about every edge (e.g. Operational Services' signal
+sources are represented by one illustrative dotted line + a caption, not 4 crossing lines from
+every service) — same "conceptual, not literal" philosophy as the original `cxos-architecture.jpeg`.
+For exact per-service detail, the diagram's caption links to the Service Map's click-to-open modals
+and to the BRD.
+
 **Horizontal counterpart** (2026-08-02): "The Five Horizontals" section (formerly "Cross-Cutting
 Foundation") has its own `<div class="handbook-block"><h3>Service Map</h3>...</div>` right after
 its `.foundation-grid`, reusing the identical `.service-db-grid`/`.service-db-card`/`.db-pill`
@@ -348,7 +390,7 @@ item:
 | `integration` | 3-5 bullets: Integration Points |
 | `nfr` | 4 bullets: Non-Functional Considerations (always cover Scale/Latency/Reliability/Security) |
 | `example` | One paragraph: Enterprise Example, with a concrete business outcome/number |
-| `servicesConsumed` | **Optional.** Bullets: every Azure/platform service + NuGet package the item touches end-to-end (Key Vault, compute host, Event Hubs/Functions, ADLS Gen2, Application Insights, plus the source-side API) — exhaustive, not the abbreviated 3-4 items already in `integration`. Renders as a new "Services Consumed" section (`genlib.js`, between Integration Points and NFR) only when present; omitting it renders nothing, so it's safe to leave unset on items not yet migrated. **Staged rollout (2026-08-02):** only populated on Data Sources' 5 Business Systems items (`crm-salesforce`, `commerce-shopify`, `support-zendesk`, `marketing-hubspot`, `erp-billing`) so far, paired with the same exhaustive list already on that module's page-level Platform Connectors table. Extend to other items' data files the same way — source the list from that item's own `technical`/`integration` content, don't invent services not already established there — after review.
+| `servicesConsumed` | **Required on every item now (2026-08-02, all 92/92 populated).** Renders as a "Services Consumed" section (`genlib.js`, between Integration Points and NFR). **Final format is deliberately light — exactly 2 bullets, not exhaustive:** (1) `Owning microservice — <code>Cxos.X.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)` — the `Cxos.*.Api` namespace comes from `brd.html`'s DDD catalog / the homepage Service Map, never invented per-item; (2) a `Database — ...` line naming the database(s) that owning service's Infrastructure layer uses (or `No dedicated database — stateless connector (see Platform Connectors above)` for the Generic Subdomain connector items). **This format was tried at exhaustive detail first, then deliberately simplified** — an earlier version listed every Azure service/NuGet package per item (mirroring what the module-level Platform Connectors table also tried and had removed, see below) but that's redundant with the `integration` array immediately above it in the same page and doesn't scale cleanly to 92 items; don't revert to the exhaustive form. |
 
 ### HLD diagrams — always write full 6 nodes, never the generic-pipeline shortcut
 

@@ -150,6 +150,14 @@
   </section>
 
   <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#129520;</span> Services Consumed</h2>
+    <ul class="feature-list">
+      <li>Owning microservice &mdash; <code>Cxos.Activation.Api</code> (see the <a href="../../index.html#service-map">Full Application Service Map</a>)</li>
+      <li>Database &mdash; Azure Cosmos DB (dispatch log) + Azure Cache for Redis (frequency caps)</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
       <li>Scale: lower volume than email by design, given frequency capping — sized for bursty but bounded traffic</li>
