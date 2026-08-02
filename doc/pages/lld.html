@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Low-Level Design (LLD) — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+</header>
+
+<main class="page">
+  <div class="breadcrumb"><a href="../index.html">Overview</a><span class="sep">/</span><span class="current">Low-Level Design</span></div>
+
+  <div class="module-page">
+    <aside class="side-nav">
+      <div class="label">All Modules</div>
+      <ul class="nav-tree">
+        <li><a class="nav-tree-link" href="../index.html">Overview</a></li>
+        <li><a class="nav-tree-link" href="brd.html">BRD</a></li>
+        <li class="nav-tree-module">
+          <div class="nav-tree-row">
+            <a href="lld.html" class="nav-tree-link active">LLD</a>
+            <button class="nav-tree-toggle" aria-expanded="true" aria-label="Toggle LLD sections"><span class="caret">&#8250;</span></button>
+          </div>
+          <ul class="nav-tree-sub open">
+            <li><a href="#purpose">Purpose &amp; Scope</a></li>
+            <li><a href="#sequence-diagram">Sequence Diagram: Event Flow</a></li>
+            <li><a href="#component-design">Component Design</a></li>
+            <li><a href="#data-model">Core Data Model</a></li>
+            <li><a href="#db-schema">Database Schema Detail</a></li>
+            <li><a href="#api-contracts">API Contracts</a></li>
+            <li><a href="#deployment">Deployment Architecture</a></li>
+            <li><a href="#error-handling">Error Handling &amp; Resiliency</a></li>
+            <li><a href="#security-design">Security Design Detail</a></li>
+            <li><a href="#observability-design">Observability Design</a></li>
+          </ul>
+        </li>
+        <li class="nav-tree-module">
+          <div class="nav-tree-row">
+            <a href="data-sources.html" class="nav-tree-link">1 &middot; Data Sources</a>
+            <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Data Sources submodules"><span class="caret">&#8250;</span></button>
+          </div>
+          <ul class="nav-tree-sub">
+            <li><a href="data-sources.html#customer-touchpoints">Customer Touchpoints</a></li>
+            <li><a href="data-sources.html#business-systems">Business Systems</a></li>
+            <li><a href="data-sources.html#files-integrations">Files &amp; Integrations</a></li>
+            <li><a href="data-sources.html#platform-connectors">Platform Connectors</a></li>
+          </ul>
+        </li>
+        <li class="nav-tree-module">
+          <div class="nav-tree-row">
+            <a href="ingestion-layer.html" class="nav-tree-link">2 &middot; Ingestion Layer</a>
+            <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Ingestion Layer submodules"><span class="caret">&#8250;</span></button>
+          </div>
+          <ul class="nav-tree-sub">
+            <li><a href="ingestion-layer.html#client-sdks">Client SDKs</a></li>
+            <li><a href="ingestion-layer.html#edge-network">Edge Network</a></li>
+            <li><a href="ingestion-layer.html#streaming-ingestion">Streaming Ingestion</a></li>
+            <li><a href="ingestion-layer.html#connectors">Connectors</a></li>
+            <li><a href="ingestion-layer.html#protocols-supported">Protocols Supported</a></li>
+            <li><a href="ingestion-layer.html#platform-connectors">Platform Connectors</a></li>
+          </ul>
+        </li>
+        <li class="nav-tree-module">
+          <div class="nav-tree-row">
+            <a href="transformation-processing.html" class="nav-tree-link">3 &middot; Transformation &amp; Processing</a>
+            <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Transformation &amp; Processing submodules"><span class="caret">&#8250;</span></button>
+          </div>
+          <ul class="nav-tree-sub">
+            <li><a href="transformation-processing.html#stream-processing">Stream Processing</a></li>
+            <li><a href="transformation-processing.html#batch-processing">Batch Processing</a></li>
+            <li><a href="transformation-processing.html#event-schema-registry">Event Schema &amp; Registry</a></li>
+            <li><a href="transformation-processing.html#platform-connectors">Platform Connectors</a></li>
+          </ul>
+        </li>
+        <li class="nav-tree-module">
+          <div class="nav-tree-row">
+            <a href="unified-data-foundation.html" class="nav-tree-link">4 &middot; Unified Data Foundation</a>
+            <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Unified Data Foundation submodules"><span class="caret">&#8250;</span></button>
+          </div>
+          <ul class="nav-tree-sub">
+            <li><a href="unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse</a></li>
+            <li><a href="unified-data-foundation.html#metadata-layer">Metadata Layer</a></li>
+            <li><a href="unified-data-foundation.html#governance-security">Governance &amp; Security</a></li>
+            <li><a href="unified-data-foundation.html#platform-connectors">Platform Connectors</a></li>
+          </ul>
+        </li>
+        <li class="nav-tree-module">
+          <div class="nav-tree-row">
+            <a href="intelligence-services.html" class="nav-tree-link">5 &middot; Intelligence &amp; Services</a>
+            <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Intelligence &amp; Services submodules"><span class="caret">&#8250;</span></button>
+          </div>
+          <ul class="nav-tree-sub">
+            <li><a href="intelligence-services.html#identity-profile">Identity &amp; Profile Service</a></li>
+            <li><a href="intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine</a></li>
+            <li><a href="intelligence-services.html#ai-insights">AI &amp; Insights</a></li>
+            <li><a href="intelligence-services.html#operational-services">Operational Services</a></li>
+            <li><a href="intelligence-services.html#platform-connectors">Platform Connectors</a></li>
+          </ul>
+        </li>
+        <li class="nav-tree-module">
+          <div class="nav-tree-row">
+            <a href="destinations-activation.html" class="nav-tree-link">6 &middot; Destinations &amp; Activation</a>
+            <button class="nav-tree-toggle" aria-expanded="false" aria-label="Toggle Destinations &amp; Activation submodules"><span class="caret">&#8250;</span></button>
+          </div>
+          <ul class="nav-tree-sub">
+            <li><a href="destinations-activation.html#real-time-activation">Real-time Activation</a></li>
+            <li><a href="destinations-activation.html#batch-file-exports">Batch / File Exports</a></li>
+            <li><a href="destinations-activation.html#apis-webhooks">APIs &amp; Webhooks</a></li>
+            <li><a href="destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync</a></li>
+            <li><a href="destinations-activation.html#platform-connectors">Platform Connectors</a></li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <div>
+      <div class="module-intro" style="--card-accent:#3454d1">
+        <div class="step">Low-Level Design</div>
+        <h1>CXOS — Low-Level Design (LLD)</h1>
+        <p>The implementation-grade companion to the BRD (business requirements) and the six module pages (conceptual architecture): concrete sequence flows, database schemas, API contracts, and deployment topology — the level of detail an engineer needs to build against or review a pull request with.</p>
+      </div>
+
+      <section id="purpose" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128218;</span> Purpose &amp; Scope</h2>
+        <p>The BRD answers <em>why</em> CXOS exists and what it must guarantee; the six module pages answer <em>what</em> each stage does conceptually; the BRD's Microservices catalog answers <em>which service owns what</em>. This document answers <em>how a single request or event actually moves through the system, byte for byte</em> — the sequence of calls, the shape of the data at each hop, the exact schema each store persists, and the topology it all runs on. It's scoped to the platform's <a href="#data-model">Core Domain</a> path (ingestion through activation, the flow used as the running example throughout) rather than re-deriving low-level detail for all 92 detail pages — each of those already documents its own Technical Overview, artifact payload, and Services Consumed.</p>
+        <div class="tag-row">
+          <span class="tag">Sequence flow</span>
+          <span class="tag">Database schema (DDL)</span>
+          <span class="tag">REST API contracts</span>
+          <span class="tag">Deployment topology</span>
+          <span class="tag">Error handling &amp; resiliency</span>
+          <span class="tag">Security &amp; observability</span>
+        </div>
+      </section>
+
+      <section id="sequence-diagram" class="section" style="margin-top:20px;">
+        <div class="section-head">
+          <div>
+            <h2>Sequence Diagram: End-to-End Event Flow</h2>
+            <p>A single "Product Viewed" event, from the browser to a delivered activation email — click to zoom.</p>
+          </div>
+        </div>
+        <div class="diagram-frame">
+          <img src="../img/lld-sequence-event-flow.svg" alt="Sequence diagram: Customer views a product, the Web/Mobile App SDK posts to Cxos.Ingestion.Api, which publishes to Azure Event Hubs and returns 202 Accepted; Cxos.Processing.Api consumes the event, dedupes/stitches/enriches it and writes to ADLS Gen2, then a scheduled dbt job rebuilds the customer profile in Cosmos DB; Cxos.Activation.Api later reads the profile for a consent and segment check, dispatches to SendGrid, and republishes the delivery status to Event Hubs as a new touchpoint.">
+        </div>
+        <p class="diagram-caption">Source diagram: doc/img/lld-sequence-event-flow.svg</p>
+        <div class="handbook-block">
+          <h3>Step-by-step</h3>
+          <ul class="feature-list">
+            <li>1&ndash;2. Browser SDK batches and POSTs the event to <code>Cxos.Ingestion.Api</code> via the shared <code>Cxos.Ingestion.Client</code> contract</li>
+            <li>3&ndash;4. Ingestion validates, enriches, and checks consent inline, publishes to Azure Event Hubs, and returns <code>202 Accepted</code> immediately &mdash; the client never waits on downstream processing</li>
+            <li>5. <code>Cxos.Processing.Api</code>'s Stream Worker consumes the event on its own consumer group, deduplicates it, stitches it to an identity, and writes it to the curated zone (ADLS Gen2, Iceberg)</li>
+            <li>6. On the next scheduled dbt run, <code>marts.customer_profile</code> is rebuilt and <code>Cxos.Profile.Api</code> upserts the resulting document into Cosmos DB</li>
+            <li>7&ndash;8. When a later trigger fires, <code>Cxos.Activation.Api</code> reads the profile for consent and segment before deciding to send anything &mdash; it never sends blind</li>
+            <li>9&ndash;10. The dispatch goes out through <code>Cxos.Connectors.SendGrid</code>; the delivery status is republished onto Event Hubs as a new touchpoint, closing the loop back into the same pipeline</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="component-design" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128736;</span> Component Design &mdash; <code>Cxos.Ingestion.Api</code> Internal Layering</h2>
+        <p>One representative service, worked through down to class responsibilities, so the pattern is clear enough to replicate for any other <code>Cxos.*.Api</code>. Every service in the BRD's DDD catalog follows the same four-layer shape (Domain has no dependencies on anything; Infrastructure implements the interfaces Domain declares &mdash; classic dependency inversion, not a Domain that reaches out to Azure SDKs directly).</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Layer</th><th>Representative Classes</th><th>Responsibility</th></tr>
+            <tr>
+              <td class="reqid">Api</td>
+              <td><code>IngestionController</code>, <code>EventDto</code></td>
+              <td>ASP.NET Core controller: <code>POST /v1/events</code>, <code>POST /v1/events/batch</code>. Maps HTTP &#8594; command, never contains business logic.</td>
+            </tr>
+            <tr>
+              <td class="reqid">Application</td>
+              <td><code>IngestionService</code>, <code>ValidateEventHandler</code>, <code>EnrichEventHandler</code>, <code>ConsentCheckHandler</code>, <code>PublishEventHandler</code></td>
+              <td>Orchestrates the use-case pipeline in order; each handler is independently unit-testable and has one job.</td>
+            </tr>
+            <tr>
+              <td class="reqid">Domain</td>
+              <td><code>Event</code>, <code>EventSchema</code>, <code>ConsentBasis</code> (entities/value objects); <code>IEventValidator</code>, <code>IConsentPolicy</code>, <code>IEventPublisher</code> (interfaces)</td>
+              <td>Pure business rules and contracts. No Azure SDK references, no I/O &mdash; fully unit-testable without a running dependency.</td>
+            </tr>
+            <tr>
+              <td class="reqid">Infrastructure</td>
+              <td><code>EventHubsPublisher : IEventPublisher</code>, <code>RedisEnrichmentCache</code>, <code>SchemaRegistryValidator : IEventValidator</code>, <code>KeyVaultSecretProvider</code></td>
+              <td>Implements Domain's interfaces against real Azure services. Swappable in tests via the interfaces above (e.g. an in-memory publisher for integration tests).</td>
+            </tr>
+          </table>
+        </div>
+        <div class="handbook-block">
+          <h3>Dependency Injection Wiring (Program.cs, abridged)</h3>
+          <pre class="code-block">services.AddScoped&lt;IEventValidator, SchemaRegistryValidator&gt;();
+services.AddScoped&lt;IConsentPolicy, ConsentEnforcementPolicy&gt;();
+services.AddScoped&lt;IEventPublisher, EventHubsPublisher&gt;();
+services.AddScoped&lt;IngestionService&gt;();
+
+// IngestionService constructor depends only on the interfaces above —
+// it has no idea Event Hubs or Redis exist.
+public IngestionService(IEventValidator validator, IConsentPolicy consent, IEventPublisher publisher) { ... }</pre>
+        </div>
+      </section>
+
+      <section id="data-model" class="section" style="margin-top:20px;">
+        <div class="section-head">
+          <div>
+            <h2>Core Data Model</h2>
+            <p>Entity relationships across the polyglot stores &mdash; click to zoom.</p>
+          </div>
+        </div>
+        <div class="diagram-frame">
+          <img src="../img/lld-entity-relationship.svg" alt="Entity relationship diagram: Tenant owns CustomerProfile and meters UsageRecord; IdentityGraph edges in Cosmos DB Gremlin API resolve to a CustomerProfile in Cosmos DB Core API; CustomerProfile generates Event rows in ADLS Gen2, validated against EventSchema in PostgreSQL; CustomerProfile is scored into PropensityScore and targeted by ActivationDispatch, both in Cosmos DB.">
+        </div>
+        <p class="diagram-caption">Source diagram: doc/img/lld-entity-relationship.svg</p>
+      </section>
+
+      <section id="db-schema" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128451;&#65039;</span> Database Schema Detail</h2>
+        <p>One concrete schema artifact per store in the polyglot persistence design &mdash; matches the database assignments already shown on the homepage's Full Application Service Map.</p>
+
+        <div class="handbook-block">
+          <h3>PostgreSQL &mdash; <code>event_schema</code> (Cxos.Processing.SchemaGovernance)</h3>
+          <pre class="code-block">CREATE TABLE event_schema (
+  event_type       text NOT NULL,
+  version          int  NOT NULL,
+  owner_team       text NOT NULL,
+  compatibility    text NOT NULL CHECK (compatibility IN ('backward','forward','full')),
+  pii_fields       text[] DEFAULT '{}',
+  registered_at    timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (event_type, version)
+);
+CREATE INDEX idx_event_schema_owner ON event_schema (owner_team);</pre>
+        </div>
+
+        <div class="handbook-block">
+          <h3>Cosmos DB Core API &mdash; CustomerProfile document (Cxos.Profile.Api)</h3>
+          <pre class="code-block">{
+  "id": "cust_004821",
+  "partitionKey": "tenant_northwind",
+  "tenant_id": "tenant_northwind",
+  "lifecycle_stage": "active",
+  "ltv_band": "gold",
+  "consent_basis": { "marketing": true, "analytics": true },
+  "churn_risk": 0.12,
+  "conversion_propensity": 0.34,
+  "model_version": "churn_risk_v4",
+  "updated_at": "2026-08-02T06:00:00Z",
+  "_etag": "\"a1b2c3d4\""
+}
+// Partitioned by tenant_id — keeps every tenant's profiles co-located
+// and enforces the isolation boundary Cxos.Tenancy.Api defines.</pre>
+        </div>
+
+        <div class="handbook-block">
+          <h3>Cosmos DB Gremlin API &mdash; IdentityGraph traversal (Cxos.Profile.Api)</h3>
+          <pre class="code-block">// Add a resolved edge
+g.V().has('customer', 'customer_key', 'cust_004821').as('c')
+  .addE('resolves_to').to(
+    g.addV('identifier').property('value', 'dev_88f2').property('type', 'device_id')
+  ).from('c')
+
+// Resolve any known identifier back to its canonical customer
+g.V().has('identifier', 'value', 'dev_88f2').out('resolves_to').values('customer_key')</pre>
+        </div>
+
+        <div class="handbook-block">
+          <h3>Azure Cache for Redis &mdash; key patterns (Cxos.Ingestion.Api, Cxos.Intelligence.Api)</h3>
+          <pre class="code-block">enrich:geo:{ip_hash}              TTL 24h    -- geo/device enrichment lookup cache
+idem:event:{event_id}             TTL 15m    -- idempotency/dedup key at ingestion
+profile:hot:{customer_key}        TTL 5m     -- hot-key read-through cache in front of Cosmos DB
+query:{metric_hash}:{dim_hash}    TTL varies -- semantic-layer query-result cache, invalidated on dbt run</pre>
+        </div>
+
+        <div class="handbook-block">
+          <h3>ADLS Gen2 (Iceberg) &mdash; curated table DDL (Cxos.Foundation.Api)</h3>
+          <pre class="code-block">CREATE TABLE curated.identity_stitched_events (
+  event_id         string,
+  customer_key     string,
+  event_type       string,
+  event_version    int,
+  event_timestamp  timestamp,
+  properties       map&lt;string, string&gt;
+)
+USING iceberg
+PARTITIONED BY (days(event_timestamp))
+TBLPROPERTIES ('write.format.default'='parquet');</pre>
+        </div>
+      </section>
+
+      <section id="api-contracts" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128279;</span> API Contracts</h2>
+        <p>Request/response shape for the three calls in the sequence diagram above. Every response follows the same error envelope on failure.</p>
+
+        <div class="handbook-block">
+          <h3><span class="priority must">Command</span> POST /v1/events &mdash; Cxos.Ingestion.Api</h3>
+          <pre class="code-block">POST https://ingest.cxos.io/v1/events
+Authorization: Bearer &lt;client-token&gt;
+Content-Type: application/json
+Idempotency-Key: c2a9f1e0-8b3d-4e7a-9c1f-2d6a8e0b4c73
+
+{
+  "event": "product_viewed",
+  "user_id": "cust_004821",
+  "context": { "channel": "web" },
+  "properties": { "sku": "sku-1029", "price": 2499 }
+}
+
+202 Accepted
+{ "event_id": "c2a9f1e0-8b3d-4e7a-9c1f-2d6a8e0b4c73", "accepted_at": "2026-08-02T06:00:00Z" }</pre>
+        </div>
+
+        <div class="handbook-block">
+          <h3><span class="priority could">Query</span> GET /v1/profile/{customer_key} &mdash; Cxos.Profile.Api</h3>
+          <pre class="code-block">GET https://api.cxos.io/v1/profile/cust_004821
+Authorization: Bearer &lt;service-token&gt;
+
+200 OK
+{
+  "customer_key": "cust_004821",
+  "lifecycle_stage": "active",
+  "ltv_band": "gold",
+  "churn_risk": 0.12
+  // fields the caller isn't entitled to are omitted, not nulled
+}
+
+404 Not Found
+{ "error": { "code": "PROFILE_NOT_FOUND", "message": "No profile for customer_key", "trace_id": "..." } }</pre>
+        </div>
+
+        <div class="handbook-block">
+          <h3><span class="priority must">Command</span> POST /v1/activate &mdash; Cxos.Activation.Api</h3>
+          <pre class="code-block">POST https://api.cxos.io/v1/activate
+Authorization: Bearer &lt;service-token&gt;
+
+{
+  "customer_key": "cust_004821",
+  "trigger": "cart_abandonment",
+  "channel": "email",
+  "template_id": "cart_recovery_v3"
+}
+
+202 Accepted
+{ "dispatch_id": "disp_9931", "routed_to": "Cxos.Connectors.SendGrid" }
+
+409 Conflict
+{ "error": { "code": "CONSENT_DENIED", "message": "Customer has not consented to marketing", "trace_id": "..." } }</pre>
+        </div>
+      </section>
+
+      <section id="deployment" class="section" style="margin-top:20px;">
+        <div class="section-head">
+          <div>
+            <h2>Deployment Architecture</h2>
+            <p>Azure infrastructure topology, by trust/network zone &mdash; click to zoom.</p>
+          </div>
+        </div>
+        <div class="diagram-frame">
+          <img src="../img/lld-deployment-topology.svg" alt="Deployment topology diagram: client apps go through Azure API Management into an AKS cluster running the always-on Cxos APIs and Azure Container Apps running the Processing worker and connector jobs; both compute zones publish through Azure Event Hubs and Service Bus into the polyglot data zone (Cosmos DB, PostgreSQL, Redis, ADLS Gen2, Data Explorer, Purview); a cross-cutting Security & Ops band underneath provides Key Vault, Azure AD/ADFS, Application Insights, and Azure Monitor to every compute node.">
+        </div>
+        <p class="diagram-caption">Source diagram: doc/img/lld-deployment-topology.svg</p>
+        <div class="tag-row">
+          <span class="tag">3 environments: Dev &middot; Staging &middot; Prod</span>
+          <span class="tag">Single primary region + paired DR region</span>
+          <span class="tag">AKS: always-on APIs, HPA on CPU + queue depth</span>
+          <span class="tag">Azure Container Apps: scale-to-zero workers/jobs</span>
+        </div>
+      </section>
+
+      <section id="error-handling" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#9888;&#65039;</span> Error Handling &amp; Resiliency</h2>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Failure Scenario</th><th>Strategy</th><th>Owner</th></tr>
+            <tr>
+              <td>Downstream dependency transient failure (e.g. Cosmos DB throttled)</td>
+              <td>Polly exponential backoff with jitter, 3 attempts, then surface as 503 rather than hang</td>
+              <td>Every <code>Cxos.*.Infrastructure</code> layer</td>
+            </tr>
+            <tr>
+              <td>Repeated dependency failure past retry budget</td>
+              <td>Circuit breaker opens for a cooldown window; health check reflects it so orchestration can stop routing traffic</td>
+              <td>Every <code>Cxos.*.Api</code></td>
+            </tr>
+            <tr>
+              <td>Duplicate event delivery (at-least-once messaging)</td>
+              <td>Idempotency key (event_id) checked against Redis before processing; safe to retry blindly</td>
+              <td>Cxos.Ingestion.Api, Cxos.Processing.Api</td>
+            </tr>
+            <tr>
+              <td>Event fails schema validation</td>
+              <td>Routed to a dead-letter Event Hubs topic with the validation error attached, not silently dropped</td>
+              <td>Cxos.Ingestion.Api</td>
+            </tr>
+            <tr>
+              <td>Downstream call exceeds latency budget</td>
+              <td>Per-call timeout (typically 2&ndash;5s) fails fast rather than holding a connection open; caller decides fallback</td>
+              <td>Every <code>Cxos.*.Api</code></td>
+            </tr>
+            <tr>
+              <td>Activation dispatch fails mid-send</td>
+              <td>Dead-lettered for manual review after backoff exhausted &mdash; never silently dropped, per BR-6.1</td>
+              <td>Cxos.Activation.Api</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="security-design" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128272;</span> Security Design Detail</h2>
+        <p>Token issuance and validation for a service-to-service call &mdash; the same flow every <code>Cxos.*.Api</code> enforces via shared middleware, per <code>Cxos.Security.Api</code> in the Full Application Service Map.</p>
+        <ul class="feature-list">
+          <li>1. Caller authenticates against Azure AD (Entra ID) &mdash; internal/employee callers federate through ADFS from on-prem AD; customer-facing callers use Azure AD B2C, kept entirely separate</li>
+          <li>2. Azure AD issues a short-lived JWT access token scoped to the caller's role/app registration</li>
+          <li>3. Azure API Management validates the token signature and expiry at the edge before a request ever reaches a service</li>
+          <li>4. The receiving <code>Cxos.*.Api</code>'s shared authentication middleware re-validates the token and resolves roles/attributes for RBAC/ABAC checks (Cxos.Foundation.Api's Access Control policies)</li>
+          <li>5. Service-to-service calls inside the cluster use managed identities, not shared secrets &mdash; no long-lived credential to leak</li>
+          <li>6. Every access decision (allow/deny, masked fields) is logged to the write-once Audit Logs store, per Governance &amp; Security</li>
+        </ul>
+      </section>
+
+      <section id="observability-design" class="submodule" style="--card-accent:#3454d1">
+        <h2><span class="icon">&#128200;</span> Observability Design</h2>
+        <p>One correlation ID is generated at the edge (Azure API Management) and propagated via the <code>X-Correlation-Id</code> header through every hop in the sequence diagram above, so a single request can be traced end to end in Application Insights regardless of how many services it touched.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Log Field</th><th>Purpose</th></tr>
+            <tr><td><code>timestamp</code></td><td>UTC, ISO 8601</td></tr>
+            <tr><td><code>correlation_id</code></td><td>Propagated from the originating request; the join key across every service's logs</td></tr>
+            <tr><td><code>service</code></td><td>The emitting <code>Cxos.*.Api</code> namespace</td></tr>
+            <tr><td><code>tenant_id</code></td><td>For per-tenant filtering and the Usage &amp; Billing meter</td></tr>
+            <tr><td><code>customer_key_hash</code></td><td>Hashed, never the raw identifier &mdash; logs are not a PII store</td></tr>
+            <tr><td><code>severity</code></td><td>Trace / Info / Warning / Error / Critical</td></tr>
+            <tr><td><code>message</code></td><td>Structured, not string-interpolated &mdash; queryable in Application Insights/Azure Monitor</td></tr>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

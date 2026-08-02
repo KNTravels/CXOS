@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 720" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="depArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3454d1"/>
+    </marker>
+    <marker id="depDotted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#9aa0b4"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1300" height="720" fill="#f7f8fc"/>
+  <text x="30" y="30" font-size="17" font-weight="800" fill="#1b1f2e">Deployment / Infrastructure Topology (Azure)</text>
+  <text x="30" y="49" font-size="11.5" fill="#5a6072">Solid arrow = request/data path &#183; Dotted line = cross-cutting (telemetry, secrets, identity) &#183; Zone labels = trust/network boundaries</text>
+
+  <!-- Client zone -->
+  <rect x="20" y="70" width="150" height="150" rx="10" fill="#f3effc" stroke="#6a4fc2" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="95" y="88" text-anchor="middle" font-size="10.5" font-weight="800" fill="#6a4fc2">CLIENT</text>
+  <rect x="35" y="100" width="120" height="46" rx="8" fill="#fff" stroke="#6a4fc2" stroke-width="1.5"/>
+  <text x="95" y="127" text-anchor="middle" font-size="11">Web App</text>
+  <rect x="35" y="160" width="120" height="46" rx="8" fill="#fff" stroke="#6a4fc2" stroke-width="1.5"/>
+  <text x="95" y="187" text-anchor="middle" font-size="11">Mobile App</text>
+
+  <!-- Edge zone -->
+  <rect x="200" y="70" width="150" height="150" rx="10" fill="#e9f1fc" stroke="#2b7fd6" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="275" y="88" text-anchor="middle" font-size="10.5" font-weight="800" fill="#2b7fd6">EDGE / INGRESS</text>
+  <rect x="215" y="115" width="120" height="80" rx="8" fill="#fff" stroke="#2b7fd6" stroke-width="1.5"/>
+  <text x="275" y="150" text-anchor="middle" font-size="11" font-weight="700">Azure API</text>
+  <text x="275" y="165" text-anchor="middle" font-size="11" font-weight="700">Management</text>
+  <text x="275" y="182" text-anchor="middle" font-size="9.5" fill="#5a6072">auth, rate limit, routing</text>
+
+  <!-- Compute AKS zone -->
+  <rect x="390" y="60" width="290" height="200" rx="10" fill="#e9f1fc" stroke="#2b7fd6" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="535" y="78" text-anchor="middle" font-size="10.5" font-weight="800" fill="#2b7fd6">COMPUTE &#8212; AKS CLUSTER (Docker)</text>
+  <rect x="405" y="90" width="260" height="38" rx="7" fill="#fff" stroke="#2b7fd6" stroke-width="1.5"/>
+  <text x="535" y="114" text-anchor="middle" font-size="10.5">Cxos.Ingestion.Api</text>
+  <rect x="405" y="136" width="260" height="38" rx="7" fill="#fff" stroke="#d9822b" stroke-width="1.5"/>
+  <text x="535" y="160" text-anchor="middle" font-size="10.5">Cxos.Profile.Api &#183; Cxos.Intelligence.Api</text>
+  <rect x="405" y="182" width="260" height="38" rx="7" fill="#fff" stroke="#c23b6d" stroke-width="1.5"/>
+  <text x="535" y="206" text-anchor="middle" font-size="10.5">Cxos.Activation.Api</text>
+  <text x="535" y="248" text-anchor="middle" font-size="9.5" fill="#5a6072">stateless, horizontally scaled, always-on APIs</text>
+
+  <!-- Compute ACA zone -->
+  <rect x="390" y="280" width="290" height="160" rx="10" fill="#e5f4f2" stroke="#0f9b8e" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="535" y="298" text-anchor="middle" font-size="10.5" font-weight="800" fill="#0f9b8e">COMPUTE &#8212; AZURE CONTAINER APPS</text>
+  <rect x="405" y="310" width="260" height="38" rx="7" fill="#fff" stroke="#0f9b8e" stroke-width="1.5"/>
+  <text x="535" y="334" text-anchor="middle" font-size="10.5">Cxos.Processing.Api (Stream/Batch Worker)</text>
+  <rect x="405" y="356" width="260" height="38" rx="7" fill="#fff" stroke="#6a4fc2" stroke-width="1.5"/>
+  <text x="535" y="380" text-anchor="middle" font-size="10.5">Cxos.Connectors.* (Jobs)</text>
+  <text x="535" y="422" text-anchor="middle" font-size="9.5" fill="#5a6072">scale-to-zero, scheduled &amp; event-triggered workloads</text>
+
+  <!-- Messaging zone -->
+  <rect x="710" y="130" width="180" height="200" rx="10" fill="#f3effc" stroke="#6a4fc2" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="800" y="148" text-anchor="middle" font-size="10.5" font-weight="800" fill="#6a4fc2">MESSAGING</text>
+  <rect x="725" y="165" width="150" height="60" rx="8" fill="#fff" stroke="#6a4fc2" stroke-width="1.5"/>
+  <text x="800" y="190" text-anchor="middle" font-size="11" font-weight="700">Azure Event Hubs</text>
+  <text x="800" y="205" text-anchor="middle" font-size="9.5" fill="#5a6072">high-throughput streams</text>
+  <rect x="725" y="235" width="150" height="60" rx="8" fill="#fff" stroke="#6a4fc2" stroke-width="1.5"/>
+  <text x="800" y="260" text-anchor="middle" font-size="11" font-weight="700">Azure Service Bus</text>
+  <text x="800" y="275" text-anchor="middle" font-size="9.5" fill="#5a6072">commands, dispatch triggers</text>
+
+  <!-- Data zone -->
+  <rect x="930" y="60" width="340" height="400" rx="10" fill="#e8f5ec" stroke="#2e9e5b" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="1100" y="78" text-anchor="middle" font-size="10.5" font-weight="800" fill="#2e9e5b">DATA (polyglot persistence)</text>
+  <rect x="945" y="90" width="310" height="46" rx="8" fill="#fff" stroke="#12a4a4" stroke-width="1.5"/>
+  <text x="1100" y="112" text-anchor="middle" font-size="10.5" font-weight="700">Azure Cosmos DB</text>
+  <text x="1100" y="127" text-anchor="middle" font-size="9.5" fill="#5a6072">Core, Gremlin &amp; Table APIs</text>
+  <rect x="945" y="146" width="310" height="46" rx="8" fill="#fff" stroke="#336791" stroke-width="1.5"/>
+  <text x="1100" y="168" text-anchor="middle" font-size="10.5" font-weight="700">Azure DB for PostgreSQL</text>
+  <text x="1100" y="183" text-anchor="middle" font-size="9.5" fill="#5a6072">Flexible Server</text>
+  <rect x="945" y="202" width="310" height="46" rx="8" fill="#fff" stroke="#d92d20" stroke-width="1.5"/>
+  <text x="1100" y="224" text-anchor="middle" font-size="10.5" font-weight="700">Azure Cache for Redis</text>
+  <text x="1100" y="239" text-anchor="middle" font-size="9.5" fill="#5a6072">hot-path cache</text>
+  <rect x="945" y="258" width="310" height="46" rx="8" fill="#fff" stroke="#2e9e5b" stroke-width="1.5"/>
+  <text x="1100" y="280" text-anchor="middle" font-size="10.5" font-weight="700">ADLS Gen2 (Iceberg Lakehouse)</text>
+  <text x="1100" y="295" text-anchor="middle" font-size="9.5" fill="#5a6072">raw &#8594; curated &#8594; marts</text>
+  <rect x="945" y="314" width="310" height="46" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.5"/>
+  <text x="1100" y="336" text-anchor="middle" font-size="10.5" font-weight="700">Azure Data Explorer (Kusto)</text>
+  <text x="1100" y="351" text-anchor="middle" font-size="9.5" fill="#5a6072">telemetry, anomaly scoring history</text>
+  <rect x="945" y="370" width="310" height="46" rx="8" fill="#fff" stroke="#2e9e5b" stroke-width="1.5"/>
+  <text x="1100" y="392" text-anchor="middle" font-size="10.5" font-weight="700">Azure Purview</text>
+  <text x="1100" y="407" text-anchor="middle" font-size="9.5" fill="#5a6072">catalog, lineage, classification</text>
+
+  <!-- Flow arrows -->
+  <g stroke="#3454d1" stroke-width="2" fill="none">
+    <line x1="170" y1="150" x2="200" y2="150" marker-end="url(#depArrow)"/>
+    <line x1="350" y1="150" x2="390" y2="150" marker-end="url(#depArrow)"/>
+    <line x1="680" y1="150" x2="710" y2="185" marker-end="url(#depArrow)"/>
+    <line x1="680" y1="345" x2="710" y2="260" marker-end="url(#depArrow)"/>
+    <line x1="890" y1="200" x2="930" y2="230" marker-end="url(#depArrow)"/>
+    <line x1="680" y1="200" x2="930" y2="113" marker-end="url(#depArrow)"/>
+    <line x1="680" y1="200" x2="930" y2="169" marker-end="url(#depArrow)"/>
+    <line x1="680" y1="360" x2="930" y2="281" marker-end="url(#depArrow)"/>
+  </g>
+
+  <!-- Security & Ops cross-cutting band -->
+  <rect x="20" y="500" width="1250" height="170" rx="10" fill="#e6eafb" stroke="#3454d1" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="45" y="522" font-size="11" font-weight="800" fill="#3454d1">SECURITY &amp; OPS &#8212; cross-cutting, every compute node connects here</text>
+  <rect x="45" y="536" width="270" height="60" rx="8" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
+  <text x="180" y="561" text-anchor="middle" font-size="11" font-weight="700">Azure Key Vault</text>
+  <text x="180" y="577" text-anchor="middle" font-size="9.5" fill="#5a6072">secrets, connection strings, keys</text>
+  <rect x="335" y="536" width="270" height="60" rx="8" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
+  <text x="470" y="561" text-anchor="middle" font-size="11" font-weight="700">Azure AD (Entra ID) / ADFS</text>
+  <text x="470" y="577" text-anchor="middle" font-size="9.5" fill="#5a6072">identity, B2C for customers</text>
+  <rect x="625" y="536" width="270" height="60" rx="8" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
+  <text x="760" y="561" text-anchor="middle" font-size="11" font-weight="700">Application Insights</text>
+  <text x="760" y="577" text-anchor="middle" font-size="9.5" fill="#5a6072">per-request tracing, correlation ID</text>
+  <rect x="915" y="536" width="270" height="60" rx="8" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
+  <text x="1050" y="561" text-anchor="middle" font-size="11" font-weight="700">Azure Monitor</text>
+  <text x="1050" y="577" text-anchor="middle" font-size="9.5" fill="#5a6072">infra metrics, alert rules</text>
+  <text x="45" y="656" font-size="10" fill="#5a6072">Every AKS pod / Azure Container Apps job resolves secrets from Key Vault at startup, authenticates via managed identity through Azure AD, and emits Application Insights telemetry carrying one correlation ID end to end.</text>
+
+  <!-- Dotted connectors from compute zones down to Security & Ops -->
+  <g stroke="#9aa0b4" stroke-width="1.5" stroke-dasharray="1.5,4" fill="none">
+    <line x1="535" y1="260" x2="535" y2="500" marker-end="url(#depDotted)"/>
+    <line x1="535" y1="440" x2="535" y2="500" marker-end="url(#depDotted)"/>
+    <line x1="275" y1="220" x2="275" y2="500" marker-end="url(#depDotted)"/>
+  </g>
+
+  <text x="30" y="700" font-size="10.5" fill="#5a6072">This is a topology view &#8212; for the request/response flow between services, see the sequence diagram above. Per-service namespace/DB detail: Full Application Service Map on the homepage, or the BRD's DDD catalog.</text>
+</svg>
