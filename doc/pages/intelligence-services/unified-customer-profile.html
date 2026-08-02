@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unified Customer Profile — Identity &amp; Profile Service — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html" class="active">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../intelligence-services.html">Intelligence &amp; Services</a><span class="sep">/</span>
+    <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service</a><span class="sep">/</span>
+    <span class="current">Unified Customer Profile</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#d9822b">
+    <div class="step">Intelligence &amp; Services &rarr; Identity &amp; Profile Service</div>
+    <h1>Unified Customer Profile</h1>
+    <p>The single, continuously-updated record of a customer assembled from every touchpoint and business system — the object every other Intelligence &amp; Services capability reads from.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Every touchpoint and business system ultimately resolves into one profile record.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Transformation &amp; Processing</div><div class="stage-detail">Identity-stitched, deduplicated events</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Curated Zone</div><div class="stage-detail">curated.identity_stitched_events (Unified Data Foundation)</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#d9822b"><div class="stage-label">Intelligence</div><div class="stage-name">Unified Customer Profile</div><div class="stage-detail">.NET Core Analytics/AI API, materialized in Azure DB for PostgreSQL</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Every Destination &amp; Service</div><div class="stage-detail">Profile API is the single read path for downstream consumers</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Gives every team — marketing, support, sales — the same view of a customer instead of each system holding a fragmented slice of the relationship</li>
+      <li>Directly enables personalization, support-context lookups, and propensity scoring, all of which depend on one trustworthy profile rather than reconciling several</li>
+      <li>Owned by Data Engineering / Customer Data Platform team</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>A scheduled dbt model rebuilds <code>marts.customer_profile</code> from the curated zone's identity-stitched events, merging demographic attributes, lifecycle stage, consent state, and computed fields (LTV band, churn risk) into one row per customer. The result is served by a .NET Core Analytics/AI API — packaged as a Docker container on Azure Container Apps — that exposes it through the Profile API, backed by Azure Database for PostgreSQL for low-latency point lookups and Azure Cache for Redis for the highest-traffic keys.</p>
+    <div class="handbook-block">
+      <h3>Profile Attributes</h3>
+      <div class="tag-row">
+        <span class="tag">Demographics</span>
+        <span class="tag">Lifecycle stage</span>
+        <span class="tag">LTV band</span>
+        <span class="tag">Consent state</span>
+        <span class="tag">Preferred channel</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128190;</span> Profile Record</h2>
+    <pre class="code-block">{
+  "customer_key": "cust_004821",
+  "lifecycle_stage": "active",
+  "ltv_band": "gold",
+  "preferred_channel": "email",
+  "consent_basis": { "marketing": true, "analytics": true },
+  "updated_at": "2026-08-02T06:00:00Z"
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Curated Zone (Unified Data Foundation) — source of the identity-stitched events the profile is built from</li>
+      <li>dbt — the modeling framework that materializes marts.customer_profile on a schedule</li>
+      <li>Identity Graph — supplies the resolved customer_key this record is keyed on</li>
+      <li>Profile API — the read path every downstream service and destination uses</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: profile table grows linearly with customer count, not event count, keeping it compact relative to the raw event volume</li>
+      <li>Latency: point lookups by customer_key return in single-digit milliseconds via Redis cache in front of PostgreSQL</li>
+      <li>Reliability: rebuilt on a fixed dbt schedule with dbt test coverage, so a bad upstream batch is caught before it overwrites a good profile</li>
+      <li>Security/Privacy: every field carries the classification tags inherited from its source (Data Classification), and consent_basis gates which downstream purposes may read it</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A support agent opens a ticket and the console calls the Profile API once, getting lifecycle stage, LTV band, and consent state in one round trip — replacing what used to be three separate lookups against CRM, Commerce, and a marketing tool that frequently disagreed with each other.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../intelligence-services.html#identity-profile">&larr; Back to Identity &amp; Profile Service</a></p>
+</main>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

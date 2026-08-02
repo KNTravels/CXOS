@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing (HubSpot) — Reverse ETL / CDP Sync — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html" class="active">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../destinations-activation.html">Destinations &amp; Activation</a><span class="sep">/</span>
+    <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync</a><span class="sep">/</span>
+    <span class="current">Marketing (HubSpot)</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#c23b6d">
+    <div class="step">Destinations &amp; Activation &rarr; Reverse ETL / CDP Sync</div>
+    <h1>Marketing (HubSpot)</h1>
+    <p>Syncs computed segments and engagement scores into HubSpot so marketing operations can build campaigns using CXOS insight inside the tool they already run campaigns from.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>HubSpot receives the same governed segments used everywhere else in Real-time Activation.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Business Systems</div><div class="stage-detail">HubSpot is also a source under Data Sources</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">Marketing system connector — original engagement data in</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Semantic Layer</div><div class="stage-detail">Segments defined as governed semantic-layer queries</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Propensity Scores</div><div class="stage-detail">Common segment-definition input</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Query &amp; Analytics Engine</div><div class="stage-detail">Resolves segment membership for the sync</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#c23b6d"><div class="stage-label">Activation</div><div class="stage-name">Marketing (HubSpot)</div><div class="stage-detail">Scheduled Reverse ETL job &rarr; HubSpot Contacts API</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Marketing operations builds and sends campaigns from HubSpot day to day — syncing CXOS segments there means marketers use governed, first-party-informed audiences without leaving their primary tool</li>
+      <li>Keeps HubSpot's own contact list from drifting out of sync with the platform's unified view of the customer</li>
+      <li>Owned by Marketing Operations / Platform Engineering</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>A scheduled .NET Core Reverse ETL job (Docker container on Azure Container Apps Jobs) resolves the same Semantic Layer-defined segments used for Ad Platforms sync into HubSpot list membership, and writes engagement-relevant profile fields (LTV band, propensity scores, preferred channel) as HubSpot contact properties via its Contacts API, so marketers building a HubSpot workflow can filter and personalize on CXOS-computed fields directly.</p>
+    <div class="handbook-block">
+      <h3>Synced Objects</h3>
+      <div class="tag-row">
+        <span class="tag">Segment/list membership</span>
+        <span class="tag">LTV band & propensity as contact properties</span>
+        <span class="tag">Preferred channel</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128190;</span> HubSpot Sync Payload</h2>
+    <pre class="code-block">{
+  "hubspot_object": "contact",
+  "list": "high_ltv_low_churn_risk",
+  "properties": {
+    "cxos_ltv_band": "gold",
+    "cxos_churn_risk": 0.12,
+    "cxos_preferred_channel": "email"
+  }
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Business Systems (Data Sources) — HubSpot as an original engagement-data source, distinct from this reverse sync</li>
+      <li>Semantic Layer — the same governed segment definitions used for Ad Platforms sync, reused here for consistency</li>
+      <li>HubSpot Contacts API — the write mechanism for list membership and contact properties</li>
+      <li>Consent Enforcement — contacts who have withdrawn marketing consent are excluded from segment sync</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: contact sync runs against the full active-customer segment population on a schedule, not per-contact calls</li>
+      <li>Latency: segments refresh on the same cadence as Ad Platforms sync (typically daily) to keep both channels consistent with each other</li>
+      <li>Reliability: a failed sync run retains HubSpot's last successfully synced segment membership rather than clearing lists mid-campaign</li>
+      <li>Security/Privacy: only marketing-consented contacts are synced, and only the specific fields approved for the marketing-operations use case are written as contact properties</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>Marketing Operations builds a HubSpot workflow targeting the same 'high LTV, low churn risk' segment already used for ad-platform suppression — because both pull from the same Semantic Layer definition, the audience marketing emails and the audience ads target stay consistent with each other automatically.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../destinations-activation.html#reverse-etl-cdp-sync">&larr; Back to Reverse ETL / CDP Sync</a></p>
+</main>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

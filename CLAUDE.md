@@ -32,19 +32,18 @@ doc/
     ├── ingestion-layer.html                |  6 hand-written module pages.
     ├── transformation-processing.html      |  Each has a sticky side-nav, a module-intro
     ├── unified-data-foundation.html        |  block, and one <section id="submodule-anchor">
-    ├── intelligence-services.html          |  per submodule. The 4 built modules render each
+    ├── intelligence-services.html          |  per submodule. All 6 modules render each
     ├── destinations-activation.html       _/   submodule's items as a `.feature-grid` of
     │                                            `.feature-card` tiles (icon + accent bar +
     │                                            title + one-line description, linking to the
     │                                            detail page) — see "Submodule item cards" below.
-    │                                            The 2 paused modules still use the older plain
-    │                                            `<ul class="feature-list">` bullet links; restyle
-    │                                            them to feature-grid once their content is built.
     │
     ├── data-sources/*.html                 Generated detail pages, one per bullet
     ├── ingestion-layer/*.html              under each module's submodules. Each bullet
     ├── transformation-processing/*.html    on the parent module page links to one of
-    └── unified-data-foundation/*.html      these via <a href="data-sources/slug.html">.
+    ├── unified-data-foundation/*.html      these via <a href="data-sources/slug.html">.
+    ├── intelligence-services/*.html
+    └── destinations-activation/*.html
 ```
 
 Header nav = the 6 modules; each has a dropdown of its submodule anchors. Module pages are
@@ -65,7 +64,9 @@ tools/docgen/
     ├── data-sources-2.js            Business Systems + Files & Integrations (8 items)
     ├── ingestion-layer.js           All 5 submodules (15 items)
     ├── transformation-processing.js All 3 submodules (14 items)
-    └── unified-data-foundation.js   All 3 submodules (16 items)
+    ├── unified-data-foundation.js   All 3 submodules (16 items)
+    ├── intelligence-services.js     All 4 submodules (17 items)
+    └── destinations-activation.js   All 4 submodules (15 items)
 ```
 
 To regenerate a module after editing its data file:
@@ -105,8 +106,9 @@ supplied as a reference. Markup per item:
 - Submodules with only one item (e.g. Streaming Ingestion → Redpanda) still use a one-item
   `.feature-grid` for visual consistency, not a bare link.
 - CSS lives in `doc/css/style.css` under "Feature grid (submodule item cards)". The older
-  `.feature-list` (plain bulleted `<li><a>`) CSS is kept for the 2 not-yet-restyled modules —
-  don't remove it until Intelligence & Services / Destinations & Activation are migrated too.
+  `.feature-list` (plain bulleted `<li><a>`) CSS is still used for non-submodule bullet lists
+  (Business Context, Integration Points, NFRs on detail pages, and other prose lists) — it's not
+  dead, just no longer used for submodule item grids on any of the 6 module pages.
 
 ### Data file schema (one entry per detail page)
 
@@ -172,31 +174,31 @@ so cross-links between pages (e.g., "→ see Ingestion Layer's Queue & Retry") s
 
 ## Status (update this section as work continues)
 
-**Done** (60 generated detail pages + 6 module pages + `index.html` + `pages/brd.html` = 68 pages total, all link-validated):
+**Done** (92 generated detail pages + 6 module pages + `index.html` + `pages/brd.html` = 100 pages total, all link-validated):
 - Data Sources — all 3 submodules (15 items)
 - Ingestion Layer — all 5 submodules (15 items)
 - Transformation & Processing — all 3 submodules (14 items)
 - Unified Data Foundation — all 3 submodules (16 items)
+- Intelligence & Services — all 4 submodules (Identity & Profile Service, Query & Analytics
+  Engine, AI & Insights, Operational Services), 17 items — resumed and completed 2026-08-02
+- Destinations & Activation — all 4 submodules (Real-time Activation, Batch/File Exports, APIs &
+  Webhooks, Reverse ETL/CDP Sync), 15 items — resumed and completed 2026-08-02
 - `pages/brd.html` — Business Requirements Document: purpose, objectives, scope, stakeholders,
   BR-1 through BR-6 (one requirements table per module, each colored with that module's own
-  accent), NFRs, assumptions, success metrics. BR-5/BR-6 are marked "Planned" since Intelligence
-  & Services / Destinations & Activation aren't built yet — update those tables' content (not
-  just their "Planned" badge) once those modules ship. Uses new `.doc-table` / `.doc-meta-table`
-  / `.priority` (must/should/could) CSS components. **BRD is a top-level nav item** (added in
-  `genlib.js`'s `navHtml()`, so it's already on all 60 generated pages — if you ever hand-edit a
-  module page's header nav, remember to add the `<li data-page="brd.html">` entry there too, or
-  it'll silently drop off just that page.
+  accent), NFRs, assumptions, success metrics. BR-5/BR-6 no longer carry the "Planned" badge —
+  their tables, the Scope section's "(Stage 5/6 — planned)" notes, and the Assumptions section's
+  phased-delivery note were all updated when those two modules shipped. Uses `.doc-table` /
+  `.doc-meta-table` / `.priority` (must/should/could) CSS components. **BRD is a top-level nav
+  item** (added in `genlib.js`'s `navHtml()`, so it's already on all 92 generated pages — if you
+  ever hand-edit a module page's header nav, remember to add the `<li data-page="brd.html">`
+  entry there too, or it'll silently drop off just that page.
+- `index.html`'s intro copy and all 6 module cards reflect all six stages being fully specified
+  (no "next"/"planned" language remaining for Intelligence & Services or Destinations &
+  Activation).
 
-**Not started** (explicitly paused by user on 2026-08-02 pending review of the above):
-- Intelligence & Services — 4 submodules (Identity & Profile Service, Query & Analytics Engine,
-  AI & Insights, Operational Services), ~17 items
-- Destinations & Activation — 4 submodules (Real-time Activation, Batch/File Exports, APIs &
-  Webhooks, Reverse ETL/CDP Sync), ~15 items
-
-When resuming: write a new `tools/docgen/data/<module-file-slug>.js` following the schema
-above (use an existing data file as the template), run it through `run.js`, add `<a>` links to
-the corresponding bullets on the parent module page (`pages/<module-file-slug>.html`), then run
-`check-links.js` before considering the module done.
+All six stages of the architecture are now fully specified end to end. Future work here is
+either refining existing content or building out `code/` (currently empty, no relationship to
+`doc/` yet).
 
 ## Verifying changes
 

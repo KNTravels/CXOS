@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Databricks / Redshift — Batch / File Exports — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html" class="active">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../destinations-activation.html">Destinations &amp; Activation</a><span class="sep">/</span>
+    <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports</a><span class="sep">/</span>
+    <span class="current">Databricks / Redshift</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#c23b6d">
+    <div class="step">Destinations &amp; Activation &rarr; Batch / File Exports</div>
+    <h1>Databricks / Redshift</h1>
+    <p>Serves data-science and legacy-warehouse teams standardized on Databricks or Redshift, via the same open-format access pattern as any other Iceberg-compatible engine.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Databricks attaches like Spark; Redshift receives a scheduled load like BigQuery.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Rollups &amp; Aggregations</div><div class="stage-detail">Produces the mart being delivered</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Zero-Copy Architecture</div><div class="stage-detail">Databricks (Spark) attaches to the same Iceberg tables</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Query &amp; Analytics Engine</div><div class="stage-detail">Read path for the Redshift load job</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#c23b6d"><div class="stage-label">Activation</div><div class="stage-name">Databricks / Redshift</div><div class="stage-detail">Spark/Iceberg attachment (Databricks) or scheduled load job (Redshift)</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Data science teams standardized on Databricks get direct Spark access to the same tables everything else reads, without a duplicate ML-specific copy</li>
+      <li>Legacy Redshift-based BI teams remain supported during a migration window without blocking their existing dashboards</li>
+      <li>Owned by Data Engineering / Data Science Platform</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>Databricks connects to the lakehouse the same way any Iceberg-compatible Spark engine does — direct attachment to Azure Data Lake Storage Gen2 tables, no export job required, matching the pattern already established for ad hoc Spark access under Zero-Copy Architecture. Redshift, without native Iceberg support, receives a scheduled load job (a Docker container on Azure Container Apps Jobs) that reads via the Query &amp; Analytics Engine and writes into Redshift-native tables, used primarily to support legacy dashboards during migration to the lakehouse-native path.</p>
+    <div class="handbook-block">
+      <h3>Delivery Modes</h3>
+      <div class="tag-row">
+        <span class="tag">Databricks — Spark/Iceberg attachment (zero-copy)</span>
+        <span class="tag">Redshift — scheduled load job</span>
+        <span class="tag">Used for ML workloads & legacy BI</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128190;</span> Databricks Attachment Example</h2>
+    <pre class="code-block"># Databricks notebook, direct Iceberg read — no CXOS export job involved
+df = spark.read.format("iceberg") \
+    .load("abfss://lakehouse@cxosdata.dfs.core.windows.net/marts/order_fact")</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Zero-Copy Architecture — the same principle extended to Databricks' Spark engine</li>
+      <li>Query &amp; Analytics Engine — read path for the Redshift scheduled load</li>
+      <li>Governance &amp; Security — grants and reviews Databricks workspace access to lakehouse tables</li>
+      <li>Predictive Models — Databricks is a common environment for ad hoc feature exploration ahead of formal dbt Python model changes</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: Databricks attachment has no export-size ceiling; Redshift loads are sized like any scheduled batch export</li>
+      <li>Latency: Databricks reflects the lakehouse near-real-time; Redshift lags by its load schedule</li>
+      <li>Reliability: the Databricks path has no separate copy to go stale; the Redshift path is monitored like any other batch export job</li>
+      <li>Security/Privacy: Databricks workspace access is governed and audited the same as any direct lakehouse consumer, not treated as an external export</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A data science team exploring a new feature for the next Predictive Models iteration attaches Databricks directly to curated tables for ad hoc exploration, while the BI team's existing Redshift dashboards keep working unchanged off a nightly load job until their planned migration to querying the lakehouse directly.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../destinations-activation.html#batch-file-exports">&larr; Back to Batch / File Exports</a></p>
+</main>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>
