@@ -198,6 +198,63 @@
             </tr>
           </table>
         </div>
+        <div class="handbook-block">
+          <h3>Microservices</h3>
+          <p class="tech">Generic Subdomain — reusable integration adapters. A connector has no bespoke business rules of its own (just source&rarr;contract translation), so DDD treats it as Infrastructure-layer only — one deployable service each, not a full Domain/Application/Infrastructure/Api split.</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Microservice</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Salesforce Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.Salesforce</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Publishes to <code>Cxos.Ingestion.Api</code> via Cxos.Ingestion.Client &middot; receives Reverse ETL write-back calls from <code>Cxos.Activation.Api</code></td>
+              </tr>
+              <tr>
+                <td>Shopify Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.Shopify</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Publishes to <code>Cxos.Ingestion.Api</code> via Cxos.Ingestion.Client</td>
+              </tr>
+              <tr>
+                <td>Zendesk Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.Zendesk</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Publishes to <code>Cxos.Ingestion.Api</code> &middot; receives Reverse ETL write-back calls from <code>Cxos.Activation.Api</code></td>
+              </tr>
+              <tr>
+                <td>HubSpot Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.HubSpot</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Publishes to <code>Cxos.Ingestion.Api</code> &middot; receives Reverse ETL write-back calls from <code>Cxos.Activation.Api</code></td>
+              </tr>
+              <tr>
+                <td>ERP / Billing Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.ErpBilling</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Publishes to <code>Cxos.Ingestion.Api</code> &middot; payment-failure webhooks feed <code>Cxos.Activation.Api</code>'s dunning workflows downstream</td>
+              </tr>
+              <tr>
+                <td>File Ingestion Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.Files</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Publishes batches to <code>Cxos.Ingestion.Api</code> from an Azure Blob Storage landing zone</td>
+              </tr>
+              <tr>
+                <td>Database CDC Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.Cdc</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Publishes change events to <code>Cxos.Ingestion.Api</code> via Azure Event Hubs</td>
+              </tr>
+              <tr>
+                <td>Generic Connector Framework</td>
+                <td class="reqid"><code>Cxos.Connectors.Generic</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Publishes to <code>Cxos.Ingestion.Api</code>; instantiated per long-tail source via configuration, not a new codebase</td>
+              </tr>
+            </table>
+          </div>
+        </div>
       </section>
 
       <section id="br-ingestion-layer" class="submodule" style="--card-accent:#2b7fd6">
@@ -224,6 +281,39 @@
               <td>100% of consent-gated events carry a valid consent basis; verified in a quarterly audit.</td>
             </tr>
           </table>
+        </div>
+        <div class="handbook-block">
+          <h3>Microservices</h3>
+          <p class="tech">Supporting Subdomain — Ingestion (bounded context, DDD-layered: Domain / Application / Infrastructure / Api)</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Layer</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Domain</td>
+                <td class="reqid"><code>Cxos.Ingestion.Domain</code></td>
+                <td>&mdash;</td>
+                <td>Defines the versioned event contract (Event, EventSchema, ConsentBasis entities) published as the <code>Cxos.Ingestion.Client</code> NuGet package that every <code>Cxos.Connectors.*</code> service and SDK depends on</td>
+              </tr>
+              <tr>
+                <td>Application</td>
+                <td class="reqid"><code>Cxos.Ingestion.Application</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Orchestrates Event Collection &rarr; Validation &rarr; Enrichment &rarr; Consent Enforcement &rarr; Queue &amp; Retry; validates schema compatibility via <code>Cxos.Processing.SchemaGovernance.Api</code></td>
+              </tr>
+              <tr>
+                <td>Infrastructure</td>
+                <td class="reqid"><code>Cxos.Ingestion.Infrastructure</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Azure API Management binding &middot; Azure Event Hubs publisher &middot; Azure Cache for Redis (geo/device enrichment lookups + idempotency/dedup keys) &middot; Azure Key Vault. Deliberately owns no persistent database of its own &mdash; ingestion is stateless pass-through, with durable state living in Event Hubs and downstream stores</td>
+              </tr>
+              <tr>
+                <td>Api</td>
+                <td class="reqid"><code>Cxos.Ingestion.Api</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Deployed entry point called by every <code>Cxos.Connectors.*</code> service and client SDK &middot; publishes accepted events to Azure Event Hubs, consumed by <code>Cxos.Processing.Infrastructure</code></td>
+              </tr>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -252,6 +342,72 @@
             </tr>
           </table>
         </div>
+        <div class="handbook-block">
+          <h3>Microservices</h3>
+          <p class="tech">Supporting Subdomain — Event Processing (bounded context, DDD-layered)</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Layer</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Domain</td>
+                <td class="reqid"><code>Cxos.Processing.Domain</code></td>
+                <td>&mdash;</td>
+                <td>Entities/rules for deduplication, identity stitching, sessionization, and rollup/aggregation definitions</td>
+              </tr>
+              <tr>
+                <td>Application</td>
+                <td class="reqid"><code>Cxos.Processing.Application</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Orchestrates the Stream Worker (real-time) and Batch Worker (dbt-driven) use cases; validates event/table compatibility via <code>Cxos.Processing.SchemaGovernance.Api</code></td>
+              </tr>
+              <tr>
+                <td>Infrastructure</td>
+                <td class="reqid"><code>Cxos.Processing.Infrastructure</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Azure Event Hubs consumer &middot; dbt CLI invocation (Azure Container Apps Jobs) &middot; Azure Data Lake Storage Gen2 (Iceberg) writer &middot; Azure Cosmos DB Table API for stream-consumer checkpoint/offset state (fast key-value, not a relational fit)</td>
+              </tr>
+              <tr>
+                <td>Api</td>
+                <td class="reqid"><code>Cxos.Processing.Api</code></td>
+                <td><span class="priority could">Query</span></td>
+                <td>Exposes job status/backfill triggers to <code>Cxos.Operations.Api</code>; writes curated/marts tables consumed by <code>Cxos.Foundation.Api</code> and every <code>Cxos.Intelligence.*</code> service</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="handbook-block">
+          <h3>Microservices &mdash; Schema Governance</h3>
+          <p class="tech">Supporting Subdomain — Schema Governance (bounded context, DDD-layered)</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Layer</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Domain</td>
+                <td class="reqid"><code>Cxos.Processing.SchemaGovernance.Domain</code></td>
+                <td>&mdash;</td>
+                <td>Compatibility rules, classification requirements, and versioning policy for every event/table schema</td>
+              </tr>
+              <tr>
+                <td>Application</td>
+                <td class="reqid"><code>Cxos.Processing.SchemaGovernance.Application</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>Validates schema-change requests submitted through <code>Cxos.Operations.Api</code>'s Workflow Engine; approved changes propagate to <code>Cxos.Foundation.Domain</code>'s classification tags</td>
+              </tr>
+              <tr>
+                <td>Infrastructure</td>
+                <td class="reqid"><code>Cxos.Processing.SchemaGovernance.Infrastructure</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>Azure Database for PostgreSQL &mdash; schema versions, compatibility rules, and owning-team relationships are genuinely relational (foreign keys, ACID), unlike the event/table data itself</td>
+              </tr>
+              <tr>
+                <td>Api</td>
+                <td class="reqid"><code>Cxos.Processing.SchemaGovernance.Api</code></td>
+                <td><span class="priority could">Query</span></td>
+                <td>Called by <code>Cxos.Ingestion.Application</code> (event validation) and <code>Cxos.Processing.Application</code> (table compatibility checks) on every write</td>
+              </tr>
+            </table>
+          </div>
+        </div>
       </section>
 
       <section id="br-unified-data-foundation" class="submodule" style="--card-accent:#2e9e5b">
@@ -278,6 +434,39 @@
               <td>A historical "as of" query returns an auditable answer within 1 business day of a request.</td>
             </tr>
           </table>
+        </div>
+        <div class="handbook-block">
+          <h3>Microservices</h3>
+          <p class="tech">Supporting Subdomain — Data Foundation &amp; Governance (bounded context, DDD-layered)</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Layer</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Domain</td>
+                <td class="reqid"><code>Cxos.Foundation.Domain</code></td>
+                <td>&mdash;</td>
+                <td>Entities: LakehouseTable, ClassificationTag, RetentionPolicy, AccessPolicy, ConsentBasis (mirrored from Ingestion)</td>
+              </tr>
+              <tr>
+                <td>Application</td>
+                <td class="reqid"><code>Cxos.Foundation.Application</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>Orchestrates catalog registration, lineage capture, classification propagation, policy evaluation, and Lifecycle Management actions</td>
+              </tr>
+              <tr>
+                <td>Infrastructure</td>
+                <td class="reqid"><code>Cxos.Foundation.Infrastructure</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Azure Data Lake Storage Gen2 (Iceberg tables, the lakehouse itself) &middot; Azure Purview (catalog/lineage/policy metadata) &middot; Azure Database for PostgreSQL (CXOS-owned retention-policy definitions and deletion-request tracking &mdash; relational, needs joins and audit trail, doesn't belong in Purview) &middot; Azure Data Lake Storage Gen2 write-once container (Audit Logs) &middot; Azure AD / ADFS (role source) &middot; Azure Key Vault</td>
+              </tr>
+              <tr>
+                <td>Api</td>
+                <td class="reqid"><code>Cxos.Foundation.Api</code></td>
+                <td><span class="priority could">Query</span></td>
+                <td>Serves Catalog/Lineage/Dictionary/Policy lookups to every <code>Cxos.Intelligence.*</code> service and <code>Cxos.Activation.Api</code>; receives table registrations from <code>Cxos.Processing.Api</code></td>
+              </tr>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -306,6 +495,105 @@
             </tr>
           </table>
         </div>
+        <div class="handbook-block">
+          <h3>Microservices &mdash; Customer Profile</h3>
+          <p class="tech">Core Domain — Customer Profile (bounded context, DDD-layered). This is the platform's differentiating capability, so unlike the Generic Subdomain connectors it gets the full layered treatment.</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Layer</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Domain</td>
+                <td class="reqid"><code>Cxos.Profile.Domain</code></td>
+                <td>&mdash;</td>
+                <td>Entities: CustomerProfile, IdentityGraph, Relationship, ConsentState</td>
+              </tr>
+              <tr>
+                <td>Application</td>
+                <td class="reqid"><code>Cxos.Profile.Application</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Orchestrates profile assembly from <code>Cxos.Foundation.Api</code>'s curated zone and identity-resolution graph traversal</td>
+              </tr>
+              <tr>
+                <td>Infrastructure</td>
+                <td class="reqid"><code>Cxos.Profile.Infrastructure</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>Azure Cosmos DB (Core/SQL API) for the profile document store &mdash; per-customer attributes vary, so a flexible-schema document fits better than a relational table &middot; Azure Cosmos DB (Gremlin API) for the Identity Graph specifically &mdash; multi-hop identifier resolution is a graph-traversal problem, not a document or relational one &middot; Azure Cache for Redis in front of both for hot-key reads</td>
+              </tr>
+              <tr>
+                <td>Api</td>
+                <td class="reqid"><code>Cxos.Profile.Api</code></td>
+                <td><span class="priority could">Query</span></td>
+                <td>Serves reads to <code>Cxos.Activation.Api</code> and every internal consumer; receives propensity/anomaly writes from <code>Cxos.Intelligence.Api</code></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="handbook-block">
+          <h3>Microservices &mdash; Analytics &amp; AI Insights</h3>
+          <p class="tech">Supporting Subdomain — Analytics &amp; AI Insights (bounded context, DDD-layered)</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Layer</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Domain</td>
+                <td class="reqid"><code>Cxos.Intelligence.Domain</code></td>
+                <td>&mdash;</td>
+                <td>Entities: Metric, Segment, PropensityScore, AnomalyRecord</td>
+              </tr>
+              <tr>
+                <td>Application</td>
+                <td class="reqid"><code>Cxos.Intelligence.Application</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>Orchestrates the Semantic Layer, Query Optimizer, and model training/scoring workflows; reads metadata from <code>Cxos.Foundation.Api</code></td>
+              </tr>
+              <tr>
+                <td>Infrastructure</td>
+                <td class="reqid"><code>Cxos.Intelligence.Infrastructure</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>DataFusion engine (reads Iceberg tables directly &mdash; no separate copy) &middot; Azure Database for PostgreSQL for the Semantic Layer's own metric/dimension definitions (genuinely relational: versioned, joined, reviewed like schema) &middot; Azure Cache for Redis (query-result cache) &middot; Azure Machine Learning (model registry, managed) &middot; Azure OpenAI Service &middot; Azure Data Explorer (Kusto) for anomaly-scoring time series &mdash; purpose-built for high-cardinality time-series, a poor fit for a relational or document store</td>
+              </tr>
+              <tr>
+                <td>Api</td>
+                <td class="reqid"><code>Cxos.Intelligence.Api</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>Serves query/analytics reads to BI tools and <code>Cxos.Activation.Api</code>; writes propensity/anomaly results to <code>Cxos.Profile.Api</code> and <code>Cxos.Operations.Api</code></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="handbook-block">
+          <h3>Microservices &mdash; Operational Services</h3>
+          <p class="tech">Supporting Subdomain — Operational Services (bounded context, DDD-layered)</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Layer</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Domain</td>
+                <td class="reqid"><code>Cxos.Operations.Domain</code></td>
+                <td>&mdash;</td>
+                <td>Entities: Workflow, Alert, QualityCheck, UsageRecord</td>
+              </tr>
+              <tr>
+                <td>Application</td>
+                <td class="reqid"><code>Cxos.Operations.Application</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>Orchestrates the Workflow Engine state machine, alert routing, quality scorecards, and usage metering</td>
+              </tr>
+              <tr>
+                <td>Infrastructure</td>
+                <td class="reqid"><code>Cxos.Operations.Infrastructure</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>Azure Database for PostgreSQL for the Workflow Engine's state machine and the Usage &amp; Billing ledger (both need ACID + relational joins across tenant/period) &middot; Azure Cosmos DB (Table API) for Alerts &amp; Notifications history and dedup-window state (high write throughput, simple key lookup, TTL) &middot; Azure Data Explorer (Kusto) for Data Quality Monitoring's scorecards (time-series, not relational) &middot; Azure Service Bus &middot; SendGrid / Slack / PagerDuty delivery adapters</td>
+              </tr>
+              <tr>
+                <td>Api</td>
+                <td class="reqid"><code>Cxos.Operations.Api</code></td>
+                <td><span class="priority should">Both</span></td>
+                <td>Receives quality/anomaly signals from every other <code>Cxos.*.Application</code> layer; serves status/usage queries to Finance and Platform Engineering</td>
+              </tr>
+            </table>
+          </div>
+        </div>
       </section>
 
       <section id="br-destinations-activation" class="submodule" style="--card-accent:#c23b6d">
@@ -332,6 +620,78 @@
               <td>Reverse ETL sync to at least 3 named destination systems is live within the first year.</td>
             </tr>
           </table>
+        </div>
+        <div class="handbook-block">
+          <h3>Microservices &mdash; Activation</h3>
+          <p class="tech">Core Domain — Activation (bounded context, DDD-layered). The second of the platform's two differentiating capabilities, alongside Customer Profile.</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Layer</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Domain</td>
+                <td class="reqid"><code>Cxos.Activation.Domain</code></td>
+                <td>&mdash;</td>
+                <td>Entities: ActivationTrigger, Destination, DispatchPolicy</td>
+              </tr>
+              <tr>
+                <td>Application</td>
+                <td class="reqid"><code>Cxos.Activation.Application</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Orchestrates consent/entitlement checks against <code>Cxos.Profile.Api</code> and segment/propensity resolution against <code>Cxos.Intelligence.Api</code> before every dispatch decision</td>
+              </tr>
+              <tr>
+                <td>Infrastructure</td>
+                <td class="reqid"><code>Cxos.Activation.Infrastructure</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Azure Service Bus publisher &middot; Azure API Management &middot; Azure Cosmos DB (Core/SQL API) for dispatch/delivery-status records (high write throughput, TTL-expired, no relational joins needed) &middot; Azure Cache for Redis for frequency-cap counters and consent-check cache</td>
+              </tr>
+              <tr>
+                <td>Api</td>
+                <td class="reqid"><code>Cxos.Activation.Api</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Entry point for every internal trigger; dispatches to every <code>Cxos.Connectors.*</code> outbound service via Azure Service Bus</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="handbook-block">
+          <h3>Microservices &mdash; Outbound Delivery Connectors</h3>
+          <p class="tech">Generic Subdomain — reusable outbound adapters, same reasoning as BR-1's inbound connectors (Infrastructure-layer only, no bespoke Domain/Application split).</p>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <tr><th>Microservice</th><th>Namespace</th><th>C/Q</th><th>Interacts With</th></tr>
+              <tr>
+                <td>Email Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.SendGrid</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Receives dispatch calls from <code>Cxos.Activation.Api</code> &middot; delivers via SendGrid</td>
+              </tr>
+              <tr>
+                <td>SMS / Push Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.Twilio</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Receives dispatch calls from <code>Cxos.Activation.Api</code> &middot; delivers via Twilio / Firebase Cloud Messaging</td>
+              </tr>
+              <tr>
+                <td>Ad Platform Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.AdPlatforms</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Receives audience syncs from <code>Cxos.Activation.Api</code> &middot; delivers to Google Ads Customer Match / Meta Conversions API</td>
+              </tr>
+              <tr>
+                <td>Batch Export Connector</td>
+                <td class="reqid"><code>Cxos.Connectors.BatchExport</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Receives scheduled export jobs from <code>Cxos.Activation.Api</code> &middot; delivers to partner S3/GCS/Blob, SFTP, Snowflake, or Databricks</td>
+              </tr>
+              <tr>
+                <td>Reverse ETL (CRM / Support / Marketing)</td>
+                <td class="reqid"><code>Cxos.Connectors.Salesforce</code> / <code>.Zendesk</code> / <code>.HubSpot</code></td>
+                <td><span class="priority must">Command</span></td>
+                <td>Same bidirectional services listed under BR-1 &middot; receive write-back dispatch calls from <code>Cxos.Activation.Api</code> to sync insight into Salesforce, Zendesk, and HubSpot</td>
+              </tr>
+            </table>
+          </div>
         </div>
       </section>
 

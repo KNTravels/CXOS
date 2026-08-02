@@ -156,6 +156,21 @@
   </section>
 
   <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#129520;</span> Services Consumed</h2>
+    <ul class="feature-list">
+      <li>Azure Key Vault (Connected App JWT cert)</li>
+      <li>Azure Kubernetes Service (hosts the connector + Ingestion API)</li>
+      <li>Azure API Management (Ingestion API gateway)</li>
+      <li>Cxos.Ingestion.Client (shared ingestion contract)</li>
+      <li>Azure Event Hubs (Batch/Stream Worker CDC merge)</li>
+      <li>Azure Functions Timer (scheduled Bulk API re-sync)</li>
+      <li>Azure Data Lake Storage Gen2 (CRM entity tables)</li>
+      <li>Application Insights (per-request tracing)</li>
+      <li>Salesforce Bulk API &amp; CDC (source-side)</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
       <li>Scale: CDC keeps sync incremental — full re-syncs are scheduled off-peak via an Azure Functions Timer trigger</li>

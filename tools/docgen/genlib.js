@@ -113,6 +113,15 @@ function renderItem(moduleFile, submoduleAnchor, submoduleName, item) {
 
   const li = arr => arr.map(x => `      <li>${x}</li>`).join('\n');
 
+  const servicesConsumedBlock = item.servicesConsumed ? `
+  <section class="submodule" style="--card-accent:${accent}">
+    <h2><span class="icon">&#129520;</span> Services Consumed</h2>
+    <ul class="feature-list">
+${li(item.servicesConsumed)}
+    </ul>
+  </section>
+` : '';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -180,7 +189,7 @@ ${li(item.business)}
 ${li(item.integration)}
     </ul>
   </section>
-
+${servicesConsumedBlock}
   <section class="submodule" style="--card-accent:${accent}">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">

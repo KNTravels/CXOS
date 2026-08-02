@@ -85,6 +85,7 @@
         <li><a href="#query-analytics-engine">Query &amp; Analytics Engine</a></li>
         <li><a href="#ai-insights">AI &amp; Insights</a></li>
         <li><a href="#operational-services">Operational Services</a></li>
+        <li><a href="#platform-connectors">Platform Connectors</a></li>
       </ul>
     </aside>
 
@@ -119,6 +120,16 @@
             <p>The single, governed read path every consumer calls.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Profile.Api</code> &middot; <span class="priority could">Query</span></p>
+          <pre class="code-block">GET /v1/profile/cust_004821
+Authorization: Bearer &lt;service-token&gt;
+
+200 OK
+{ "customer_key": "cust_004821", "lifecycle_stage": "active", "ltv_band": "gold" }
+-- fields the caller isn't entitled to are omitted, not nulled</pre>
+        </div>
       </section>
 
       <section id="query-analytics-engine" class="submodule" style="--card-accent:#d9822b">
@@ -145,6 +156,15 @@
             <h4 class="feature-card-title">Caching</h4>
             <p>Serves repeated queries instantly and invalidates on fresh data.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Intelligence.Api</code> &middot; <span class="priority could">Query</span></p>
+          <pre class="code-block">POST /v1/query
+{ "metric": "net_revenue", "dimensions": { "region": "APAC" }, "time_grain": "week" }
+
+200 OK
+{ "net_revenue": 51230.40, "cache_hit": true }</pre>
         </div>
       </section>
 
@@ -177,6 +197,14 @@
             <p>The conversational assistant that ties every AI capability together.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Intelligence.Api</code> &middot; <span class="priority should">Both</span></p>
+          <pre class="code-block">GET /v1/propensity/cust_004821
+{ "churn_risk": 0.78, "conversion_propensity": 0.12, "model_version": "churn_risk_v4" }
+
+POST /v1/copilot/ask { "question": "which APAC customers are at risk of churning?" }</pre>
+        </div>
       </section>
 
       <section id="operational-services" class="submodule" style="--card-accent:#d9822b">
@@ -202,6 +230,41 @@
             <h4 class="feature-card-title">Usage &amp; Billing</h4>
             <p>Meters ingestion, compute, and storage per team for chargeback.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Operations.Api</code> &middot; <span class="priority should">Both</span></p>
+          <pre class="code-block">GET /v1/workflows/wf_88213
+{ "type": "schema_change_approval", "state": "pending_approver" }
+
+GET /v1/usage/tenant_northwind?period=2026-07
+{ "ingestion_events": 812400000, "estimated_cost_usd": 6240.18 }</pre>
+        </div>
+      </section>
+
+      <section id="platform-connectors" class="submodule" style="--card-accent:#d9822b">
+        <h2><span class="icon">&#128268;</span> Platform Connectors</h2>
+        <p class="tech">What each AI &amp; analytics capability connects out to, beyond the lakehouse it reads from.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Connector Package</th><th>Consumer</th></tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.Salesforce</code> / <code>.Zendesk</code> / <code>.HubSpot</code> (read path)</td>
+              <td>Unified Customer Profile &middot; Identity Graph (identity resolution inputs)</td>
+            </tr>
+            <tr>
+              <td class="reqid">Azure OpenAI Service client</td>
+              <td>Natural Language Query &middot; AI Copilot</td>
+            </tr>
+            <tr>
+              <td class="reqid">Azure Machine Learning client</td>
+              <td>Predictive Models &middot; Propensity Scores &middot; Anomaly Detection</td>
+            </tr>
+            <tr>
+              <td class="reqid">DataFusion Iceberg connector</td>
+              <td>Query Optimizer &middot; Semantic Layer</td>
+            </tr>
+          </table>
         </div>
       </section>
 

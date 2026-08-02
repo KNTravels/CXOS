@@ -84,6 +84,7 @@
         <li><a href="#customer-touchpoints">Customer Touchpoints</a></li>
         <li><a href="#business-systems">Business Systems</a></li>
         <li><a href="#files-integrations">Files &amp; Integrations</a></li>
+        <li><a href="#platform-connectors">Platform Connectors</a></li>
       </ul>
     </aside>
 
@@ -133,6 +134,18 @@
             <p>Mentions, comments, DMs, and ad engagement from platform APIs.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Ingestion.Api</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">POST https://ingest.cxos.io/v1/events
+Authorization: Bearer &lt;client-token&gt;
+Content-Type: application/json
+
+{ "event": "product_viewed", "user_id": "cust_004821",
+  "context": { "channel": "web" }, "properties": { "sku": "sku-1029" } }
+
+202 Accepted</pre>
+        </div>
       </section>
 
       <section id="business-systems" class="submodule" style="--card-accent:#6a4fc2">
@@ -164,6 +177,18 @@
             <p>Billing status, invoices, and subscription data tied to the account.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Connectors.Salesforce</code> / <code>.Shopify</code> / <code>.Zendesk</code> / <code>.HubSpot</code> / <code>.ErpBilling</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">// Registered via the central connector registry, not called directly:
+{
+  "connector": "Cxos.Connectors.Salesforce",
+  "instance_id": "sfdc_prod",
+  "auth": { "type": "oauth2_jwt", "keyvault_ref": "sfdc-prod-cert" },
+  "sync_mode": "cdc"
+}
+// Each connector publishes normalized events to Cxos.Ingestion.Api on your behalf.</pre>
+        </div>
       </section>
 
       <section id="files-integrations" class="submodule" style="--card-accent:#6a4fc2">
@@ -184,6 +209,54 @@
             <h4 class="feature-card-title">APIs &amp; Webhooks</h4>
             <p>Generic REST/webhook path for systems without a dedicated connector.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Connectors.Files</code> / <code>.Cdc</code> / <code>.Generic</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">// File-based: drop into the per-source Azure Blob Storage landing zone
+abfss://landing@cxosdata.dfs.core.windows.net/partner_loyalty_export/loyalty_2026-08-01.parquet
+
+// Generic REST/webhook: register a field-mapping config, no new codebase
+{ "connector_id": "conn_partner_survey", "mode": "webhook",
+  "field_mapping": { "event": "$.event_type", "user_id": "$.customer.external_id" } }</pre>
+        </div>
+      </section>
+
+      <section id="platform-connectors" class="submodule" style="--card-accent:#6a4fc2">
+        <h2><span class="icon">&#128268;</span> Platform Connectors</h2>
+        <p class="tech">Named connector packages that bring each business system's data into the shared ingestion contract.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Connector Package</th><th>Consumer</th></tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.Salesforce</code></td>
+              <td>Identity &amp; Profile Service (Intelligence &amp; Services) &middot; CRM (Salesforce) Reverse ETL (Destinations &amp; Activation)</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.Shopify</code></td>
+              <td>AI &amp; Insights (LTV/RFM scoring) &middot; Web / App Personalization</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.Zendesk</code></td>
+              <td>AI &amp; Insights (churn/CSAT signal) &middot; Support (Zendesk) Reverse ETL</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.HubSpot</code></td>
+              <td>Query &amp; Analytics Engine &middot; Marketing (HubSpot) Reverse ETL</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.ErpBilling</code></td>
+              <td>AI &amp; Insights (payment-risk scoring) &middot; Operational Services (dunning alerts)</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.Files</code></td>
+              <td>Data Lakehouse raw zone (Unified Data Foundation)</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.Cdc</code></td>
+              <td>Data Lakehouse mirrored tables (Unified Data Foundation)</td>
+            </tr>
+          </table>
         </div>
       </section>
 

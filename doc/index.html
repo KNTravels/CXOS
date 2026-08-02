@@ -113,8 +113,8 @@
   <section class="section">
     <div class="section-head">
       <div>
-        <h2>The Six Modules</h2>
-        <p>Each stage below drills down into its own reference page with submodules and a real-world example.</p>
+        <h2>The Six Verticals</h2>
+        <p>Each vertical below drills down into its own reference page with submodules and a real-world example.</p>
       </div>
     </div>
     <div class="module-grid">
@@ -167,6 +167,141 @@
         <div class="go">Explore Destinations &amp; Activation &rarr;</div>
       </a>
 
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Full Application Service Map</h2>
+        <p>Every deployable microservice across the six stages, and the database purpose-picked for its access pattern &mdash; one size does not fit all. Full DDD/CQRS breakdown lives in the <a href="pages/brd.html">BRD</a>.</p>
+      </div>
+    </div>
+
+    <div class="db-legend">
+      <div class="db-legend-item" style="--db-color:#12a4a4">
+        <div class="db-icon">&#127760;</div>
+        <div><div class="name">Azure Cosmos DB</div><div class="desc">Flexible-schema docs &amp; graph traversal</div></div>
+      </div>
+      <div class="db-legend-item" style="--db-color:#336791">
+        <div class="db-icon">&#128024;</div>
+        <div><div class="name">Azure DB for PostgreSQL</div><div class="desc">Relational, ACID, joined data</div></div>
+      </div>
+      <div class="db-legend-item" style="--db-color:#d92d20">
+        <div class="db-icon">&#9889;</div>
+        <div><div class="name">Azure Cache for Redis</div><div class="desc">Hot-path caching, ephemeral state</div></div>
+      </div>
+      <div class="db-legend-item" style="--db-color:#d97706">
+        <div class="db-icon">&#128200;</div>
+        <div><div class="name">Azure Data Explorer</div><div class="desc">Time-series &amp; telemetry (Kusto)</div></div>
+      </div>
+      <div class="db-legend-item" style="--db-color:#2e9e5b">
+        <div class="db-icon">&#129666;</div>
+        <div><div class="name">ADLS Gen2 (Iceberg)</div><div class="desc">The lakehouse itself</div></div>
+      </div>
+    </div>
+
+    <div class="service-db-grid">
+
+      <div class="service-db-card" style="--card-accent:#2b7fd6">
+        <div class="card-head"><span class="stage-tag">Stage 2 &middot; Supporting</span><span class="priority could">Command</span></div>
+        <h4>&#128229; Ingestion</h4>
+        <span class="ns"><code>Cxos.Ingestion.Api</code></span>
+        <div class="db-row">
+          <span class="db-pill" style="--db-color:#d92d20"><span class="pip">&#9889;</span>Redis (cache only)</span>
+        </div>
+      </div>
+
+      <div class="service-db-card" style="--card-accent:#0f9b8e">
+        <div class="card-head"><span class="stage-tag">Stage 3 &middot; Supporting</span><span class="priority must">Command</span></div>
+        <h4>&#9881;&#65039; Event Processing</h4>
+        <span class="ns"><code>Cxos.Processing.Api</code></span>
+        <div class="db-row">
+          <span class="db-pill" style="--db-color:#2e9e5b"><span class="pip">&#129666;</span>ADLS Gen2 (Iceberg)</span>
+          <span class="db-pill" style="--db-color:#12a4a4"><span class="pip">&#127760;</span>Cosmos DB (checkpoints)</span>
+        </div>
+      </div>
+
+      <div class="service-db-card" style="--card-accent:#0f9b8e">
+        <div class="card-head"><span class="stage-tag">Stage 3 &middot; Supporting</span><span class="priority could">Query</span></div>
+        <h4>&#128203; Schema Governance</h4>
+        <span class="ns"><code>Cxos.Processing.SchemaGovernance.Api</code></span>
+        <div class="db-row">
+          <span class="db-pill" style="--db-color:#336791"><span class="pip">&#128024;</span>PostgreSQL</span>
+        </div>
+      </div>
+
+      <div class="service-db-card" style="--card-accent:#2e9e5b">
+        <div class="card-head"><span class="stage-tag">Stage 4 &middot; Supporting</span><span class="priority could">Query</span></div>
+        <h4>&#127963;&#65039; Data Foundation &amp; Governance</h4>
+        <span class="ns"><code>Cxos.Foundation.Api</code></span>
+        <div class="db-row">
+          <span class="db-pill" style="--db-color:#2e9e5b"><span class="pip">&#129666;</span>ADLS Gen2 (Iceberg)</span>
+          <span class="db-pill" style="--db-color:#336791"><span class="pip">&#128024;</span>PostgreSQL (policy)</span>
+        </div>
+      </div>
+
+      <div class="service-db-card" style="--card-accent:#d9822b">
+        <div class="card-head"><span class="stage-tag">Stage 5 &middot; Core Domain</span><span class="priority could">Query</span></div>
+        <h4>&#129380; Customer Profile</h4>
+        <span class="ns"><code>Cxos.Profile.Api</code></span>
+        <div class="db-row">
+          <span class="db-pill" style="--db-color:#12a4a4"><span class="pip">&#127760;</span>Cosmos DB (Core API)</span>
+          <span class="db-pill" style="--db-color:#12a4a4"><span class="pip">&#127760;</span>Cosmos DB (Gremlin)</span>
+          <span class="db-pill" style="--db-color:#d92d20"><span class="pip">&#9889;</span>Redis</span>
+        </div>
+      </div>
+
+      <div class="service-db-card" style="--card-accent:#d9822b">
+        <div class="card-head"><span class="stage-tag">Stage 5 &middot; Supporting</span><span class="priority should">Both</span></div>
+        <h4>&#129504; Analytics &amp; AI Insights</h4>
+        <span class="ns"><code>Cxos.Intelligence.Api</code></span>
+        <div class="db-row">
+          <span class="db-pill" style="--db-color:#336791"><span class="pip">&#128024;</span>PostgreSQL (semantic layer)</span>
+          <span class="db-pill" style="--db-color:#d97706"><span class="pip">&#128200;</span>Data Explorer (scoring)</span>
+          <span class="db-pill" style="--db-color:#d92d20"><span class="pip">&#9889;</span>Redis (query cache)</span>
+        </div>
+      </div>
+
+      <div class="service-db-card" style="--card-accent:#d9822b">
+        <div class="card-head"><span class="stage-tag">Stage 5 &middot; Supporting</span><span class="priority should">Both</span></div>
+        <h4>&#128736; Operational Services</h4>
+        <span class="ns"><code>Cxos.Operations.Api</code></span>
+        <div class="db-row">
+          <span class="db-pill" style="--db-color:#336791"><span class="pip">&#128024;</span>PostgreSQL (workflow, billing)</span>
+          <span class="db-pill" style="--db-color:#12a4a4"><span class="pip">&#127760;</span>Cosmos DB (alerts)</span>
+          <span class="db-pill" style="--db-color:#d97706"><span class="pip">&#128200;</span>Data Explorer (quality)</span>
+        </div>
+      </div>
+
+      <div class="service-db-card" style="--card-accent:#c23b6d">
+        <div class="card-head"><span class="stage-tag">Stage 6 &middot; Core Domain</span><span class="priority must">Command</span></div>
+        <h4>&#128225; Activation</h4>
+        <span class="ns"><code>Cxos.Activation.Api</code></span>
+        <div class="db-row">
+          <span class="db-pill" style="--db-color:#12a4a4"><span class="pip">&#127760;</span>Cosmos DB (dispatch log)</span>
+          <span class="db-pill" style="--db-color:#d92d20"><span class="pip">&#9889;</span>Redis (frequency caps)</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="connectors-strip">
+      <div class="label">Generic Subdomain &mdash; Stateless Connectors (no dedicated database)</div>
+      <div class="tag-row">
+        <span class="tag">Cxos.Connectors.Salesforce</span>
+        <span class="tag">Cxos.Connectors.Shopify</span>
+        <span class="tag">Cxos.Connectors.Zendesk</span>
+        <span class="tag">Cxos.Connectors.HubSpot</span>
+        <span class="tag">Cxos.Connectors.ErpBilling</span>
+        <span class="tag">Cxos.Connectors.Files</span>
+        <span class="tag">Cxos.Connectors.Cdc</span>
+        <span class="tag">Cxos.Connectors.Generic</span>
+        <span class="tag">Cxos.Connectors.SendGrid</span>
+        <span class="tag">Cxos.Connectors.Twilio</span>
+        <span class="tag">Cxos.Connectors.AdPlatforms</span>
+        <span class="tag">Cxos.Connectors.BatchExport</span>
+      </div>
     </div>
   </section>
 
@@ -236,8 +371,8 @@
   <section class="section">
     <div class="section-head">
       <div>
-        <h2>Cross-Cutting Foundation</h2>
-        <p>Capabilities that run underneath every module above.</p>
+        <h2>The Five Horizontals</h2>
+        <p>Cross-cutting capabilities that run horizontally beneath every vertical above.</p>
       </div>
     </div>
     <div class="foundation-grid">

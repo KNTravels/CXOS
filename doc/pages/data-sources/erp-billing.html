@@ -152,6 +152,20 @@
   </section>
 
   <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#129520;</span> Services Consumed</h2>
+    <ul class="feature-list">
+      <li>Azure Functions Timer (scheduled ERP/billing pull)</li>
+      <li>Azure Functions (near-real-time Stripe webhook handling)</li>
+      <li>Azure Key Vault (SAP/NetSuite/Stripe credentials)</li>
+      <li>Cxos.Ingestion.Client</li>
+      <li>Azure Data Lake Storage Gen2 (billing history)</li>
+      <li>Azure AD / Entra ID (access control on tokenized payment metadata)</li>
+      <li>Application Insights</li>
+      <li>SAP / NetSuite / Stripe APIs (source-side)</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
       <li>Scale: account/invoice volume is modest relative to behavioral events; batch sync is sufficient for most fields</li>

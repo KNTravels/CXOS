@@ -84,6 +84,7 @@
         <li><a href="#stream-processing">Stream Processing</a></li>
         <li><a href="#batch-processing">Batch Processing</a></li>
         <li><a href="#event-schema-registry">Event Schema &amp; Registry</a></li>
+        <li><a href="#platform-connectors">Platform Connectors</a></li>
       </ul>
     </aside>
 
@@ -129,6 +130,14 @@
             <p>Synthesizes higher-level events like cart_abandoned from raw patterns.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Processing.Api</code> &middot; <span class="priority could">Query</span> (job status) / <span class="priority must">Command</span> (backfill trigger)</p>
+          <pre class="code-block">GET /v1/processing/stream-worker/status
+{ "consumer_group": "cxos-processing-stream-worker", "lag_seconds": 2.1, "healthy": true }
+
+POST /v1/processing/backfill { "job": "identity-resolution", "from": "2026-07-01" }</pre>
+        </div>
       </section>
 
       <section id="batch-processing" class="submodule" style="--card-accent:#0f9b8e">
@@ -156,6 +165,14 @@
             <p>Builds the feature tables ML models train and score against.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Processing.Api</code> &middot; <span class="priority could">Query</span></p>
+          <pre class="code-block">// Not called directly for output — read the marts tables it produces
+// via Cxos.Intelligence.Api's Query & Analytics Engine. To check a job:
+GET /v1/processing/batch-worker/runs?job=rollups_aggregations&status=latest
+{ "job": "rollups_aggregations", "status": "success", "rows_written": 2847193 }</pre>
+        </div>
       </section>
 
       <section id="event-schema-registry" class="submodule" style="--card-accent:#0f9b8e">
@@ -181,6 +198,39 @@
             <h4 class="feature-card-title">Governance Rules</h4>
             <p>Policy layer governing naming, PII tags, and ownership.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Processing.SchemaGovernance.Api</code> &middot; <span class="priority could">Query</span></p>
+          <pre class="code-block">GET /v1/schema-registry/events/product_viewed?version=latest
+{ "event": "product_viewed", "version": 3, "owner_team": "commerce-platform",
+  "compatibility": "backward", "pii_fields": [] }</pre>
+        </div>
+      </section>
+
+      <section id="platform-connectors" class="submodule" style="--card-accent:#0f9b8e">
+        <h2><span class="icon">&#128268;</span> Platform Connectors</h2>
+        <p class="tech">The engine adapters and inbound connector family this stage reads from and writes through.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Connector Package</th><th>Consumer</th></tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.*</code> (inbound family)</td>
+              <td>Stream Worker &middot; Batch Worker (every normalized event lands here first)</td>
+            </tr>
+            <tr>
+              <td class="reqid">dbt-snowflake adapter</td>
+              <td>Rollups &amp; Aggregations &middot; Batch Processing</td>
+            </tr>
+            <tr>
+              <td class="reqid">dbt-spark adapter</td>
+              <td>Batch Processing (large-scale rollups, backfills)</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Ingestion.Client</code> (schema source)</td>
+              <td>Stream Worker validation against the shared contract</td>
+            </tr>
+          </table>
         </div>
       </section>
 
