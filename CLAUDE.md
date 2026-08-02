@@ -210,12 +210,48 @@ uses `clamp()` for its `<h1>`, the badge grid is `repeat(auto-fit, minmax(170px,
 reflow naturally into the narrower content column — don't add special-casing to make them
 full-width again, that would reintroduce the exact layout this fix removed.
 
-**Header, post-removal:** `<header class="site-header">` still exists on every page with just the
-brand logo (`<a class="brand">...CXOS...</a>`) — only the `<nav>`/toggle-button were removed, not
-the header element itself. Corresponding dead CSS (`nav.main-nav`, `.nav-list`, `.nav-list > li`,
-`.dropdown`, `.nav-caret`, `.nav-toggle`, and their `@media (max-width: 860px)` overrides) and dead
-JS (mobile hamburger toggle, tap-to-open dropdown, active-nav-by-page-path highlighting) were
-removed too — don't re-add stubs for markup that no longer exists.
+**Header, post-removal:** `<header class="site-header">` on every page is just the brand logo in
+the HTML source (`<a class="brand">...CXOS...</a>`) — the old `<nav>`/dropdown markup and its
+`.nav-toggle` button were fully removed, not just hidden. Corresponding dead CSS (`nav.main-nav`,
+`.nav-list`, `.nav-list > li`, `.dropdown`, `.nav-caret`) and dead JS (tap-to-open dropdown,
+active-nav-by-page-path highlighting) were removed too — don't re-add stubs for markup that no
+longer exists. **A `.nav-toggle` button exists again** (see "Mobile off-canvas sidebar drawer"
+below), but it's a *different* control serving a *different* purpose — it toggles the sidebar
+drawer open/closed, not a header dropdown — and critically, **it's not in any HTML file**: it's
+created by `initSidebarDrawer()` in `main.js` and inserted into the DOM at runtime, right after
+`.brand`. If you're looking for it in a page's source and can't find it, that's why — don't add it
+to the HTML templates, that would create a duplicate.
+
+### Mobile off-canvas sidebar drawer (2026-08-02)
+
+The sidebar (`.side-nav`) only sits inline/stacked above content on desktop and tablet widths.
+Under 860px it's an **off-canvas drawer**: hidden by default (`transform: translateX(-100%)`),
+slides in over a dim backdrop when the hamburger button is tapped, and **auto-closes when any
+real link inside it is tapped** — this replaced an earlier version where the sidebar was just
+`position: static` and permanently stacked inline on mobile with no way to hide it; the user
+found that confusing ("not going back to the left after selecting a menu item") since there was
+no drawer at all to close.
+
+- **Both the hamburger button and the backdrop `<div>` are created by JS**
+  (`initSidebarDrawer()` in `main.js`, called first thing inside the `DOMContentLoaded` handler),
+  **not present in any HTML file** — this was a deliberate choice to avoid hand-editing the header
+  across 100+ pages a second time. If you ever need to reference either element from CSS/JS, they
+  won't be in the page source; they only exist after `main.js` runs.
+- `toggle.click` → `openDrawer()`/`closeDrawer()` (adds/removes `.open` on both `.side-nav` and
+  `.sidenav-backdrop`, flips `aria-expanded`). Backdrop click and Escape both close it too.
+- **Closing on link-click only binds to `<a>` tags inside `.side-nav`**, deliberately excluding
+  `.nav-tree-toggle` — those are `<button>`s that expand/collapse a module's submodule list
+  in-place, and tapping one should let you keep browsing the tree, not kick you out of the drawer.
+  If you ever add a new clickable control inside the sidebar, decide explicitly whether it should
+  close the drawer (a real navigation) or not (an in-place UI toggle) rather than assuming.
+- CSS lives right after the `.nav-tree-sub` rules in `style.css`: `.nav-toggle` and
+  `.sidenav-backdrop` both have `display: none` base rules (so they're inert on desktop even
+  though the JS creates them unconditionally on every page) with the real drawer styling only
+  inside `@media (max-width: 860px)`.
+- This CSS also carries a comment calling out that `.side-nav`'s override must be declared *after*
+  the unconditional base `.side-nav` rule earlier in the file — same equal-specificity/source-order
+  gotcha that broke the original `position: static` mobile override before it was rewritten as
+  this drawer; if you ever reorder `style.css`'s sections, watch for this again.
 
 If you hand-edit `genlib.js`'s `renderItem()` template again, keep the indentation-nesting in mind
 even though it's cosmetic-only: the body sections are one level deeper (inside `<div>` inside
@@ -625,15 +661,18 @@ so cross-links between pages (e.g., "→ see Ingestion Layer's Queue & Retry") s
 - `index.html`'s intro copy and all 6 module cards reflect all six stages being fully specified
   (no "next"/"planned" language remaining for Intelligence & Services or Destinations &
   Activation).
-- **Mobile responsiveness pass (2026-08-02):** fixed a latent bug where `.side-nav`'s
-  `position: static` mobile override was silently ignored (an unconditional `.side-nav { position:
-  sticky }` rule appeared *later* in `style.css` than the `@media (max-width: 860px)` override
-  that was supposed to beat it — equal specificity means source order decides, so the override
-  never actually applied). Also bumped touch targets for `.nav-tree-toggle` and side-nav links to
-  ~40-44px on mobile, made the Service Map detail modal a full-width bottom sheet under 600px, and
-  removed a fully duplicated `.hld-diagram`/`.code-block` CSS block (the second copy, later in the
-  file and therefore the one actually governing behavior, already had `-webkit-overflow-scrolling:
-  touch`; the dead first copy lacked it and was deleted, not the other way round).
+- **Mobile responsiveness pass (2026-08-02, two rounds):** round 1 fixed a latent bug where
+  `.side-nav`'s `position: static` mobile override was silently ignored (equal-specificity,
+  source-order bug — see "Mobile off-canvas sidebar drawer" above for the details, since round 2
+  replaced `position: static` with a proper drawer and the same gotcha applies to that rule too),
+  bumped touch targets for `.nav-tree-toggle` and side-nav links to ~40-44px on mobile, made the
+  Service Map detail modal a full-width bottom sheet under 600px, and removed a fully duplicated
+  `.hld-diagram`/`.code-block` CSS block (the second copy, later in the file and therefore the one
+  actually governing behavior, already had `-webkit-overflow-scrolling: touch`; the dead first copy
+  lacked it and was deleted, not the other way round). **Round 2** replaced the inline/stacked
+  mobile sidebar with a proper off-canvas drawer (hamburger toggle, slide-in, backdrop,
+  auto-close-on-link-tap) after the user found the stacked version confusing with nothing to
+  close — see "Mobile off-canvas sidebar drawer" above for full detail.
 
 All six stages of the architecture are now fully specified end to end. Future work here is
 either refining existing content or building out `code/` (currently empty, no relationship to

@@ -1,6 +1,8 @@
 // CXOS Reference Documentation — shared behavior
 
 document.addEventListener("DOMContentLoaded", function () {
+  initSidebarDrawer();
+
   // Collapsible module tree in the side nav (replaces the old header dropdown nav).
   // Each module row is a link (navigates) plus a separate toggle button (expands/collapses
   // its submodule list) — the current page's own module ships with aria-expanded="true" and
@@ -69,6 +71,57 @@ document.addEventListener("DOMContentLoaded", function () {
   // Service Map detail modal (index.html only — guarded, since main.js loads on every page)
   initServiceModal();
 });
+
+// Off-canvas mobile drawer for the sidebar. The hamburger button and the backdrop are both
+// created here, not present in the HTML — every page already has `.side-nav`, so building
+// these two elements once in JS avoids hand-editing the header on 100+ pages. Guarded on
+// `.side-nav` existing (every page has one, but keep the guard in case a future page doesn't).
+function initSidebarDrawer() {
+  var sideNav = document.querySelector(".side-nav");
+  var header = document.querySelector(".site-header");
+  var brand = document.querySelector(".site-header .brand");
+  if (!sideNav || !header || !brand) return;
+
+  var toggle = document.createElement("button");
+  toggle.className = "nav-toggle";
+  toggle.setAttribute("aria-label", "Toggle navigation");
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.innerHTML = "&#9776;";
+  brand.insertAdjacentElement("afterend", toggle);
+
+  var backdrop = document.createElement("div");
+  backdrop.className = "sidenav-backdrop";
+  document.body.appendChild(backdrop);
+
+  function closeDrawer() {
+    sideNav.classList.remove("open");
+    backdrop.classList.remove("open");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openDrawer() {
+    sideNav.classList.add("open");
+    backdrop.classList.add("open");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  toggle.addEventListener("click", function () {
+    if (sideNav.classList.contains("open")) closeDrawer(); else openDrawer();
+  });
+  backdrop.addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeDrawer();
+  });
+
+  // Selecting any real link in the sidebar (module link, submodule anchor, Overview/BRD/LLD)
+  // closes the drawer so the page content is immediately visible — the .nav-tree-toggle
+  // caret buttons are <button>s, not <a>s, so expanding/collapsing a module's submodule
+  // list here deliberately does NOT close the drawer.
+  sideNav.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", function () {
+      if (window.matchMedia("(max-width: 860px)").matches) closeDrawer();
+    });
+  });
+}
 
 // Content for the Service Map modal — one entry per data-service value on a .service-db-card
 // (index.html "Full Application Service Map" for the 6 verticals + "Service Map" for the 5
