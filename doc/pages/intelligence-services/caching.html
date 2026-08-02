@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caching — Query &amp; Analytics Engine — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html" class="active">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../intelligence-services.html">Intelligence &amp; Services</a><span class="sep">/</span>
+    <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine</a><span class="sep">/</span>
+    <span class="current">Caching</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#d9822b">
+    <div class="step">Intelligence &amp; Services &rarr; Query &amp; Analytics Engine</div>
+    <h1>Caching</h1>
+    <p>The result and metadata caching layer that makes repeated or near-identical queries return instantly instead of re-executing the full plan every time.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Caching is why the tenth person to open the same dashboard doesn't wait as long as the first.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Transformation &amp; Processing</div><div class="stage-detail">Cache invalidation is keyed to batch/stream completion</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">marts.* tables</div><div class="stage-detail">Source of truth the cache is invalidated against</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#d9822b"><div class="stage-label">Intelligence</div><div class="stage-name">Caching</div><div class="stage-detail">Azure Cache for Redis in front of the Query Optimizer</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Interactive Dashboards &amp; AI Copilot</div><div class="stage-detail">The direct beneficiaries of a cache hit</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Most dashboard traffic is many people asking the same or nearly the same question — caching turns that traffic pattern into a cost and latency win rather than repeated full-cost execution</li>
+      <li>Protects the lakehouse from being overloaded by popular-dashboard traffic during business hours</li>
+      <li>Owned by Analytics Engineering / Platform Engineering</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>Query results are cached in Azure Cache for Redis, keyed on a normalized representation of the compiled semantic-layer query plus its parameters, with a TTL tuned per mart to the underlying dbt refresh schedule so a cache entry never outlives the data it was computed from. Rollups &amp; Aggregations' batch jobs actively invalidate the relevant cache keys on completion — packaged as part of the same .NET Core scheduler that orchestrates dbt runs — rather than relying purely on TTL expiry, keeping the cache from serving stale results after a fresh batch lands.</p>
+    <div class="handbook-block">
+      <h3>Cache Layers</h3>
+      <div class="tag-row">
+        <span class="tag">Query-result cache (Redis)</span>
+        <span class="tag">Metadata/catalog cache</span>
+        <span class="tag">Active invalidation on batch completion</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128190;</span> Cache Key Structure</h2>
+    <pre class="code-block">cache:query:{metric_hash}:{dimension_filter_hash}:{time_grain}
+TTL: aligned to marts.order_fact's dbt refresh schedule (hourly)
+Invalidated on: rollups_aggregations job completion</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Azure Cache for Redis — the caching implementation</li>
+      <li>Rollups &amp; Aggregations — actively invalidates cache entries on batch completion</li>
+      <li>Query Optimizer — checks the cache before planning a fresh execution</li>
+      <li>AI Copilot — benefits from cache hits on the common questions it fields repeatedly</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: cache sizing tracks distinct-query cardinality among popular dashboards, not total data volume</li>
+      <li>Latency: a cache hit returns in single-digit milliseconds versus hundreds of milliseconds to seconds for a fresh execution</li>
+      <li>Reliability: active invalidation on batch completion, not TTL alone, is what prevents a stale-cache correctness bug after a fix lands upstream</li>
+      <li>Security/Privacy: cache entries are scoped per caller entitlement context, not shared blindly across users with different access levels</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>During a Monday morning traffic spike, 200 people open the same executive revenue dashboard within 10 minutes. Only the first query executes a full plan against the lakehouse; the remaining 199 are served from cache in milliseconds, keeping the underlying query engine's load flat.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../intelligence-services.html#query-analytics-engine">&larr; Back to Query &amp; Analytics Engine</a></p>
+</main>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Platforms (SendGrid) — Real-time Activation — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html" class="active">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../destinations-activation.html">Destinations &amp; Activation</a><span class="sep">/</span>
+    <a href="../destinations-activation.html#real-time-activation">Real-time Activation</a><span class="sep">/</span>
+    <span class="current">Email Platforms (SendGrid)</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#c23b6d">
+    <div class="step">Destinations &amp; Activation &rarr; Real-time Activation</div>
+    <h1>Email Platforms (SendGrid)</h1>
+    <p>Triggers transactional and campaign email in response to a real-time customer event or a propensity-score threshold — the highest-volume real-time destination.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>A qualifying event or score crossing a threshold triggers an email within minutes.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Transformation &amp; Processing</div><div class="stage-detail">Real-time event stream feeding trigger logic</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">Unified Customer Profile</div><div class="stage-detail">Consent state and preferred channel checked before send</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Intelligence</div><div class="stage-name">Propensity Scores</div><div class="stage-detail">Optional trigger input for targeted campaigns</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#c23b6d"><div class="stage-label">Activation</div><div class="stage-name">Email Platforms (SendGrid)</div><div class="stage-detail">.NET Core Activation API &rarr; SendGrid API</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Email remains the highest-ROI, highest-volume activation channel — cart abandonment, win-back, and lifecycle campaigns all depend on it firing reliably and on time</li>
+      <li>Consent and channel-preference enforcement here is a direct compliance requirement, not just good practice</li>
+      <li>Owned by Marketing Technology / Platform Engineering</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>A .NET Core Activation API — packaged as a Docker container on Azure Container Apps — subscribes to qualifying events (cart abandonment, propensity-score threshold crossings) via Azure Service Bus, checks the customer's <code>consent_basis</code> and preferred channel through the Profile API, and calls the SendGrid API to trigger the appropriate template. Delivery status (sent, bounced, opened, clicked) is written back to Azure Event Hubs as a new event, closing the loop so engagement data feeds back into the lakehouse like any other touchpoint.</p>
+    <div class="handbook-block">
+      <h3>Trigger Types</h3>
+      <div class="tag-row">
+        <span class="tag">Cart abandonment</span>
+        <span class="tag">Propensity threshold</span>
+        <span class="tag">Lifecycle milestone</span>
+        <span class="tag">Transactional (order confirmation)</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128190;</span> Activation Trigger Payload</h2>
+    <pre class="code-block">{
+  "customer_key": "cust_004821",
+  "trigger": "cart_abandonment",
+  "channel": "email",
+  "template_id": "cart_recovery_v3",
+  "consent_checked": true
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Azure Service Bus — delivers the triggering event to the Activation API</li>
+      <li>Profile API — consent and preferred-channel check before every send</li>
+      <li>SendGrid — email delivery provider</li>
+      <li>Azure Event Hubs — delivery/engagement events written back as new touchpoint data</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: designed for bursty campaign sends (tens of thousands of triggers in a short window) without backing up the Service Bus queue</li>
+      <li>Latency: real-time triggers fire within 5 minutes of the qualifying event, per BR-6.2</li>
+      <li>Reliability: failed sends are retried with backoff via Polly, then dead-lettered for manual review rather than silently dropped</li>
+      <li>Security/Privacy: no send occurs without a passing consent check — the API fails closed if the Profile API is unreachable rather than sending anyway</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#c23b6d">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A customer abandons a cart with a high-value item. The event reaches the Activation API within seconds, a consent check passes, and a recovery email sends within the 5-minute SLA — recovering an order that would otherwise have been lost, with the resulting click event flowing back into the lakehouse as a fresh touchpoint.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../destinations-activation.html#real-time-activation">&larr; Back to Real-time Activation</a></p>
+</main>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

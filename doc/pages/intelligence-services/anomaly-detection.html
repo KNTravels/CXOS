@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anomaly Detection — AI &amp; Insights — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html" class="active">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../intelligence-services.html">Intelligence &amp; Services</a><span class="sep">/</span>
+    <a href="../intelligence-services.html#ai-insights">AI &amp; Insights</a><span class="sep">/</span>
+    <span class="current">Anomaly Detection</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#d9822b">
+    <div class="step">Intelligence &amp; Services &rarr; AI &amp; Insights</div>
+    <h1>Anomaly Detection</h1>
+    <p>Continuously monitors key metrics and data-quality signals for statistically unusual behavior and raises it before a human would otherwise notice.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Anomaly Detection watches the marts layer so a bad number gets caught before a dashboard is.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">Rollups &amp; Aggregations</div><div class="stage-detail">Metric time series the model scores</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">marts.* tables</div><div class="stage-detail">Source metrics evaluated on each refresh</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#d9822b"><div class="stage-label">Intelligence</div><div class="stage-name">Anomaly Detection</div><div class="stage-detail">Azure Machine Learning model, scheduled scoring job</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Alerts &amp; Notifications</div><div class="stage-detail">Anomalies are surfaced as operational alerts</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Catches metric and data-quality regressions — a broken connector, a mis-tagged event, a real business anomaly — before a stakeholder spots it in a dashboard and asks an unplanned question</li>
+      <li>Reduces mean-time-to-detect for revenue or volume anomalies from 'whenever someone notices' to minutes</li>
+      <li>Owned by Analytics Engineering / Data Science, alert routing owned by Operational Services</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>An Azure Machine Learning-hosted model (a seasonal-decomposition and z-score ensemble, retrained periodically) scores every registered Semantic Layer metric on each dbt refresh, comparing the latest value against its expected range given historical seasonality. The scoring job runs as a .NET Core-orchestrated Azure Container Apps Job — a Docker container invoking the Azure ML scoring endpoint — and any metric outside its confidence band is written to an anomalies table that Alerts &amp; Notifications polls.</p>
+    <div class="handbook-block">
+      <h3>Detected Anomaly Types</h3>
+      <div class="tag-row">
+        <span class="tag">Metric value out of range</span>
+        <span class="tag">Volume drop/spike</span>
+        <span class="tag">Data-quality regression</span>
+        <span class="tag">Schema drift correlation</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128190;</span> Anomaly Record</h2>
+    <pre class="code-block">{
+  "metric": "net_revenue",
+  "dimension": { "region": "APAC" },
+  "expected_range": [42000, 58000],
+  "observed": 12400,
+  "severity": "high",
+  "detected_at": "2026-08-02T07:15:00Z"
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Rollups &amp; Aggregations — supplies the metric time series being scored</li>
+      <li>Azure Machine Learning — hosts and serves the anomaly-scoring model</li>
+      <li>Alerts &amp; Notifications (Operational Services) — routes detected anomalies to the owning team</li>
+      <li>Data Quality Monitoring (Operational Services) — a related but distinct signal source; anomalies here are metric-level, not row-level</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: scoring runs once per metric per refresh cycle, so cost scales with catalog size, not raw event volume</li>
+      <li>Latency: anomalies are detected within one refresh cycle of the underlying metric — typically within the hour</li>
+      <li>Reliability: the model is retrained on a rolling window so seasonal patterns (e.g., holiday spikes) do not get permanently flagged as anomalies</li>
+      <li>Security/Privacy: scoring operates on aggregated metrics, not row-level customer data, keeping the model's inputs low-sensitivity</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>An APAC connector silently breaks overnight, dropping reported revenue to a quarter of its expected range. Anomaly Detection flags it within the hour and Alerts &amp; Notifications pages the on-call data engineer — instead of the drop being discovered two days later when Finance asks why the weekly number looks wrong.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../intelligence-services.html#ai-insights">&larr; Back to AI &amp; Insights</a></p>
+</main>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

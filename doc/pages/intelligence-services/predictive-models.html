@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predictive Models — AI &amp; Insights — CXOS Reference Documentation</title>
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">CX</span>
+    CXOS <span class="brand-sub">— Customer Experience Operating System</span>
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li data-page="index.html"><a href="../../index.html">Overview</a></li>
+      <li data-page="brd.html"><a href="../brd.html">BRD</a></li>
+      <li data-page="data-sources.html">
+        <a href="../data-sources.html">1 · Data Sources <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../data-sources.html#customer-touchpoints">Customer Touchpoints<span class="desc">Web, mobile, kiosk, chat, call center</span></a>
+          <a href="../data-sources.html#business-systems">Business Systems<span class="desc">CRM, Commerce, Support, Marketing, ERP</span></a>
+          <a href="../data-sources.html#files-integrations">Files &amp; Integrations<span class="desc">CSV/JSON/Parquet, Databases, APIs</span></a>
+        </div>
+      </li>
+      <li data-page="ingestion-layer.html">
+        <a href="../ingestion-layer.html">2 · Ingestion Layer <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../ingestion-layer.html#client-sdks">Client SDKs<span class="desc">Web, Mobile, Server SDK</span></a>
+          <a href="../ingestion-layer.html#edge-network">Edge Network<span class="desc">Global points of presence</span></a>
+          <a href="../ingestion-layer.html#streaming-ingestion">Streaming Ingestion<span class="desc">Redpanda (Kafka compatible)</span></a>
+          <a href="../ingestion-layer.html#connectors">Connectors<span class="desc">Pre-built &amp; custom connectors</span></a>
+          <a href="../ingestion-layer.html#protocols-supported">Protocols Supported<span class="desc">HTTP, gRPC, Webhooks, Batch</span></a>
+        </div>
+      </li>
+      <li data-page="transformation-processing.html">
+        <a href="../transformation-processing.html">3 · Transformation &amp; Processing <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../transformation-processing.html#stream-processing">Stream Processing<span class="desc">Real-time — Bytewax / Quix Streams</span></a>
+          <a href="../transformation-processing.html#batch-processing">Batch Processing<span class="desc">Near-real-time — Spark / Python Jobs</span></a>
+          <a href="../transformation-processing.html#event-schema-registry">Event Schema &amp; Registry<span class="desc">Versioning, compatibility, governance</span></a>
+        </div>
+      </li>
+      <li data-page="unified-data-foundation.html">
+        <a href="../unified-data-foundation.html">4 · Unified Data Foundation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../unified-data-foundation.html#data-lakehouse">CXOS Data Lakehouse<span class="desc">Apache Iceberg + S3-compatible storage</span></a>
+          <a href="../unified-data-foundation.html#metadata-layer">Metadata Layer<span class="desc">Catalog, lineage, dictionary, entitlements</span></a>
+          <a href="../unified-data-foundation.html#governance-security">Governance &amp; Security<span class="desc">Access control, privacy, audit, encryption</span></a>
+        </div>
+      </li>
+      <li data-page="intelligence-services.html" class="active">
+        <a href="../intelligence-services.html">5 · Intelligence &amp; Services <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../intelligence-services.html#identity-profile">Identity &amp; Profile Service<span class="desc">Unified profile, identity graph</span></a>
+          <a href="../intelligence-services.html#query-analytics-engine">Query &amp; Analytics Engine<span class="desc">DataFusion SQL engine, semantic layer</span></a>
+          <a href="../intelligence-services.html#ai-insights">AI &amp; Insights<span class="desc">Anomaly detection, propensity, copilot</span></a>
+          <a href="../intelligence-services.html#operational-services">Operational Services<span class="desc">Workflow, alerts, data quality, billing</span></a>
+        </div>
+      </li>
+      <li data-page="destinations-activation.html">
+        <a href="../destinations-activation.html">6 · Destinations &amp; Activation <span class="nav-caret">&#9662;</span></a>
+        <div class="dropdown">
+          <a href="../destinations-activation.html#real-time-activation">Real-time Activation<span class="desc">Email, SMS/Push, Ad Platforms</span></a>
+          <a href="../destinations-activation.html#batch-file-exports">Batch / File Exports<span class="desc">S3/GCS/Azure, SFTP, Warehouses</span></a>
+          <a href="../destinations-activation.html#apis-webhooks">APIs &amp; Webhooks<span class="desc">Journeys, automation, integrations</span></a>
+          <a href="../destinations-activation.html#reverse-etl-cdp-sync">Reverse ETL / CDP Sync<span class="desc">Sync back to CRM, Support, Marketing</span></a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="breadcrumb">
+    <a href="../../index.html">Overview</a><span class="sep">/</span>
+    <a href="../intelligence-services.html">Intelligence &amp; Services</a><span class="sep">/</span>
+    <a href="../intelligence-services.html#ai-insights">AI &amp; Insights</a><span class="sep">/</span>
+    <span class="current">Predictive Models</span>
+  </div>
+
+  <div class="module-intro" style="--card-accent:#d9822b">
+    <div class="step">Intelligence &amp; Services &rarr; AI &amp; Insights</div>
+    <h1>Predictive Models</h1>
+    <p>The shared framework for training, versioning, and serving machine learning models — churn, LTV forecasting, demand — that other AI & Insights capabilities build on.</p>
+  </div>
+
+  <section class="section" style="margin-top:20px;">
+    <div class="section-head"><div><h2>High-Level Design</h2><p>Predictive Models is the shared ML platform every scoring capability in this module is built on.</p></div></div>
+    <div class="hld-diagram">
+      <div class="hld-node"><div class="stage-label">Data Source</div><div class="stage-name">Data Sources</div><div class="stage-detail">Every touchpoint and business system</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Ingestion</div><div class="stage-name">Ingestion Layer</div><div class="stage-detail">SDKs, connectors, protocols</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Processing</div><div class="stage-name">dbt Python Models</div><div class="stage-detail">Feature prep (Rollups & Aggregations)</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Foundation</div><div class="stage-name">marts.ml_features</div><div class="stage-detail">Curated feature tables in the lakehouse</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node origin" style="--card-accent:#d9822b"><div class="stage-label">Intelligence</div><div class="stage-name">Predictive Models</div><div class="stage-detail">Azure Machine Learning training + registry</div></div>
+      <div class="hld-arrow">&rarr;</div>
+      <div class="hld-node"><div class="stage-label">Activation</div><div class="stage-name">Propensity Scores, AI Copilot</div><div class="stage-detail">Consumers of trained model outputs</div></div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128188;</span> Business Context</h2>
+    <ul class="feature-list">
+      <li>Gives every predictive use case (churn, LTV, propensity) a shared, auditable training and deployment pipeline instead of one-off notebooks nobody can reproduce</li>
+      <li>Makes model performance and drift visible to the business, not just to the data science team that built it</li>
+      <li>Owned by Data Science, feature pipelines co-owned with Data Engineering</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128268;</span> Technical Overview</h2>
+    <p>Feature engineering happens as dbt Python models — version-controlled and tested like any other dbt model — producing curated feature tables (<code>marts.ml_features</code>) directly from the lakehouse. Azure Machine Learning handles training, experiment tracking, and model registry; trained models are deployed behind a .NET Core Analytics/AI API scoring endpoint (a Docker container on Azure Container Apps) so downstream capabilities like Propensity Scores call a stable API rather than loading a model file directly.</p>
+    <div class="handbook-block">
+      <h3>Pipeline Stages</h3>
+      <div class="tag-row">
+        <span class="tag">dbt Python feature models</span>
+        <span class="tag">Azure ML training & registry</span>
+        <span class="tag">Scoring API (Docker/ACA)</span>
+        <span class="tag">Drift monitoring</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128190;</span> Model Registry Entry</h2>
+    <pre class="code-block">{
+  "model_name": "churn_risk_v4",
+  "framework": "azureml",
+  "trained_on": "marts.ml_features (as of 2026-07-28)",
+  "auc": 0.87,
+  "deployed_endpoint": "/v1/score/churn_risk_v4"
+}</pre>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#128279;</span> Integration Points</h2>
+    <ul class="feature-list">
+      <li>Rollups &amp; Aggregations / dbt Python models — feature engineering pipeline</li>
+      <li>Azure Machine Learning — training, experiment tracking, model registry</li>
+      <li>Propensity Scores — the primary consumer of trained model outputs</li>
+      <li>Application Insights — tracks scoring-endpoint latency and error rates in production</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
+    <ul class="feature-list">
+      <li>Scale: training runs on a scheduled cadence (not per-request), so cost scales with retraining frequency, not query volume</li>
+      <li>Latency: the scoring API returns predictions in under 100ms per customer, using a pre-loaded model rather than cold-starting per request</li>
+      <li>Reliability: every deployed model is versioned in the registry, so a regression can be rolled back to the prior version without retraining</li>
+      <li>Security/Privacy: feature tables inherit classification tags from their source fields — a model trained on PII-derived features is itself treated as a sensitive artifact</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#d9822b">
+    <h2><span class="icon">&#127919;</span> Enterprise Example</h2>
+    <p>A new churn model scores 0.87 AUC in offline evaluation but drifts to 0.79 in production after a promotional pricing change shifts customer behavior. Drift monitoring flags the gap, and the team rolls back to the prior registry version while retraining — a controlled response instead of silently serving degraded predictions.</p>
+  </section>
+
+  <p style="margin-top:28px;"><a href="../intelligence-services.html#ai-insights">&larr; Back to AI &amp; Insights</a></p>
+</main>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>
