@@ -85,6 +85,7 @@
         <li><a href="#batch-file-exports">Batch / File Exports</a></li>
         <li><a href="#apis-webhooks">APIs &amp; Webhooks</a></li>
         <li><a href="#reverse-etl-cdp-sync">Reverse ETL / CDP Sync</a></li>
+        <li><a href="#platform-connectors">Platform Connectors</a></li>
       </ul>
     </aside>
 
@@ -124,6 +125,15 @@
             <p>In-session banners and modals that react within the same visit.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Activation.Api</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">POST /v1/activate
+{ "customer_key": "cust_004821", "trigger": "cart_abandonment",
+  "channel": "email", "template_id": "cart_recovery_v3" }
+
+202 Accepted { "dispatch_id": "disp_9931", "routed_to": "Cxos.Connectors.SendGrid" }</pre>
+        </div>
       </section>
 
       <section id="batch-file-exports" class="submodule" style="--card-accent:#c23b6d">
@@ -150,6 +160,13 @@
             <p>Direct Spark attachment for data science, scheduled loads for BI.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Connectors.BatchExport</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">POST /v1/exports/schedule
+{ "table": "marts.order_fact", "destination": "s3://partner-northwind/cxos-exports/",
+  "format": "parquet", "schedule": "0 2 * * *" }</pre>
+        </div>
       </section>
 
       <section id="apis-webhooks" class="submodule" style="--card-accent:#c23b6d">
@@ -171,6 +188,17 @@
             <p>A shared connector template for destinations that don't fit the mold.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Activation.Api</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">// Register a webhook subscription — CXOS pushes to you, signed:
+POST /v1/webhooks/subscribe
+{ "event_types": ["propensity.threshold_crossed"], "endpoint": "https://hooks.acme.example/cxos" }
+
+// Or pull on demand via the External Applications API:
+GET /external/v1/profile/cust_004821
+Authorization: Bearer &lt;partner-scoped-token&gt;</pre>
+        </div>
       </section>
 
       <section id="reverse-etl-cdp-sync" class="submodule" style="--card-accent:#c23b6d">
@@ -191,6 +219,50 @@
             <h4 class="feature-card-title">Marketing (HubSpot)</h4>
             <p>Syncs governed segments so campaigns match ad-platform audiences.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Connectors.Salesforce</code> / <code>.Zendesk</code> / <code>.HubSpot</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">// Not called directly — field mappings drive the sync automatically:
+{
+  "salesforce_object": "Account",
+  "field_mappings": { "CXOS_LTV_Band__c": "marts.customer_profile.ltv_band" },
+  "sync_method": "bulk_api_upsert", "schedule": "hourly"
+}</pre>
+        </div>
+      </section>
+
+      <section id="platform-connectors" class="submodule" style="--card-accent:#c23b6d">
+        <h2><span class="icon">&#128268;</span> Platform Connectors</h2>
+        <p class="tech">The outbound connector family every activation destination is built on.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Connector Package</th><th>Consumer</th></tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Activation.Client</code></td>
+              <td>Every destination handler in this module</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.SendGrid</code></td>
+              <td>Email Platforms (SendGrid)</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.Twilio</code></td>
+              <td>SMS / Push (Twilio, FCM)</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.GoogleAds</code> / <code>.MetaAds</code></td>
+              <td>Ad Platforms (Google, Meta)</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.Salesforce</code> / <code>.Zendesk</code> / <code>.HubSpot</code> (write path)</td>
+              <td>Reverse ETL / CDP Sync</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.Sftp</code> / <code>.Snowflake</code></td>
+              <td>Batch / File Exports</td>
+            </tr>
+          </table>
         </div>
       </section>
 

@@ -86,6 +86,7 @@
         <li><a href="#streaming-ingestion">Streaming Ingestion</a></li>
         <li><a href="#connectors">Connectors</a></li>
         <li><a href="#protocols-supported">Protocols Supported</a></li>
+        <li><a href="#platform-connectors">Platform Connectors</a></li>
       </ul>
     </aside>
 
@@ -114,6 +115,14 @@
             <h4 class="feature-card-title">Server SDK</h4>
             <p>Backend library for IoT gateways, kiosks, and internal services.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Ingestion.Api</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">// @cxos/web-sdk, @cxos/mobile-sdk, and Cxos.Ingestion.Client (Server SDK)
+// all wrap the same call:
+Cxos.track("product_viewed", { sku: "sku-1029", price: 2499 });
+// -> POST https://ingest.cxos.io/v1/events, batched and retried automatically</pre>
         </div>
       </section>
 
@@ -147,6 +156,13 @@
             <p>Absorbs bursts and outages between the edge and processing.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Ingestion.Application</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">// Internal pipeline stages — not called directly. Trace a request through them via
+// Application Insights using the correlation ID returned on every /v1/events call:
+X-Correlation-Id: 7e2a1c4b-9f3d-4e8a-b1c2-5a6e0d3f8b21</pre>
+        </div>
       </section>
 
       <section id="streaming-ingestion" class="submodule" style="--card-accent:#2b7fd6">
@@ -157,6 +173,14 @@
             <h4 class="feature-card-title">Redpanda (Kafka Compatible)</h4>
             <p>Kafka-API-compatible streaming backbone with lower operational overhead.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Ingestion.Infrastructure</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">// Consumers attach to the Event Hubs-compatible endpoint directly —
+// no CXOS-owned API in front of the stream itself:
+Endpoint=sb://cxos-events.servicebus.windows.net/;EntityPath=ingestion-accepted
+ConsumerGroup=cxos-processing-stream-worker</pre>
         </div>
       </section>
 
@@ -173,6 +197,16 @@
             <h4 class="feature-card-title">Custom Connectors</h4>
             <p>Framework for building a new integration when none exists yet.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Connectors.*</code> (registry family) &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">// Enable an existing pre-built connector via configuration:
+POST /v1/connectors/enable
+{ "connector": "Cxos.Connectors.HubSpot", "instance_id": "hs_prod", "auth_ref": "kv://hubspot-prod" }
+
+// Scaffold a custom one from the shared IConnector template:
+dotnet new cxos-connector -n AcmePartnerConnector</pre>
         </div>
       </section>
 
@@ -199,6 +233,44 @@
             <h4 class="feature-card-title">Batch Upload (S3, SFTP, API)</h4>
             <p>Path for large, scheduled data drops and historical exports.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Ingestion.Api</code> &middot; <span class="priority must">Command</span></p>
+          <pre class="code-block">HTTP/HTTPS   POST /v1/events               (default, universal)
+gRPC         cxos.ingestion.v1.Ingest/Track (highest-volume server callers)
+Webhooks     inbound receiver per connector (platforms that push to CXOS)
+Batch        Azure Blob Storage landing zone (S3/SFTP/API bulk drops)</pre>
+        </div>
+      </section>
+
+      <section id="platform-connectors" class="submodule" style="--card-accent:#2b7fd6">
+        <h2><span class="icon">&#128268;</span> Platform Connectors</h2>
+        <p class="tech">The shared client libraries every SDK, connector, and downstream service builds on.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Connector Package</th><th>Consumer</th></tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Ingestion.Client</code></td>
+              <td>Every SDK, connector, and business-system integration in Data Sources</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>Cxos.Connectors.*</code> (registry family)</td>
+              <td>Event Collection (Ingestion API) &middot; Reverse ETL / CDP Sync callers</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>@cxos/web-sdk</code></td>
+              <td>Web / App Personalization &middot; On-site Messages</td>
+            </tr>
+            <tr>
+              <td class="reqid"><code>@cxos/mobile-sdk</code></td>
+              <td>SMS / Push (Twilio, FCM) targeting</td>
+            </tr>
+            <tr>
+              <td class="reqid">Custom Connector Framework (<code>IConnector</code>)</td>
+              <td>Any team extending the platform to a long-tail system</td>
+            </tr>
+          </table>
         </div>
       </section>
 

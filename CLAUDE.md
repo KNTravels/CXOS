@@ -110,6 +110,182 @@ supplied as a reference. Markup per item:
   (Business Context, Integration Points, NFRs on detail pages, and other prose lists) — it's not
   dead, just no longer used for submodule item grids on any of the 6 module pages.
 
+### Platform Connectors section (`.doc-table`, hand-written, one per module page)
+
+Every one of the 6 module pages ends with a `<section id="platform-connectors">` (just before
+the closing "Real World Example" box) — a static, hand-written table, **not** generated from a
+docgen data file. It lists the named `Cxos.Connectors.*` / `Cxos.*.Client` packages relevant to
+that module's own domain, reusing the `.doc-table-wrap` / `.doc-table` CSS already built for
+`brd.html` (the `td.reqid` class is repurposed here to bold/accent-color the package-name
+column). **Two columns only, always in this order: Connector Package, Consumer.** A third
+"Required Services" column existed briefly (2026-08-02) — including a fully exhaustive
+`.service-list` breakdown trialed on `data-sources.html` — but the user found that level of detail
+unnecessary for this table and asked for the column removed entirely across all 6 pages;
+**don't re-add it.** If per-connector service dependencies are ever needed again, that's what
+`brd.html`'s DDD-layered Infrastructure rows are for (see "Microservices catalog" below) — don't
+duplicate that detail back into this table. Each module page also has a matching
+`<li><a href="#platform-connectors">` entry appended to its own side-nav (`aside.side-nav`) — this
+section is intentionally **not** added to the header dropdown nav (`genlib.js`'s `navHtml()`),
+since that would require regenerating all 92 detail pages just to add one more anchor.
+
+The `Cxos.Connectors.<System>` naming convention (e.g. `Cxos.Connectors.Salesforce`) originates
+from `data-sources-2.js`'s Business Systems items and `ingestion-layer.js`'s Connectors submodule
+— those same connector packages are bidirectional (an inbound extract connector doing Reverse ETL
+write-back is the *same* package, not a second one), so Intelligence & Services' and Destinations
+& Activation's tables reference the identical package names rather than inventing new ones for
+the same system. `Cxos.Activation.Client` is the outbound counterpart to `Cxos.Ingestion.Client`,
+used for connectors that only ever write out (SendGrid, Twilio, ad platforms) with no inbound
+side. Rows that aren't literally a CXOS-built package (e.g. "Snowflake external tables", "dbt-spark
+adapter") are still valid entries — the column is "what this module connects through," not a
+strict NuGet-package list — keep those honestly labeled rather than inventing a fake package name
+for a third-party-native integration.
+
+### Microservices catalog (`brd.html` only — DDD + CQRS + polyglot persistence)
+
+Each of BR-1 through BR-6 in `brd.html` has one or more `<div class="handbook-block">` sub-blocks
+titled "Microservices" (placed directly after that BR's requirements table, inside the same
+`<section id="br-...">`) cataloging the actual deployable .NET Core services for that stage, with
+proper namespaces and how they interact. This is intentionally **BRD-only for now** — the
+plan is to add a lighter "how to consume this service" section at the module/submodule level
+later; don't preemptively add it there.
+
+**Domain classification (DDD strategic design)** — stated as a `<p class="tech">` line above each
+table, not a column:
+- **Core Domain** (the platform's actual differentiators): Customer Profile (BR-5) and Activation
+  (BR-6) — these two alone get the full 4-layer DDD treatment *and* are called out as "Core."
+- **Supporting Subdomain** (necessary, built in-house, not the differentiator): Ingestion (BR-2),
+  Event Processing + Schema Governance (BR-3, two separate bounded contexts), Data Foundation &amp;
+  Governance (BR-4), Analytics &amp; AI Insights + Operational Services (BR-5, two more contexts
+  alongside Customer Profile).
+- **Generic Subdomain** (solved problem, reusable pattern): every `Cxos.Connectors.*` service —
+  BR-1's inbound connectors and BR-6's outbound connectors (SendGrid, Twilio, ad platforms, batch
+  export). **These deliberately do NOT get the 4-layer DDD breakdown** — a connector has no
+  bespoke business rules, just source&harr;contract translation, so under DDD it's legitimately
+  Infrastructure-layer-only. Say this explicitly in the intro `<p class="tech">` line so it doesn't
+  read as an inconsistency. Table columns for these: `Microservice | Namespace | C/Q | Interacts With`.
+
+**DDD layering (Core/Supporting contexts only)** — each bounded context becomes 4 table rows,
+namespaced `Cxos.<Context>.<Layer>`, table columns `Layer | Namespace | C/Q | Interacts With`:
+- **Domain** — entities/value objects/business rules only, no I/O, C/Q = `&mdash;`
+- **Application** — orchestrates use cases, calls other bounded contexts' `.Api` layer
+- **Infrastructure** — the actual external adapters: Azure services, **and the specific database
+  chosen for that context's access pattern** (see polyglot persistence below)
+- **Api** — the one deployed, callable entry point other bounded contexts actually talk to
+
+**Polyglot persistence — do not default every service to the same database.** Pick per
+bounded context based on actual access pattern, and say why in the Infrastructure row:
+Azure Cosmos DB Core/SQL API for flexible-schema per-customer documents (Customer Profile) ·
+Cosmos DB Gremlin API specifically for graph traversal (Identity Graph) · Cosmos DB Table API for
+high-throughput simple key-value with TTL (stream checkpoints, alert history, activation dispatch
+records) · Azure Database for PostgreSQL for genuinely relational/ACID/joined data (schema
+registry, workflow state machine, usage/billing ledger) · Azure Cache for Redis for hot-path
+caching and ephemeral counters (enrichment lookups, query-result cache, frequency caps) · Azure
+Data Explorer (Kusto) for time-series/high-cardinality telemetry (anomaly scoring history, data
+quality scorecards) · Azure Data Lake Storage Gen2 (Iceberg) for the lakehouse itself. A service
+that's deliberately stateless (Ingestion's own Infrastructure layer) should say so explicitly
+rather than getting a database assigned for the sake of it.
+
+**CQRS** — a `C/Q` column on every table, using the existing `.priority` badge classes for color:
+`<span class="priority must">Command</span>` (red) for writes/mutations, `<span class="priority
+could">Query</span>` (blue) for reads, `<span class="priority should">Both</span>` (yellow) for
+genuinely mixed, and plain `&mdash;` for the Domain layer (no I/O to classify). This repurposes the
+BRD's existing must/should/could requirement-priority styling for a different axis — a deliberate
+reuse of the color system, not a requirements priority.
+
+**Required Services column — tried and removed (2026-08-02), don't re-add:** the Platform
+Connectors table briefly had a third `Required Services` column, trialed first as an abbreviated
+inline-`&middot;`-separated list on all 6 pages, then expanded to a fully exhaustive
+`<ul class="service-list">` breakdown on `data-sources.html` specifically (every Azure service +
+NuGet package a connector touches end-to-end). The user reviewed the exhaustive version and asked
+for the column removed entirely — too much detail for this table — so it's back to **two columns
+only: Connector Package, Consumer**, across all 6 pages. The `.service-list` CSS rule was removed
+from `style.css` since nothing references it anymore. If service-level detail is wanted again in
+the future, it belongs in `brd.html`'s DDD-layered Infrastructure rows (see "Microservices
+catalog" below), not back in this table — don't reintroduce a third column here without being
+asked. (Separately, the detail-page-level `servicesConsumed` field described under "Data file
+schema" below is a *different* feature — a per-item "Services Consumed" section on 5 Business
+Systems detail sub-pages — and was not part of what got removed; leave it as-is.)
+
+### "Full Application Service Map" (index.html only, between "The Six Verticals" and "End-to-End Flow")
+
+"The Six Modules" was renamed to **"The Six Verticals"** and "Cross-Cutting Foundation" to
+**"The Five Horizontals"** (2026-08-02, homepage only — the module pages, nav, breadcrumbs, and
+every internal `module-*`/`.module-page` class name, `MODULES` object in `genlib.js`, and
+"6 module pages" terminology throughout this file are all **unchanged**; this was a copy/label
+change on `index.html`'s two headings, not a systemic rename). If you add a 7th cross-cutting
+capability to the `.foundation-grid`, update "Five" in the heading; same for "Six" if a vertical
+is ever added or removed.
+
+A visual, homepage-level summary of the same microservices catalog defined in `brd.html` —
+added 2026-08-02 at the user's request for something "fancy" with DB icons, distinct from the
+plain tables used everywhere else on the site. Three parts, in this order:
+
+1. **`.db-legend`** — 5 badges, one per database technology actually used anywhere in the
+   catalog (Cosmos DB, PostgreSQL, Redis, Azure Data Explorer/Kusto, ADLS Gen2/Iceberg), each with
+   an emoji icon in a `color-mix()`-tinted box and a one-line "why this one" description. This is
+   the visual anchor for the polyglot-persistence story — **keep this list in sync with
+   `brd.html`'s Infrastructure rows**; if a new DB technology is ever introduced there, add it here
+   too, with a new consistent hex in the same `--db-color` inline-custom-property pattern.
+2. **`.service-db-grid`** — one `.service-db-card` per **Core/Supporting** bounded context from
+   `brd.html` (8 cards: Ingestion, Event Processing, Schema Governance, Data Foundation &amp;
+   Governance, Customer Profile, Analytics &amp; AI Insights, Operational Services, Activation).
+   Each card: stage number + Core/Supporting tag, C/Q badge (reusing `.priority` must/could/should),
+   the `.Api`-layer namespace, and a `.db-row` of `.db-pill`s — one pill per database that
+   context's Infrastructure layer actually uses in the BRD (some cards intentionally show 2-3
+   pills to make the polyglot point visible, e.g. Operational Services spans Postgres + Cosmos DB
+   + Data Explorer). **Generic Subdomain connectors are deliberately excluded from this grid** —
+   they're stateless (see below) — so this card count stays at 8, not 8 + every connector.
+3. **`.connectors-strip`** — a single `.tag-row` listing all 12 unique `Cxos.Connectors.*` names
+   (8 inbound from BR-1 + 4 outbound-only from BR-6; the write-path Salesforce/Zendesk/HubSpot
+   reuse is not double-counted) under a "stateless, no dedicated database" label, so the "full
+   application" is still represented completely without needing a database pill for services that
+   don't have one.
+
+CSS lives in `style.css` right before "Foundation / principles (home)". Uses `color-mix(in srgb,
+var(--db-color) X%, var(--surface))` for both icon-box and pill backgrounds — this is why no
+separate dark-mode override was needed: it blends against `--surface`, which already flips
+correctly in dark mode via the existing `@media (prefers-color-scheme: dark)` block, so the tint
+adapts automatically. If you ever need to support browsers without `color-mix()`, add a fallback,
+but don't remove the `color-mix()` version — it's what keeps this section low-maintenance across
+light/dark without duplicating every hex twice.
+
+### "How to Consume" blocks (all 22 submodule sections, hand-written on the 6 module pages)
+
+Every submodule `<section>` across all 6 module pages (the same 22 sections that hold a
+`.feature-grid`) ends with a `<div class="handbook-block"><h3>How to Consume</h3>...</div>` block,
+placed right after the `.feature-grid` and before the section's closing `</section>` tag. This is
+the **lighter, consumption-focused counterpart** to `brd.html`'s full DDD microservices catalog —
+deliberately *not* a repeat of the Domain/Application/Infrastructure layers (those are internal
+implementation detail irrelevant to "how do I call this"). Structure:
+
+```html
+<div class="handbook-block">
+  <h3>How to Consume</h3>
+  <p class="tech"><code>Cxos.Profile.Api</code> &middot; <span class="priority could">Query</span></p>
+  <pre class="code-block">GET /v1/profile/cust_004821
+...</pre>
+</div>
+```
+
+- The `<p class="tech">` line names the **Api-layer namespace only** (from `brd.html`'s catalog —
+  don't invent a different namespace here, reuse the canonical one) plus its C/Q tag using the
+  same `.priority must/could/should` badge convention established in the BRD.
+- The `<pre class="code-block">` is one small, concrete, realistic example — an HTTP
+  request/response, an event payload, a config snippet, or (for internal-only stages like
+  Ingestion's edge pipeline or Streaming Ingestion's Event Hubs consumer group) an explanation of
+  *why* there's no direct caller-facing call and what to look at instead. Escape angle brackets as
+  `&lt;`/`&gt;` in placeholder text (e.g. `Bearer &lt;token&gt;`) — unescaped `<placeholder>` text
+  gets parsed as a real (broken) HTML tag inside `<pre>`; this is a pre-existing minor issue in a
+  few older generated detail pages (e.g. `intelligence-services/profile-api.html`'s artifactCode) —
+  don't propagate it into new hand-written content, but no need to go fix the old ones as part of
+  unrelated work.
+- Submodules that map to a Generic Subdomain connector family (e.g. Data Sources' Business
+  Systems, Destinations & Activation's Reverse ETL) reference the same `Cxos.Connectors.*` names as
+  `brd.html`'s BR-1/BR-6 tables, not a new invented service.
+- This pattern is now considered **done** across all 22 submodules — if a new submodule is ever
+  added, give it one of these blocks too, sourcing the namespace/C-Q from `brd.html`'s catalog
+  (add it there first if the bounded context doesn't exist yet).
+
 ### Data file schema (one entry per detail page)
 
 Each module's data file exports an array of `{ anchor, name, items: [...] }` submodule groups
@@ -130,6 +306,7 @@ item:
 | `integration` | 3-5 bullets: Integration Points |
 | `nfr` | 4 bullets: Non-Functional Considerations (always cover Scale/Latency/Reliability/Security) |
 | `example` | One paragraph: Enterprise Example, with a concrete business outcome/number |
+| `servicesConsumed` | **Optional.** Bullets: every Azure/platform service + NuGet package the item touches end-to-end (Key Vault, compute host, Event Hubs/Functions, ADLS Gen2, Application Insights, plus the source-side API) — exhaustive, not the abbreviated 3-4 items already in `integration`. Renders as a new "Services Consumed" section (`genlib.js`, between Integration Points and NFR) only when present; omitting it renders nothing, so it's safe to leave unset on items not yet migrated. **Staged rollout (2026-08-02):** only populated on Data Sources' 5 Business Systems items (`crm-salesforce`, `commerce-shopify`, `support-zendesk`, `marketing-hubspot`, `erp-billing`) so far, paired with the same exhaustive list already on that module's page-level Platform Connectors table. Extend to other items' data files the same way — source the list from that item's own `technical`/`integration` content, don't invent services not already established there — after review.
 
 ### HLD diagrams — always write full 6 nodes, never the generic-pipeline shortcut
 

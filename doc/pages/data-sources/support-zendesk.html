@@ -151,6 +151,19 @@
   </section>
 
   <section class="submodule" style="--card-accent:#6a4fc2">
+    <h2><span class="icon">&#129520;</span> Services Consumed</h2>
+    <ul class="feature-list">
+      <li>Azure Functions (webhook receiver)</li>
+      <li>Azure Key Vault (Zendesk API credentials)</li>
+      <li>Cxos.Ingestion.Client</li>
+      <li>Azure Functions Timer (scheduled Search API backfill sync)</li>
+      <li>Azure Data Lake Storage Gen2 (ticket history)</li>
+      <li>Application Insights</li>
+      <li>Zendesk Webhooks API &amp; Search API (source-side)</li>
+    </ul>
+  </section>
+
+  <section class="submodule" style="--card-accent:#6a4fc2">
     <h2><span class="icon">&#9888;&#65039;</span> Non-Functional Considerations</h2>
     <ul class="feature-list">
       <li>Scale: ticket volume is modest compared to behavioral events — a webhook-first design is sufficient without a heavy queue</li>

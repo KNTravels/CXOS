@@ -84,6 +84,7 @@
         <li><a href="#data-lakehouse">CXOS Data Lakehouse</a></li>
         <li><a href="#metadata-layer">Metadata Layer</a></li>
         <li><a href="#governance-security">Governance &amp; Security</a></li>
+        <li><a href="#platform-connectors">Platform Connectors</a></li>
       </ul>
     </aside>
 
@@ -134,6 +135,14 @@
             <p>Automated policies that age and expire data over time.</p>
           </a>
         </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Foundation.Infrastructure</code> &middot; <span class="priority should">Both</span></p>
+          <pre class="code-block">-- Any Iceberg-compatible engine attaches directly, no CXOS API in the read path:
+SELECT * FROM curated.identity_stitched_events
+WHERE event_date >= '2026-07-26';
+-- location: abfss://lakehouse@cxosdata.dfs.core.windows.net/curated/events</pre>
+        </div>
       </section>
 
       <section id="metadata-layer" class="submodule" style="--card-accent:#2e9e5b">
@@ -160,6 +169,13 @@
             <h4 class="feature-card-title">Policies &amp; Entitlements</h4>
             <p>Metadata-driven rules for who can access what.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Foundation.Api</code> &middot; <span class="priority could">Query</span></p>
+          <pre class="code-block">GET /v1/catalog/tables/curated.identity_stitched_events
+{ "owner_team": "platform-engineering", "row_count_estimate": 2847193021,
+  "lineage": ["raw.events"], "last_updated": "2026-08-02T09:00:00Z" }</pre>
         </div>
       </section>
 
@@ -191,6 +207,40 @@
             <h4 class="feature-card-title">Encryption (At Rest &amp; In Transit)</h4>
             <p>Keeps data unreadable without proper authorization, always.</p>
           </a>
+        </div>
+        <div class="handbook-block">
+          <h3>How to Consume</h3>
+          <p class="tech"><code>Cxos.Foundation.Api</code> &middot; <span class="priority should">Both</span></p>
+          <pre class="code-block">// Policy is checked automatically on every read via the shared policy library —
+// not something a caller invokes separately. To inspect a decision:
+GET /v1/governance/access-decision?principal=agt_302&resource=curated.customer_profile
+{ "decision": "allow", "constraints": { "column_mask": ["email", "phone"] } }</pre>
+        </div>
+      </section>
+
+      <section id="platform-connectors" class="submodule" style="--card-accent:#2e9e5b">
+        <h2><span class="icon">&#128268;</span> Platform Connectors</h2>
+        <p class="tech">The engine attachments every Iceberg-compatible consumer connects through — no data copy required.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <tr><th>Connector Package</th><th>Consumer</th></tr>
+            <tr>
+              <td class="reqid">Iceberg REST Catalog</td>
+              <td>Query &amp; Analytics Engine (DataFusion) &middot; ad hoc Spark/Trino</td>
+            </tr>
+            <tr>
+              <td class="reqid">Snowflake external tables</td>
+              <td>Snowflake / BigQuery (Destinations &amp; Activation)</td>
+            </tr>
+            <tr>
+              <td class="reqid">Databricks Iceberg connector</td>
+              <td>Databricks / Redshift (Destinations &amp; Activation) &middot; Predictive Models</td>
+            </tr>
+            <tr>
+              <td class="reqid">Azure Purview scanners</td>
+              <td>Catalog &middot; Lineage &middot; Data Dictionary</td>
+            </tr>
+          </table>
         </div>
       </section>
 
